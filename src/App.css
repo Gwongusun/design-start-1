@@ -129,44 +129,76 @@
   color: #333;
 }
 
-/* 셀렉트 박스 (버튼) 스타일 */
+/* src/App.css */
+
 .select-box {
   padding: 12px 16px;
   border: 1px solid #ccc;
-  border-radius: 12px; /* 둥근 모서리 */
-  font-size: 18px;
+  border-radius: 6px;
+  font-size: 16px;
   background-color: white;
   cursor: pointer;
+  
+  /* ✨ 내부 정렬 설정 */
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: space-between; /* 글자와 화살표 양끝 배치 */
+  align-items: center;            /* 세로 중앙 정렬 */
+  
   transition: border-color 0.2s;
+  overflow: hidden; /* 둥근 모서리 넘침 방지 */
 }
 
-.select-box.open,
-.select-box:hover {
-  border-color: #63b3ed; /* 열리거나 호버 시 테두리 색상 */
+/* ✨ 말줄임표 핵심 스타일 (.selected-value) */
+.selected-value {
+  /* 1. 줄바꿈 금지 (무조건 한 줄) */
+  white-space: nowrap;
+  
+  /* 2. 넘치는 부분 숨김 */
+  overflow: hidden;
+  
+  /* 3. 넘치면 ... 으로 표시 */
+  text-overflow: ellipsis;
+  
+  /* 박스 안에서 차지할 공간 설정 */
+  flex: 1;         /* 화살표 공간 빼고 나머지 다 차지 */
+  text-align: left; /* 왼쪽 정렬 */
+  margin-right: 10px; /* 화살표랑 너무 딱 붙지 않게 틈 주기 */
 }
 
+/* 화살표가 찌그러지지 않게 고정 */
 .arrow {
+  flex-shrink: 0; /* 공간이 좁아도 절대 줄어들지 않음 */
   font-size: 12px;
   color: #999;
 }
 
+/* (나머지 hover, focus 스타일은 그대로 두시면 됩니다) */
+.select-box:hover {
+  border-color: #63b3ed;
+}
+
 /* 드롭다운 메뉴 스타일 (이미지 디자인 반영) */
+
+
+/* src/App.css */
+
 .select-menu {
   position: absolute;
-  top: 100%; /* 박스 바로 아래 */
+  top: 100%;
   left: 0;
   width: 100%;
-  margin-top: 8px; /* 박스와의 간격 */
+  margin-top: 8px;
   background-color: white;
   border: 1px solid #eee;
-  border-radius: 16px; /* 더 둥근 모서리 */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
-  z-index: 10; /* 다른 요소 위로 띄우기 */
-  overflow: hidden; /* 둥근 모서리 밖으로 내용 넘침 방지 */
-  padding: 8px 0; /* 위아래 여백 */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  padding: 8px 8px;
+  box-sizing: border-box;
+  
+  /* ✨ 스크롤 기능 핵심 코드 */
+  max-height: 300px;  /* 높이가 400px을 넘으면 */
+  overflow-y: auto;   /* 세로 스크롤바가 생깁니다 */
 }
 
 /* 옵션 항목 스타일 */
@@ -176,6 +208,7 @@
   color: #333;
   cursor: pointer;
   transition: background-color 0.2s, color 0.2s;
+  border-radius: 10px;
 }
 
 /* 마우스 올렸을 때 */
@@ -188,4 +221,49 @@
   font-weight: bold;
   color: #68d391; /* 초록색 글씨 */
   background-color: #f0fff4; /* 아주 연한 초록색 배경 */
+}
+
+.selected-value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: 10px; /* 화살표와의 간격 */
+}
+/* src/App.css - 드롭다운 스타일 섹션 */
+
+/* 기존 .select-menu를 .dropdown-menu로 변경 */
+.dropdown-menu {
+  position: absolute;
+  top: 100%; /* 부모 요소 바로 아래 */
+  left: 0;
+  width: 100%; /* 기본은 부모 너비 따라감 (props로 덮어쓰기 가능) */
+  margin-top: 8px;
+  background-color: white;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  padding: 8px 8px;
+  box-sizing: border-box;
+  
+  /* 높이 제한 및 스크롤 설정 */
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+/* --- 커스텀 스크롤바 디자인 (dropdown-menu에 적용) --- */
+.dropdown-menu::-webkit-scrollbar {
+  width: 12px;
+}
+.dropdown-menu::-webkit-scrollbar-track {
+  background: transparent;
+  margin: 2px 0;
+}
+.dropdown-menu::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.dropdown-menu::-webkit-scrollbar-thumb:hover {
+  background-color: #a0aec0;
 }

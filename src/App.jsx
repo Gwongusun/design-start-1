@@ -1,34 +1,38 @@
 // src/App.jsx
 import { useState } from 'react';
 import './App.css';
-import Select from './components/Select'; // 방금 만든 컴포넌트 불러오기
+import Select from './components/Select';
 
 function App() {
-  // 선택된 값을 저장할 '상태(State)' 만들기
   const [framework, setFramework] = useState('react');
 
-  // 셀렉트 박스에 들어갈 옵션 목록
+  // ✨ 항목을 7개로 늘렸습니다. (내용도 길게 해서 테스트)
   const options = [
-    { value: 'react', label: 'React' },
-    { value: 'vue', label: 'Vue' },
-    { value: 'angular', label: 'Angular' },
-    { value: 'svelte', label: 'Svelte' },
+    { value: 'react', label: 'React (Facebook에서 만든 UI 라이브러리)' },
+    { value: 'vue', label: 'Vue (진입장벽이 낮고 유연한 프레임워크)' },
+    { value: 'angular', label: 'Angular (Google이 만든 완전체 프레임워크)' },
+    { value: 'svelte', label: 'Svelte (가상돔 없는 새로운 접근)' },
+    { value: 'next', label: 'Next.js (React 기반의 풀스택 프레임워크)' },
+    { value: 'nuxt', label: 'Nuxt.js (Vue 기반의 강력한 프레임워크)' },
+    { value: 'jquery', label: 'jQuery (전설의 라이브러리, 아직 살아있다)' },
   ];
 
   return (
     <div className="App">
-      <h1>Select Component 만들기</h1>
+      <h1>Select Component 스크롤 테스트</h1>
       
-      <div style={{ width: '300px', margin: '0 auto' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
         <Select
-          label="좋아하는 프레임워크 선택"
+          label="프레임워크 선택 (메뉴 많음)"
           options={options}
           value={framework}
-          onChange={(e) => setFramework(e.target.value)}
+          onChange={(value) => setFramework(value)}
+          width="200px"      
+          menuWidth="500px"  
         />
       </div>
 
-      <p>현재 선택된 값: <strong>{framework}</strong></p>
+      <p style={{marginTop: '100px'}}>현재 선택된 값: <strong>{framework}</strong></p>
     </div>
   );
 }
