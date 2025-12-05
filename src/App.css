@@ -1,0 +1,83 @@
+/* src/App.css */
+
+/* 1. 디자인 토큰 (변수) 정의 */
+:root {
+  /* 브랜드 컬러 */
+  --primary-color: #646cff;
+  --primary-hover: #535bf2;
+  --error-color: #ff4d4f;
+  
+  /* 텍스트 컬러 */
+  --text-white: #ffffff;
+  --text-dark: #213547;
+  
+  /* 둥글기 & 간격 */
+  --radius-md: 8px;
+  --spacing-md: 16px;
+}
+
+/* 2. 전체 레이아웃 (화면 중앙 정렬) */
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  font-family: 'Pretendard', sans-serif;
+  color: var(--text-dark);
+}
+
+/* 3. 버튼 컴포넌트 스타일 */
+.btn {
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+/* Primary 버튼 (메인) */
+.btn-primary {
+  background-color: var(--primary-color);
+  color: var(--text-white);
+}
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Danger 버튼 (경고) */
+.btn-danger {
+  background-color: var(--error-color);
+  color: var(--text-white);
+}
+
+/* --- 아래 내용을 App.css 맨 밑에 추가하세요 --- */
+
+/* 라벨 (입력창 위의 글씨) */
+.label {
+  display: block;        /* 한 줄을 꽉 채우기 */
+  text-align: left;      /* 왼쪽 정렬 */
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;    /* 입력창과의 간격 */
+  color: var(--text-dark);
+}
+
+/* 입력창 본체 */
+.input-field {
+  width: 100%;           /* 부모 너비에 꽉 차게 */
+  padding: 12px 16px;    /* 안쪽 여백 */
+  border: 1px solid #ddd; /* 회색 테두리 */
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  outline: none;         /* 기본 못생긴 테두리 제거 */
+  transition: 0.2s;      /* 부드러운 효과 */
+  box-sizing: border-box; /* 테두리 포함해서 크기 계산 */
+}
+
+/* ✨ 인터랙션: 입력하려고 클릭했을 때(Focus) */
+.input-field:focus {
+  border-color: var(--primary-color); /* 브랜드 컬러로 변신 */
+  box-shadow: 0 0 0 4px rgba(100, 108, 255, 0.2); /* 은은한 번짐 효과 */
+}
