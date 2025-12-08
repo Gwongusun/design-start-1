@@ -24,7 +24,7 @@ function App() {
           options={options}
           value={framework}
           onChange={(value) => setFramework(value)}
-          width="800px"      
+          width="600px"      
           menuWidth="500px"  
         />
       </div>

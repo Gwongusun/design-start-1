@@ -59,10 +59,16 @@ const SelectedValue = styled.span`
   margin-right: 10px;
 `;
 
+// 기존 Arrow 코드를 찾아서 이렇게 바꿔주세요
 const Arrow = styled.span`
   flex-shrink: 0;
-  font-size: 12px;
-  color: #999;
+  width: 24px;
+  height: 24px;
+  
+  /* SVG 아이콘 적용 (회색 #999) */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
 `;
 
 const OptionItem = styled.div<{ isSelected: boolean }>`
@@ -111,7 +117,7 @@ function Select({ label, options, value, onChange, width, menuWidth }: SelectPro
       <Label>{label}</Label>
       <TriggerButton isOpen={isOpen} onClick={toggleOpen}>
         <SelectedValue>{displayValue}</SelectedValue>
-        <Arrow>▼</Arrow>
+        <Arrow></Arrow>
       </TriggerButton>
 
       <Dropdown isOpen={isOpen} width={menuWidth}>
