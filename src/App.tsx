@@ -15,7 +15,7 @@ function App() {
   ];
 
   return (
-    <div style={{ textAlign: 'center', padding: '50px' }}>
+    <div style={{ display: 'block', textAlign: 'center', padding: '50px' }}>
       <h1>TypeScript + Emotion Select</h1>
       
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
@@ -24,7 +24,7 @@ function App() {
           options={options}
           value={framework}
           onChange={(value) => setFramework(value)}
-          width="600px"      
+          width="800px"      
           menuWidth="500px"  
         />
       </div>
