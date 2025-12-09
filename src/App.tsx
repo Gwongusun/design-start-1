@@ -1,5 +1,25 @@
+/** @jsxImportSource @emotion/react */
 import { useState } from 'react';
+import styled from '@emotion/styled';
 import Select, { OptionType } from './components/Select';
+import Text from './components/Text'; /* 컴포넌트 불러오기 */
+
+// 1. 레이아웃 스타일
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 100px 20px;
+  max-width: 1280px;
+  margin: 0 auto;
+`;
+
+const SelectWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 100px;
+`;
 
 function App() {
   const [framework, setFramework] = useState<string>('react');
@@ -15,24 +35,35 @@ function App() {
   ];
 
   return (
-    <div style={{ display: 'block', textAlign: 'center', padding: '50px' }}>
-      <h1>TypeScript + Emotion Select</h1>
+    <Container>
+      <Text 
+        as="h1" 
+        variant="displayLarge" 
+        color="#213547" 
+        style={{ marginBottom: '60px' }}
+      >
+        TypeScript + Emotion Select
+      </Text>
       
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
+      <SelectWrapper>
         <Select
           label="프레임워크 선택"
           options={options}
           value={framework}
           onChange={(value) => setFramework(value)}
-          width="800px"      
-          menuWidth="500px"  
+          width="600px"      
+          menuWidth="600px"  
         />
-      </div>
+      </SelectWrapper>
 
-      <p style={{ marginTop: '100px' }}>
-        현재 선택된 값: <strong>{framework}</strong>
-      </p>
-    </div>
+      <Text variant="bodyLarge" color="#555">
+        현재 선택된 값: 
+        <Text as="span" variant="bodyLarge" color="#646cff" style={{ fontWeight: 700, marginLeft: '8px' }}
+        >{framework}
+        </Text>
+      </Text>
+
+    </Container>
   );
 }
 

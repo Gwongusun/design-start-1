@@ -1,32 +1,36 @@
-/* 1. 박스 모델 초기화 (매우 중요!) */
-/* 모든 요소의 테두리와 패딩을 너비에 포함시킵니다. 레이아웃 깨짐을 방지합니다. */
+/* src/index.css */
+
+/* 1. 박스 모델 초기화 */
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-/* 2. 전역 폰트 및 기본 렌더링 설정 */
+/* 2. 전역 렌더링 및 색상 설정 */
 :root {
-  font-family: 'Pretendard', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  /* ⚠️ 폰트 패밀리 정의 삭제함 (typography.css에서 관리) */
+  
+  /* 폰트 렌더링 최적화 옵션은 그대로 유지 */
   line-height: 1.5;
   font-weight: 400;
-
-  /* 폰트가 더 선명하게 보이도록 설정 */
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* 기본 다크모드 색상 (Vite 기본값 유지) */
+  /* 기본 다크모드 색상 */
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
 }
 
-/* 3. Body 초기화 및 레이아웃 설정 (여기가 핵심!) */
+/* 3. Body 초기화 및 레이아웃 설정 */
 body {
   margin: 0;
   
-  /* Flex 관련 설정 제거 -> 일반 블록 요소로 변경 */
+  /* ✨ 핵심: typography.css에서 정의한 기본 폰트 변수를 여기서 적용합니다 */
+  font-family: var(--font-family-base, sans-serif);
+  
+  /* Flex 제거 -> 일반 블록 요소로 변경 (화면 중앙 강제 정렬 해제) */
   display: block;  
   
   min-width: 320px;
@@ -34,7 +38,6 @@ body {
 }
 
 /* 4. 라이트 모드 지원 */
-/* 사용자의 브라우저가 라이트 모드일 때 적용될 색상 */
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
