@@ -20,8 +20,8 @@ const sampleOptions = [
   { label: '옵션 2 (Vue)', value: 'vue' },
   { label: '옵션 3 (Angular)', value: 'angular' },
   { label: '옵션 4 (React)', value: 'etc' },
-  { label: '옵션 5 (Vue)', value: 'vue' },
-  { label: '옵션 6 (Angular)', value: 'angular' },
+  { label: '옵션 5 (Vue)', value: 'etc2' },
+  { label: '옵션 6 (변경사항)', value: 'etc3' },
 ];
 
 export const Default: Story = {
