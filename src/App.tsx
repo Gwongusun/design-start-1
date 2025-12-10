@@ -101,8 +101,8 @@ export default function App() {
         options={options} 
         value={val1} 
         onChange={setVal1} 
-        width="400px"      
-        menuWidth="600px"
+        width="300px"      
+        menuWidth="400px"
       />
 
       <Text as="h3" variant="h2" style={{ marginTop: '40px', marginBottom: '12px' }}>
@@ -114,7 +114,7 @@ export default function App() {
         value={val2} 
         onChange={setVal2} 
         width="600px"      
-        menuWidth="400px"
+        menuWidth="500px"
       />
 
       <Text as="h3" variant="h2" style={{ marginTop: '40px', marginBottom: '12px' }}>
