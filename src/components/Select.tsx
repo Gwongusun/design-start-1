@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useState, useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
-import Dropdown from './Dropdown';
+import Dropdown, { OptionItem } from './Dropdown';
 
 // 데이터 타입 정의
 export interface OptionType {
@@ -12,7 +12,7 @@ export interface OptionType {
 interface SelectProps {
   label: string;
   options: OptionType[];
-  value: string;
+  value: string; // 부모에서 빈 문자열("")을 넘겨주면 선택 안 된 상태가 됩니다.
   onChange: (value: string) => void;
   width?: string;
   menuWidth?: string;
@@ -34,10 +34,10 @@ const Label = styled.label`
 `;
 
 const TriggerButton = styled.div<{ isOpen: boolean }>`
-  padding: 12px 16px;
+  padding: 6px 8px;
   border: 1px solid ${(props) => (props.isOpen ? '#63b3ed' : '#ccc')};
-  border-radius: 12px;
-  font-size: 16px;
+  border-radius: 6px;
+  font-size: 14px;
   background-color: white;
   cursor: pointer;
   display: flex;
@@ -51,46 +51,37 @@ const TriggerButton = styled.div<{ isOpen: boolean }>`
   }
 `;
 
-const SelectedValue = styled.span`
+// ✅ [수정] isPlaceholder prop을 받아 색상을 다르게 처리합니다.
+const SelectedValue = styled.span<{ isPlaceholder: boolean }>`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   flex: 1;
   margin-right: 10px;
+  color: ${(props) => (props.isPlaceholder ? '#999' : '#333')}; /* 선택 안됐을 땐 회색 */
 `;
 
-// 기존 Arrow 코드를 찾아서 이렇게 바꿔주세요
 const Arrow = styled.span`
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
-  
-  /* SVG 아이콘 적용 (회색 #999) */
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>');
+  width: 16px;
+  height: 16px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>');
   background-repeat: no-repeat;
   background-position: center;
-`;
-
-const OptionItem = styled.div<{ isSelected: boolean }>`
-  padding: 14px 20px;
-  font-size: 16px;
-  color: ${(props) => (props.isSelected ? '#68d391' : '#333')};
-  background-color: ${(props) => (props.isSelected ? '#f0fff4' : 'transparent')};
-  font-weight: ${(props) => (props.isSelected ? 'bold' : 'normal')};
-  cursor: pointer;
-  transition: all 0.2s;
-
-  &:hover {
-    background-color: #f7f7f7;
-  }
 `;
 
 function Select({ label, options, value, onChange, width, menuWidth }: SelectProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // 현재 선택된 옵션 찾기
   const selectedOption = options.find((option) => option.value === value);
-  const displayValue = selectedOption ? selectedOption.label : '선택해주세요';
+  
+  // ✅ [수정] 선택된 값이 없으면 true
+  const isPlaceholder = !selectedOption;
+  
+  // ✅ [수정] 선택된 값이 없으면 "선택하세요" 출력
+  const displayValue = selectedOption ? selectedOption.label : '선택하세요';
 
   const toggleOpen = () => setIsOpen(!isOpen);
 
@@ -116,7 +107,10 @@ function Select({ label, options, value, onChange, width, menuWidth }: SelectPro
     <Wrapper ref={containerRef} width={width}>
       <Label>{label}</Label>
       <TriggerButton isOpen={isOpen} onClick={toggleOpen}>
-        <SelectedValue>{displayValue}</SelectedValue>
+        {/* ✅ [수정] isPlaceholder prop 전달 */}
+        <SelectedValue isPlaceholder={isPlaceholder}>
+          {displayValue}
+        </SelectedValue>
         <Arrow></Arrow>
       </TriggerButton>
 

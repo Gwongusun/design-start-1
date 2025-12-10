@@ -1,0 +1,1 @@
+declare module 'react-custom-scrollbars-2';

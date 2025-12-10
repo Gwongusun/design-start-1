@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import styled from '@emotion/styled';
 import Select, { OptionType } from './components/Select';
-import Text from './components/Text'; /* 컴포넌트 불러오기 */
+import Text from './components/Text';
 
 // 1. 레이아웃 스타일
 const Container = styled.div`
@@ -22,7 +22,8 @@ const SelectWrapper = styled.div`
 `;
 
 function App() {
-  const [framework, setFramework] = useState<string>('react');
+  // ✅ [수정] 초기값을 'react'에서 빈 문자열('')로 변경하여 "선택하세요" 상태로 시작
+  const [framework, setFramework] = useState<string>('');
 
   const options: OptionType[] = [
     { value: 'react', label: 'React (Facebook에서 만든 UI 라이브러리)' },
@@ -32,6 +33,8 @@ function App() {
     { value: 'next', label: 'Next.js (React 기반의 풀스택 프레임워크)' },
     { value: 'nuxt', label: 'Nuxt.js (Vue 기반의 강력한 프레임워크)' },
     { value: 'jquery', label: 'jQuery (전설의 라이브러리, 아직 살아있다)' },
+    { value: 'jquery2', label: 'jQuery (전설의 라이브러리, 아직 살아있다)' },
+    { value: 'jquery3', label: 'jQuery (전설의 라이브러리, 아직 살아있다)' },
   ];
 
   return (
@@ -58,8 +61,9 @@ function App() {
 
       <Text variant="bodyLarge" color="#555">
         현재 선택된 값: 
-        <Text as="span" variant="bodyLarge" color="#646cff" style={{ fontWeight: 700, marginLeft: '8px' }}
-        >{framework}
+        <Text as="span" variant="bodyLarge" color="#646cff" style={{ fontWeight: 700, marginLeft: '8px' }}>
+          {/* 값이 비어있을 때 '없음'이라고 표시하거나 그냥 framework 값을 출력 */}
+          {framework === '' ? '없음' : framework}
         </Text>
       </Text>
 
