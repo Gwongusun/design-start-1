@@ -2,8 +2,47 @@
 import { useState, useRef, useEffect } from 'react';
 import styled from '@emotion/styled';
 import Dropdown, { OptionItem } from './Dropdown';
+import Text from './Text';
 
-// 데이터 타입 정의
+// 🎨 [색상 정의]
+const COLORS = {
+  default: {
+    bg: 'white',
+    border: '#ccc',
+    text: '#333',
+    label: '#333',
+    arrow: '#999', 
+  },
+  placeholder: {
+    bg: 'white',
+    border: '#ccc',
+    text: '#999',
+    label: '#333',
+    arrow: '#999',
+  },
+  hover: {
+    bg: '#fafafa',
+    border: '#63b3ed', 
+    text: '#333',
+    label: '#333',
+    arrow: '#63b3ed', // 🔥 호버 시 바뀔 화살표 색상 (파란색)
+  },
+  open: {
+    bg: 'white',
+    border: '#63b3ed',
+    text: '#333',
+    label: '#333',
+    arrow: '#333',   
+  },
+  disabled: {
+    bg: '#f7fafc',
+    border: '#e2e8f0',
+    text: '#a0aec0',
+    label: '#a0aec0',
+    arrow: '#cbd5e0', 
+  }
+};
+
 export interface OptionType {
   label: string;
   value: string;
@@ -12,10 +51,11 @@ export interface OptionType {
 interface SelectProps {
   label: string;
   options: OptionType[];
-  value: string; // 부모에서 빈 문자열("")을 넘겨주면 선택 안 된 상태가 됩니다.
+  value: string;
   onChange: (value: string) => void;
   width?: string;
   menuWidth?: string;
+  disabled?: boolean;
 }
 
 const Wrapper = styled.div<{ width?: string }>`
@@ -27,63 +67,66 @@ const Wrapper = styled.div<{ width?: string }>`
   width: ${(props) => props.width || '100%'};
 `;
 
-const Label = styled.label`
-  font-size: 14px;
-  font-weight: bold;
-  color: #333;
-`;
-
-const TriggerButton = styled.div<{ isOpen: boolean }>`
-  padding: 6px 8px;
-  border: 1px solid ${(props) => (props.isOpen ? '#63b3ed' : '#ccc')};
+// TriggerButton: 이제 복잡한 CSS 없이 배경과 테두리만 담당합니다.
+const TriggerButton = styled.div<{ isOpen: boolean; isDisabled: boolean; isPlaceholder: boolean }>`
+  padding: 3px 10px;
   border-radius: 6px;
-  font-size: 14px;
-  background-color: white;
-  cursor: pointer;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
   overflow: hidden;
+  height: 40px;
 
+  /* 배경색 */
+  background-color: ${(props) => 
+    props.isDisabled ? COLORS.disabled.bg 
+    : props.isOpen ? COLORS.open.bg 
+    : props.isPlaceholder ? COLORS.placeholder.bg 
+    : COLORS.default.bg
+  };
+
+  /* 테두리색 */
+  border: 1px solid ${(props) => 
+    props.isDisabled ? COLORS.disabled.border 
+    : props.isOpen ? COLORS.open.border 
+    : props.isPlaceholder ? COLORS.placeholder.border
+    : COLORS.default.border
+  };
+
+  cursor: ${(props) => (props.isDisabled ? 'not-allowed' : 'pointer')};
+
+  /* 호버 시 배경/테두리 변경 */
   &:hover {
-    border-color: #63b3ed;
+    background-color: ${(props) => !props.isDisabled && COLORS.hover.bg};
+    border-color: ${(props) => !props.isDisabled && COLORS.hover.border};
   }
 `;
 
-// ✅ [수정] isPlaceholder prop을 받아 색상을 다르게 처리합니다.
-const SelectedValue = styled.span<{ isPlaceholder: boolean }>`
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+const SelectedValueWrapper = styled.div`
   flex: 1;
+  min-width: 0;
   margin-right: 10px;
-  color: ${(props) => (props.isPlaceholder ? '#999' : '#333')}; /* 선택 안됐을 땐 회색 */
+  display: flex;
+  align-items: center;
 `;
 
-const Arrow = styled.span`
-  flex-shrink: 0;
-  width: 16px;
-  height: 16px;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23999999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>');
-  background-repeat: no-repeat;
-  background-position: center;
-`;
-
-function Select({ label, options, value, onChange, width, menuWidth }: SelectProps) {
+function Select({ label, options, value, onChange, width, menuWidth, disabled = false }: SelectProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  
+  // ✅ [핵심 1] 마우스가 올라갔는지를 감시하는 변수(State)를 만듭니다.
+  const [isHovered, setIsHovered] = useState<boolean>(false); 
+  
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // 현재 선택된 옵션 찾기
   const selectedOption = options.find((option) => option.value === value);
-  
-  // ✅ [수정] 선택된 값이 없으면 true
   const isPlaceholder = !selectedOption;
-  
-  // ✅ [수정] 선택된 값이 없으면 "선택하세요" 출력
   const displayValue = selectedOption ? selectedOption.label : '선택하세요';
 
-  const toggleOpen = () => setIsOpen(!isOpen);
+  const toggleOpen = () => {
+    if (disabled) return;
+    setIsOpen(!isOpen);
+  };
 
   const handleOptionClick = (optionValue: string) => {
     onChange(optionValue);
@@ -92,10 +135,7 @@ function Select({ label, options, value, onChange, width, menuWidth }: SelectPro
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -103,28 +143,99 @@ function Select({ label, options, value, onChange, width, menuWidth }: SelectPro
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  const getLabelColor = () => {
+    if (disabled) return COLORS.disabled.label;
+    if (isOpen) return COLORS.open.label;
+    return COLORS.default.label;
+  };
+
+  const getTextColor = () => {
+    if (disabled) return COLORS.disabled.text;
+    if (isOpen) return COLORS.open.text;
+    if (isPlaceholder) return COLORS.placeholder.text;
+    return COLORS.default.text;
+  };
+
+  // ✅ [핵심 2] 현재 상태(Disabled / Open / Hover)에 따라 '색상 코드'를 계산해서 돌려주는 함수
+  const getArrowColor = () => {
+    if (disabled) return COLORS.disabled.arrow;
+    if (isOpen) return COLORS.open.arrow;
+    if (isHovered) return COLORS.hover.arrow; // 마우스가 올라가면 이 색을 씁니다!
+    return COLORS.default.arrow;
+  };
+
   return (
     <Wrapper ref={containerRef} width={width}>
-      <Label>{label}</Label>
-      <TriggerButton isOpen={isOpen} onClick={toggleOpen}>
-        {/* ✅ [수정] isPlaceholder prop 전달 */}
-        <SelectedValue isPlaceholder={isPlaceholder}>
-          {displayValue}
-        </SelectedValue>
-        <Arrow></Arrow>
+      <Text as="label" variant="label" color={getLabelColor()} style={{ fontWeight: 'bold' }}>
+        {label}
+      </Text>
+
+      <TriggerButton 
+        isOpen={isOpen} 
+        isDisabled={disabled}
+        isPlaceholder={isPlaceholder}
+        onClick={toggleOpen}
+        
+        // ✅ [핵심 3] 마우스가 들어오고 나갈 때 상태를 변경합니다.
+        onMouseEnter={() => !disabled && setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <SelectedValueWrapper>
+          <Text 
+            variant="bodyMedium" 
+            color={getTextColor()}
+            style={{ 
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              width: '100%',
+              display: 'block'
+            }}
+          >
+            {displayValue}
+          </Text>
+        </SelectedValueWrapper>
+
+        {/* ✅ [핵심 4] 사용자님이 찾으신 stroke 부분에 계산된 색상(getArrowColor)을 꽂아넣습니다! */}
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke={getArrowColor()}  /* 여기가 마법이 일어나는 곳입니다 */
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          style={{
+            transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+            transition: 'transform 0.2s, stroke 0.2s', // 색상도 부드럽게 변하게 설정
+            flexShrink: 0
+          }}
+        >
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+
       </TriggerButton>
 
-      <Dropdown isOpen={isOpen} width={menuWidth}>
-        {options.map((option) => (
-          <OptionItem
-            key={option.value}
-            isSelected={option.value === value}
-            onClick={() => handleOptionClick(option.value)}
-          >
-            {option.label}
-          </OptionItem>
-        ))}
-      </Dropdown>
+      {!disabled && (
+        <Dropdown isOpen={isOpen} width={menuWidth}>
+          {options.map((option) => (
+            <OptionItem
+              key={option.value}
+              isSelected={option.value === value}
+              onClick={() => handleOptionClick(option.value)}
+            >
+              <Text 
+                variant="bodyMedium" 
+                color={option.value === value ? '#68d391' : '#333'}
+                style={{ fontWeight: option.value === value ? 'bold' : 'normal' }}
+              >
+                {option.label}
+              </Text>
+            </OptionItem>
+          ))}
+        </Dropdown>
+      )}
     </Wrapper>
   );
 }

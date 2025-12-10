@@ -10,14 +10,14 @@ interface DropdownProps {
 }
 
 export const OptionItem = styled.div<{ isSelected: boolean }>`
-  padding: 8px 12px;
+  padding: 4px 10px;
   font-size: 14px;
   border-radius: 6px;
   color: ${(props) => (props.isSelected ? '#68d391' : '#333')};
   background-color: ${(props) => (props.isSelected ? '#f0fff4' : 'transparent')};
   font-weight: ${(props) => (props.isSelected ? 'bold' : 'normal')};
   cursor: pointer;
-  transition: all 0.5s;
+  transition: all 0.2s;
   &:hover {
     background-color: #f7f7f7;
   }
@@ -75,7 +75,7 @@ function Dropdown({ children, isOpen, width }: DropdownProps) {
     <MenuContainer width={width}>
       <Scrollbars
         autoHeight
-        autoHeightMax={300}
+        autoHeightMax={200}
         renderThumbVertical={(props: any) => <Thumb {...props} />}  
       >
         {/* 기존 div 대신 ListWrapper 사용 */}

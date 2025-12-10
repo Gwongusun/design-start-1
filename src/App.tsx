@@ -1,29 +1,22 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react';
 import styled from '@emotion/styled';
-import Select, { OptionType } from './components/Select';
-import Text from './components/Text';
 
-// 1. 레이아웃 스타일
+// ✅ 핵심 수정: components 폴더 안에서 불러오도록 경로 변경
+import Select, { OptionType } from './components/Select';
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 100px 20px;
-  max-width: 1280px;
+  gap: 30px;
+  padding: 50px;
+  max-width: 600px;
   margin: 0 auto;
 `;
 
-const SelectWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 100px;
-`;
-
-function App() {
-  // ✅ [수정] 초기값을 'react'에서 빈 문자열('')로 변경하여 "선택하세요" 상태로 시작
-  const [framework, setFramework] = useState<string>('');
+export default function App() {
+  const [val1, setVal1] = useState('');
+  const [val2, setVal2] = useState('react');
 
   const options: OptionType[] = [
     { value: 'react', label: 'React (Facebook에서 만든 UI 라이브러리)' },
@@ -33,42 +26,46 @@ function App() {
     { value: 'next', label: 'Next.js (React 기반의 풀스택 프레임워크)' },
     { value: 'nuxt', label: 'Nuxt.js (Vue 기반의 강력한 프레임워크)' },
     { value: 'jquery', label: 'jQuery (전설의 라이브러리, 아직 살아있다)' },
-    { value: 'jquery2', label: 'jQuery (전설의 라이브러리, 아직 살아있다)' },
-    { value: 'jquery3', label: 'jQuery (전설의 라이브러리, 아직 살아있다)' },
+    { value: 'ember', label: 'Ember.js (야심찼던 초창기 SPA 프레임워크)' },
+    { value: 'backbone', label: 'Backbone.js (MVC 패턴의 조상님)' },
+    { value: 'meteor', label: 'Meteor.js (풀스택 자바스크립트 플랫폼)' },
   ];
 
   return (
     <Container>
-      <Text 
-        as="h1" 
-        variant="displayLarge" 
-        color="#213547" 
-        style={{ marginBottom: '60px' }}
-      >
-        TypeScript + Emotion Select
-      </Text>
-      
-      <SelectWrapper>
-        <Select
-          label="프레임워크 선택"
-          options={options}
-          value={framework}
-          onChange={(value) => setFramework(value)}
-          width="600px"      
-          menuWidth="600px"  
-        />
-      </SelectWrapper>
+      <h3>1. Default & Hover (기본 상태)</h3>
+      <Select 
+        label="디폴트 상태" 
+        options={options} 
+        value={val1} 
+        onChange={setVal1} 
+      />
 
-      <Text variant="bodyLarge" color="#555">
-        현재 선택된 값: 
-        <Text as="span" variant="bodyLarge" color="#646cff" style={{ fontWeight: 700, marginLeft: '8px' }}>
-          {/* 값이 비어있을 때 '없음'이라고 표시하거나 그냥 framework 값을 출력 */}
-          {framework === '' ? '없음' : framework}
-        </Text>
-      </Text>
+      <h3>2. Active/Pressed (값이 선택된 상태)</h3>
+      <Select 
+        label="선택 완료 상태" 
+        options={options} 
+        value={val2} 
+        onChange={setVal2} 
+      />
 
+      <h3>3. Disabled (선택 불가 - 빈 값)</h3>
+      <Select 
+        label="비활성화 (값 없음)" 
+        options={options} 
+        value="" 
+        onChange={() => {}} 
+        disabled={true} 
+      />
+
+      <h3>4. Disabled with Value (선택 불가 - 값 있음)</h3>
+      <Select 
+        label="비활성화 (값 있음)" 
+        options={options} 
+        value="react" 
+        onChange={() => {}} 
+        disabled={true} 
+      />
     </Container>
   );
 }
-
-export default App;
