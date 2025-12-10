@@ -71,8 +71,8 @@ export default function App() {
           options={options}
           value={framework}
           onChange={(value) => setFramework(value)}
-          width="300px"      
-          menuWidth="500px"  
+          width="600px"      
+          menuWidth="600px"  
         />
       </SelectWrapper>
 
@@ -101,8 +101,8 @@ export default function App() {
         options={options} 
         value={val1} 
         onChange={setVal1} 
-        width="200px"      
-        menuWidth="500px"
+        width="400px"      
+        menuWidth="600px"
       />
 
       <Text as="h3" variant="h2" style={{ marginTop: '40px', marginBottom: '12px' }}>
@@ -113,8 +113,8 @@ export default function App() {
         options={options} 
         value={val2} 
         onChange={setVal2} 
-        width="300px"      
-        menuWidth="500px"
+        width="600px"      
+        menuWidth="400px"
       />
 
       <Text as="h3" variant="h2" style={{ marginTop: '40px', marginBottom: '12px' }}>
@@ -126,8 +126,8 @@ export default function App() {
         value="" 
         onChange={() => {}} 
         disabled={true} 
-        width="300px"      
-        menuWidth="500px"
+        width="600px"      
+        menuWidth="600px"
       />
 
       <Text as="h3" variant="h2" style={{ marginTop: '40px', marginBottom: '12px' }}>
@@ -139,8 +139,8 @@ export default function App() {
         value="react" 
         onChange={() => {}} 
         disabled={true} 
-        width="300px"      
-        menuWidth="500px"
+        width="600px"      
+        menuWidth="600px"
       />
     </Container>
   );
