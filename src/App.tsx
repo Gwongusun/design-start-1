@@ -92,14 +92,7 @@ export default function App() {
       </Text>
 
       <SelectWrapper>
-        <Select
-          label="프레임워크 선택"
-          options={options}
-          value={framework}
-          onChange={(value) => setFramework(value)}
-          width="300px"      
-          menuWidth="500px"  
-        />
+        <Select label="프레임워크 선택" options={options} value={framework} onChange={(value) => setFramework(value)} width="300px" menuWidth="500px" maxHeight={200}/>
       </SelectWrapper>
 
       <Text variant="bodyLarge" color="#555" style={{ marginBottom: '40px' }}>
@@ -118,19 +111,19 @@ export default function App() {
       <div style={{ display: 'grid', gap: '30px', gridTemplateColumns: '1fr 1fr' }}>
         <div>
           <Text as="h4" variant="h2" style={{ marginBottom: '10px' }}>1. Default</Text>
-          <Select label="기본" options={options} value={val1} onChange={setVal1} />
+          <Select label="기본" options={options} value={val1} onChange={setVal1} width="300px" menuWidth="300px" maxHeight={200}/>
         </div>
         <div>
           <Text as="h4" variant="h2" style={{ marginBottom: '10px' }}>2. Active</Text>
-          <Select label="선택됨" options={options} value={val2} onChange={setVal2} />
+          <Select label="선택됨" options={options} value={val2} onChange={setVal2} width="300px" menuWidth="300px" maxHeight={200}/>
         </div>
         <div>
           <Text as="h4" variant="h2" style={{ marginBottom: '10px' }}>3. Disabled</Text>
-          <Select label="불가" options={options} value="" onChange={() => {}} disabled />
+          <Select label="불가" options={options} value="" onChange={() => {}} disabled width="300px" menuWidth="300px" maxHeight={200}/>
         </div>
         <div>
           <Text as="h4" variant="h2" style={{ marginBottom: '10px' }}>4. Disabled (Val)</Text>
-          <Select label="불가(값)" options={options} value="react" onChange={() => {}} disabled />
+          <Select label="불가(값)" options={options} value="react" onChange={() => {}} disabled width="300px" menuWidth="300px" maxHeight={200}/>
         </div>
       </div>
 
@@ -164,6 +157,7 @@ export default function App() {
             onChange={setTestRight} 
             width="250px"      
             menuWidth="500px" /* 일부러 넓게 설정 */
+            maxHeight={200}
           />
         </FlexRight>
       </Section>
@@ -189,6 +183,7 @@ export default function App() {
           onChange={setTestBottom} 
           width="100%"      
           menuWidth="100%"
+          maxHeight={400}
         />
       </Section>
       
