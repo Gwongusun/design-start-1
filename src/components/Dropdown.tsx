@@ -1,16 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
-import { ReactNode } from 'react';
+import { ReactNode, forwardRef } from 'react'; // forwardRef 추가
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
 interface DropdownProps {
   children: ReactNode;
   isOpen: boolean;
   width?: string;
+  verticalPos?: 'top' | 'bottom';
+  alignPos?: 'left' | 'right';
+  maxHeight?: number;
 }
 
 export const OptionItem = styled.div<{ isSelected: boolean }>`
-  padding: 4px 10px;
+  padding: 5px 10px;
   font-size: 14px;
   border-radius: 6px;
   color: ${(props) => (props.isSelected ? '#68d391' : '#333')};
@@ -23,12 +26,15 @@ export const OptionItem = styled.div<{ isSelected: boolean }>`
   }
 `;
 
-const MenuContainer = styled.div<{ width?: string }>`
+const MenuContainer = styled.div<{ width?: string; verticalPos: 'top' | 'bottom'; alignPos: 'left' | 'right' }>`
   position: absolute;
-  top: 100%;
-  left: 0;
+  top: ${(props) => (props.verticalPos === 'bottom' ? '100%' : 'auto')};
+  bottom: ${(props) => (props.verticalPos === 'top' ? '100%' : 'auto')};
+  left: ${(props) => (props.alignPos === 'left' ? '0' : 'auto')};
+  right: ${(props) => (props.alignPos === 'right' ? '0' : 'auto')};
+  margin-top: ${(props) => (props.verticalPos === 'bottom' ? '8px' : '0')};
+  margin-bottom: ${(props) => (props.verticalPos === 'top' ? '8px' : '0')};
   width: ${(props) => props.width || '100%'};
-  margin-top: 8px;
   background-color: white;
   border: 1px solid #eee;
   border-radius: 6px;
@@ -49,42 +55,32 @@ const Thumb = styled.div`
   }
 `;
 
-// [수정됨] 패딩/마진이 아닌 '높이 값'으로 위아래 공간을 확보하는 래퍼
 const ListWrapper = styled.div`
-  padding: 0 8px; /* 좌우 패딩은 유지 */
-
-  /* 위쪽 공간 확보: 8px 높이의 빈 블록 생성 */
-  &::before {
-    content: "";
-    display: block;
-    height: 8px;
-  }
-
-  /* 아래쪽 공간 확보: 8px 높이의 빈 블록 생성 */
-  &::after {
-    content: "";
-    display: block;
-    height: 8px;
-  }
+  padding: 0 8px;
+  &::before { content: ""; display: block; height: 8px; }
+  &::after { content: ""; display: block; height: 8px; }
 `;
 
-function Dropdown({ children, isOpen, width }: DropdownProps) {
-  if (!isOpen) return null;
+// ✅ [수정] forwardRef로 감싸서 외부에서 ref를 받을 수 있게 변경
+const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
+  ({ children, isOpen, width, verticalPos = 'bottom', alignPos = 'left', maxHeight = 200 }, ref) => {
+    if (!isOpen) return null;
 
-  return (
-    <MenuContainer width={width}>
-      <Scrollbars
-        autoHeight
-        autoHeightMax={200}
-        renderThumbVertical={(props: any) => <Thumb {...props} />}  
-      >
-        {/* 기존 div 대신 ListWrapper 사용 */}
-        <ListWrapper>
-          {children}
-        </ListWrapper>
-      </Scrollbars>
-    </MenuContainer>
-  );
-}
+    return (
+      // 전달받은 ref를 실제 DOM 요소인 MenuContainer에 연결
+      <MenuContainer ref={ref} width={width} verticalPos={verticalPos} alignPos={alignPos}>
+        <Scrollbars
+          autoHeight
+          autoHeightMax={maxHeight}
+          renderThumbVertical={(props: any) => <Thumb {...props} />}  
+        >
+          <ListWrapper>
+            {children}
+          </ListWrapper>
+        </Scrollbars>
+      </MenuContainer>
+    );
+  }
+);
 
 export default Dropdown;

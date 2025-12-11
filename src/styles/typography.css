@@ -50,11 +50,11 @@
 
   /* 4. Label & Caption (라벨 및 설명) */
   --font-label-size: 14px;
-  --font-label-height: 1.4;
+  --font-label-height: 22px;
   --font-label-weight: var(--fw-medium);
   
   --font-caption-size: 12px;
-  --font-caption-height: 1.4;
+  --font-caption-height: 20px;
   --font-caption-weight: var(--fw-medium);
-  --font-caption-color: #888; /* 캡션용 기본 색상도 필요하면 정의 */
+
 }
