@@ -135,21 +135,36 @@ function Select({
   const displayValue = selectedOption ? selectedOption.label : '선택하세요';
 
   // [위치 계산 로직]
-  useLayoutEffect(() => {
+useLayoutEffect(() => {
     if (isOpen && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
       const windowWidth = document.documentElement.clientWidth; 
       const windowHeight = window.innerHeight;
       
+      // 높이 계산 (기존과 동일)
       const DROPDOWN_HEIGHT = maxHeight + 40; 
-      const dropdownWidthParsed = menuWidth ? parseInt(menuWidth, 10) : rect.width;
-      
       const spaceBelow = windowHeight - rect.bottom;
       const vertical = spaceBelow < (DROPDOWN_HEIGHT) ? 'top' : 'bottom'; 
       
-      const GAP_BUFFER = 50; 
+      // 너비 및 좌우 계산 (수정된 부분)
+      const dropdownWidthParsed = menuWidth ? parseInt(menuWidth, 10) : rect.width;
+      const GAP_BUFFER = 10; // 여유 공간 (기존 50은 너무 넓을 수 있어 10 정도로 줄임, 원하시면 50 유지)
+
+      // 1. 오른쪽 공간이 부족한지 확인 (기존 로직)
+      // (화면 전체 폭 - 버튼 왼쪽 위치)가 (드롭다운 폭 + 여유공간)보다 작으면 오른쪽이 좁은 것
       const spaceRight = windowWidth - rect.left;
-      const align = spaceRight < (dropdownWidthParsed + GAP_BUFFER) ? 'right' : 'left';
+      const isOverflowRight = spaceRight < (dropdownWidthParsed + GAP_BUFFER);
+
+      // 2. 왼쪽 공간이 부족한지 확인 (새로 추가된 로직)
+      // (버튼 오른쪽 끝 위치 - 드롭다운 폭)이 0보다 작으면, 
+      // 오른쪽 정렬(align: right)을 했을 때 드롭다운이 화면 왼쪽 밖으로 튀어나감
+      const isOverflowLeft = (rect.right - dropdownWidthParsed) < GAP_BUFFER;
+
+      // [최종 결정]
+      // 오른쪽이 부족하면(isOverflowRight) 보통 'right' 정렬을 해야 하지만,
+      // 왼쪽 공간마저 부족하다면(isOverflowLeft) -> 사용자 요청대로 'left'로 강제
+      // 즉, "오른쪽이 좁은데 + 왼쪽은 안 좁을 때"만 'right'를 씁니다.
+      const align = (isOverflowRight && !isOverflowLeft) ? 'right' : 'left';
 
       setDropdownPos({ vertical, align });
     }
