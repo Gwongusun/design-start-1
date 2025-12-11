@@ -1,16 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import styled from '@emotion/styled';
+import { useTheme } from '@emotion/react'; 
 import Dropdown, { OptionItem } from './Dropdown';
 import Text from './Text';
-
-const COLORS = {
-  default: { bg: 'white', border: '#ccc', text: '#333', label: '#333', arrow: '#999' },
-  placeholder: { bg: 'white', border: '#ccc', text: '#999', label: '#333', arrow: '#999' },
-  hover: { bg: '#fafafa', border: '#63b3ed', text: '#333', label: '#333', arrow: '#63b3ed' },
-  open: { bg: 'white', border: '#63b3ed', text: '#333', label: '#333', arrow: '#333' },
-  disabled: { bg: '#f7fafc', border: '#e2e8f0', text: '#a0aec0', label: '#a0aec0', arrow: '#cbd5e0' }
-};
 
 export interface OptionType {
   label: string;
@@ -36,7 +29,6 @@ const Wrapper = styled.div<{ width?: string }>`
   width: ${(props) => props.width || '100%'};
 `;
 
-// 버튼과 드롭다운의 기준점이 되는 영역
 const InputArea = styled.div`
   position: relative;
   width: 100%;
@@ -53,25 +45,25 @@ const TriggerButton = styled.div<{ isOpen: boolean; isDisabled: boolean; isPlace
   box-sizing: border-box;
   overflow: hidden;
 
-  background-color: ${(props) => 
-    props.isDisabled ? COLORS.disabled.bg 
-    : props.isOpen ? COLORS.open.bg 
-    : props.isPlaceholder ? COLORS.placeholder.bg 
-    : COLORS.default.bg
-  };
+  /* 🎨 배경색 */
+  background-color: ${(props) => {
+    if (props.isDisabled) return props.theme.colors.coolgray[50];
+    return props.theme.colors.white;
+  }};
 
-  border: 1px solid ${(props) => 
-    props.isDisabled ? COLORS.disabled.border 
-    : props.isOpen ? COLORS.open.border 
-    : props.isPlaceholder ? COLORS.placeholder.border
-    : COLORS.default.border
-  };
+  /* 🎨 테두리색 */
+  border: 1px solid ${(props) => {
+    if (props.isDisabled) return props.theme.colors.coolgray[100];
+    if (props.isOpen) return props.theme.colors.coolgray[500];
+    return props.theme.colors.coolgray[200];
+  }};
 
   cursor: ${(props) => (props.isDisabled ? 'not-allowed' : 'pointer')};
 
+  /* 🎨 호버 효과 */
   &:hover {
-    background-color: ${(props) => !props.isDisabled && COLORS.hover.bg};
-    border-color: ${(props) => !props.isDisabled && COLORS.hover.border};
+    background-color: ${(props) => !props.isDisabled && props.theme.colors.coolgray[50]};
+    border-color: ${(props) => !props.isDisabled && props.theme.colors.coolgray[400]};
   }
 `;
 
@@ -94,10 +86,11 @@ function Select({
   maxHeight = 200 
 }: SelectProps) {
   
+  const theme = useTheme();
+
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false); 
   
-  // 드롭다운 위치 상태 관리
   const [dropdownPos, setDropdownPos] = useState<{ vertical: 'top' | 'bottom', align: 'left' | 'right' }>({
     vertical: 'bottom',
     align: 'left'
@@ -110,7 +103,7 @@ function Select({
   const isPlaceholder = !selectedOption;
   const displayValue = selectedOption ? selectedOption.label : '선택하세요';
 
-  // [위치 자동 계산 로직]
+  // [위치 자동 계산]
   useLayoutEffect(() => {
     if (isOpen && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
@@ -120,10 +113,8 @@ function Select({
       const DROPDOWN_HEIGHT = maxHeight + 40; 
       const spaceBelow = windowHeight - rect.bottom;
       
-      // 1. 위/아래 결정
       const vertical = spaceBelow < (DROPDOWN_HEIGHT) ? 'top' : 'bottom'; 
       
-      // 2. 좌/우 결정
       const dropdownWidthParsed = menuWidth ? parseInt(menuWidth, 10) : rect.width;
       const GAP_BUFFER = 10;
       const spaceRight = windowWidth - rect.left;
@@ -149,15 +140,8 @@ function Select({
   // [외부 클릭 감지]
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // 버튼 클릭은 무시 (toggleOpen이 처리함)
-      if (containerRef.current && containerRef.current.contains(event.target as Node)) {
-        return;
-      }
-      // 드롭다운 내부 클릭 무시 (Dropdown 내부 로직 보호)
-      if (dropdownRef.current && dropdownRef.current.contains(event.target as Node)) {
-        return;
-      }
-      // 그 외 영역 클릭 시 닫기
+      if (containerRef.current && containerRef.current.contains(event.target as Node)) return;
+      if (dropdownRef.current && dropdownRef.current.contains(event.target as Node)) return;
       setIsOpen(false);
     };
 
@@ -174,22 +158,25 @@ function Select({
     };
   }, [isOpen]);
 
+  // 🎨 색상 반환 함수 (Theme Token 사용)
   const getLabelColor = () => { 
-    if (disabled) return COLORS.disabled.label;
-    if (isOpen) return COLORS.open.label;
-    return COLORS.default.label;
+    if (disabled) return theme.colors.coolgray[250];
+    if (isOpen) return theme.colors.coolgray[800];
+    return theme.colors.coolgray[800];
   };
+
   const getTextColor = () => { 
-    if (disabled) return COLORS.disabled.text;
-    if (isOpen) return COLORS.open.text;
-    if (isPlaceholder) return COLORS.placeholder.text;
-    return COLORS.default.text;
+    if (disabled) return theme.colors.coolgray[300];
+    if (isOpen) return theme.colors.coolgray[900];
+    if (isPlaceholder) return theme.colors.coolgray[300]; 
+    return theme.colors.coolgray[900]; 
   };
+
   const getArrowColor = () => { 
-    if (disabled) return COLORS.disabled.arrow;
-    if (isOpen) return COLORS.open.arrow;
-    if (isHovered) return COLORS.hover.arrow; 
-    return COLORS.default.arrow;
+    if (disabled) return theme.colors.coolgray[200];
+    if (isOpen) return theme.colors.coolgray[900];
+    if (isHovered) return theme.colors.coolgray[900];
+    return theme.colors.coolgray[300]; 
   };
 
   return (
@@ -245,12 +232,9 @@ function Select({
           </svg>
         </TriggerButton>
 
-        {/* ✅ [핵심 변경] DropdownRefWrapper 제거 
-           Dropdown 컴포넌트에 직접 ref를 전달하고, 위치 props를 넘깁니다.
-        */}
         {!disabled && isOpen && (
           <Dropdown 
-            ref={dropdownRef} // forwardRef 덕분에 여기에 직접 ref 연결 가능!
+            ref={dropdownRef} 
             isOpen={isOpen} 
             width={menuWidth}
             verticalPos={dropdownPos.vertical}
@@ -265,7 +249,7 @@ function Select({
               >
                 <Text 
                   variant="label" 
-                  color={option.value === value ? '#68d391' : '#333'}
+                  color={option.value === value ? theme.colors.green[600] : theme.colors.coolgray[800]}
                   style={{ fontWeight: option.value === value ? 'bold' : 'normal' }}
                 >
                   {option.label}
