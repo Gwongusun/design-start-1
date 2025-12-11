@@ -183,7 +183,7 @@ export default function App() {
           onChange={setTestBottom} 
           width="100%"      
           menuWidth="100%"
-          maxHeight={400}
+          maxHeight={200}
         />
       </Section>
       
@@ -194,7 +194,7 @@ export default function App() {
         </Text>
         <Text variant="bodyLarge" color="#666" style={{ marginBottom: '20px' }}>
           <b>위쪽 + 왼쪽 방향</b>으로 동시에 보정되어야 합니다. <br/>
-          (maxHeight를 300px로 늘려서 테스트)
+          (maxHeight를 400px로 늘려서 테스트)
         </Text>
         
         <FlexRight>
@@ -205,7 +205,7 @@ export default function App() {
             onChange={setTestCorner} 
             width="200px"      
             menuWidth="400px"
-            maxHeight={100} /* ✅ 여기서 높이를 300으로 지정했습니다! */
+            maxHeight={400} /* ✅ 여기서 높이를 300으로 지정했습니다! */
           />
         </FlexRight>
       </Section>
