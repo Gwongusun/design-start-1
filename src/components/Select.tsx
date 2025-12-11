@@ -36,7 +36,7 @@ const Wrapper = styled.div<{ width?: string }>`
   width: ${(props) => props.width || '100%'};
 `;
 
-// 버튼과 드롭다운만 감싸는 영역 (위치 기준점)
+// 버튼과 드롭다운의 기준점이 되는 영역
 const InputArea = styled.div`
   position: relative;
   width: 100%;
@@ -83,31 +83,6 @@ const SelectedValueWrapper = styled.div`
   align-items: center;
 `;
 
-// Dropdown 위치 및 간격 제어를 위한 래퍼
-const DropdownRefWrapper = styled.div<{ isTop: boolean }>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1000;
-
-  & > * {
-    pointer-events: auto;
-
-    /* 1. 위로 열릴 때 (isTop === true) -> 버튼 위 간격 */
-    ${(props) => props.isTop && `
-      margin-bottom: 6px !important; 
-    `}
-
-    /* 2. 아래로 열릴 때 (isTop === false) -> 버튼 아래 간격 */
-    ${(props) => !props.isTop && `
-      margin-top: 6px !important; 
-    `}
-  }
-`;
-
 function Select({ 
   label, 
   options, 
@@ -122,6 +97,7 @@ function Select({
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false); 
   
+  // 드롭다운 위치 상태 관리
   const [dropdownPos, setDropdownPos] = useState<{ vertical: 'top' | 'bottom', align: 'left' | 'right' }>({
     vertical: 'bottom',
     align: 'left'
@@ -134,36 +110,26 @@ function Select({
   const isPlaceholder = !selectedOption;
   const displayValue = selectedOption ? selectedOption.label : '선택하세요';
 
-  // [위치 계산 로직]
-useLayoutEffect(() => {
+  // [위치 자동 계산 로직]
+  useLayoutEffect(() => {
     if (isOpen && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
       const windowWidth = document.documentElement.clientWidth; 
       const windowHeight = window.innerHeight;
       
-      // 높이 계산 (기존과 동일)
       const DROPDOWN_HEIGHT = maxHeight + 40; 
       const spaceBelow = windowHeight - rect.bottom;
+      
+      // 1. 위/아래 결정
       const vertical = spaceBelow < (DROPDOWN_HEIGHT) ? 'top' : 'bottom'; 
       
-      // 너비 및 좌우 계산 (수정된 부분)
+      // 2. 좌/우 결정
       const dropdownWidthParsed = menuWidth ? parseInt(menuWidth, 10) : rect.width;
-      const GAP_BUFFER = 10; // 여유 공간 (기존 50은 너무 넓을 수 있어 10 정도로 줄임, 원하시면 50 유지)
-
-      // 1. 오른쪽 공간이 부족한지 확인 (기존 로직)
-      // (화면 전체 폭 - 버튼 왼쪽 위치)가 (드롭다운 폭 + 여유공간)보다 작으면 오른쪽이 좁은 것
+      const GAP_BUFFER = 10;
       const spaceRight = windowWidth - rect.left;
       const isOverflowRight = spaceRight < (dropdownWidthParsed + GAP_BUFFER);
-
-      // 2. 왼쪽 공간이 부족한지 확인 (새로 추가된 로직)
-      // (버튼 오른쪽 끝 위치 - 드롭다운 폭)이 0보다 작으면, 
-      // 오른쪽 정렬(align: right)을 했을 때 드롭다운이 화면 왼쪽 밖으로 튀어나감
       const isOverflowLeft = (rect.right - dropdownWidthParsed) < GAP_BUFFER;
-
-      // [최종 결정]
-      // 오른쪽이 부족하면(isOverflowRight) 보통 'right' 정렬을 해야 하지만,
-      // 왼쪽 공간마저 부족하다면(isOverflowLeft) -> 사용자 요청대로 'left'로 강제
-      // 즉, "오른쪽이 좁은데 + 왼쪽은 안 좁을 때"만 'right'를 씁니다.
+      
       const align = (isOverflowRight && !isOverflowLeft) ? 'right' : 'left';
 
       setDropdownPos({ vertical, align });
@@ -180,14 +146,14 @@ useLayoutEffect(() => {
     setIsOpen(false);
   };
 
-  // [수정됨: 스크롤 이벤트 리스너 제거]
+  // [외부 클릭 감지]
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      // 1. 컨테이너(버튼) 클릭 시 무시 (toggleOpen이 처리)
+      // 버튼 클릭은 무시 (toggleOpen이 처리함)
       if (containerRef.current && containerRef.current.contains(event.target as Node)) {
         return;
       }
-      // 2. 드롭다운 내부 클릭 시 무시
+      // 드롭다운 내부 클릭 무시 (Dropdown 내부 로직 보호)
       if (dropdownRef.current && dropdownRef.current.contains(event.target as Node)) {
         return;
       }
@@ -195,18 +161,15 @@ useLayoutEffect(() => {
       setIsOpen(false);
     };
 
-    // 윈도우 리사이즈 시에는 닫는 것이 안전하므로 유지
     const handleResize = () => setIsOpen(false);
 
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
-      // window.addEventListener('scroll', ...); <--- 스크롤 감지 로직 제거됨
       window.addEventListener('resize', handleResize);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
-      // window.removeEventListener('scroll', ...); <--- 제거됨
       window.removeEventListener('resize', handleResize);
     };
   }, [isOpen]);
@@ -260,6 +223,7 @@ useLayoutEffect(() => {
             </Text>
           </SelectedValueWrapper>
 
+          {/* 화살표 아이콘 */}
           <svg
             width="16"
             height="16"
@@ -281,35 +245,34 @@ useLayoutEffect(() => {
           </svg>
         </TriggerButton>
 
+        {/* ✅ [핵심 변경] DropdownRefWrapper 제거 
+           Dropdown 컴포넌트에 직접 ref를 전달하고, 위치 props를 넘깁니다.
+        */}
         {!disabled && isOpen && (
-          <DropdownRefWrapper 
-            ref={dropdownRef} 
-            isTop={dropdownPos.vertical === 'top'} 
+          <Dropdown 
+            ref={dropdownRef} // forwardRef 덕분에 여기에 직접 ref 연결 가능!
+            isOpen={isOpen} 
+            width={menuWidth}
+            verticalPos={dropdownPos.vertical}
+            alignPos={dropdownPos.align}
+            maxHeight={maxHeight}
           >
-            <Dropdown 
-              isOpen={isOpen} 
-              width={menuWidth}
-              verticalPos={dropdownPos.vertical}
-              alignPos={dropdownPos.align}
-              maxHeight={maxHeight}
-            >
-              {options.map((option) => (
-                <OptionItem
-                  key={option.value}
-                  isSelected={option.value === value}
-                  onClick={() => handleOptionClick(option.value)}
+            {options.map((option) => (
+              <OptionItem
+                key={option.value}
+                isSelected={option.value === value}
+                onClick={() => handleOptionClick(option.value)}
+              >
+                <Text 
+                  variant="label" 
+                  color={option.value === value ? '#68d391' : '#333'}
+                  style={{ fontWeight: option.value === value ? 'bold' : 'normal' }}
                 >
-                  <Text 
-                    variant="label" 
-                    color={option.value === value ? '#68d391' : '#333'}
-                    style={{ fontWeight: option.value === value ? 'bold' : 'normal' }}
-                  >
-                    {option.label}
-                  </Text>
-                </OptionItem>
-              ))}
-            </Dropdown>
-          </DropdownRefWrapper>
+                  {option.label}
+                </Text>
+              </OptionItem>
+            ))}
+          </Dropdown>
         )}
       </InputArea>
     </Wrapper>
