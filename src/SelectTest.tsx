@@ -226,9 +226,9 @@ export default function SelectTest() {
         </Text>
       </Header>
 
-      {/* 0. Quick Start & Props */}
+      {/* 1. Quick Start & Props */}
       <Section>
-        <SectionHeader title="0. Quick Start & Props" />
+        <SectionHeader title="1. Quick Start & Props" />
         
         <Text variant="400-14" color={theme.colors.coolgray[600]}>
           Select 컴포넌트의 모든 옵션(Props)을 적용한 기본 사용 예시입니다.
@@ -271,8 +271,8 @@ export default function SelectTest() {
               { name: 'value', desc: '현재 선택된 값 (Controlled Component)' },
               { name: 'onChange', desc: '값이 변경될 때 실행되는 핸들러' },
               { name: 'width', desc: '버튼 너비 (기본값: 100%)' },
-              { name: 'menuWidth', desc: '메뉴 너비 (기본값: width와 동일)' },
-              { name: 'maxHeight', desc: '메뉴 최대 높이 (기본값: 250px)' },
+              { name: 'menuWidth', desc: '드롭다운 메뉴 너비 (기본값: width와 동일)' },
+              { name: 'maxHeight', desc: '드롭다운 메뉴 최대 높이 (기본값: 250px)' },
               { name: 'disabled', desc: '비활성화 여부' },
             ].map((prop) => (
               <PropItem key={prop.name}>
@@ -286,9 +286,9 @@ export default function SelectTest() {
         </div>
       </Section>
 
-      {/* 1. Basic Usage */}
+      {/* 2. Basic Usage */}
       <Section>
-        <SectionHeader title="1. Basic Usage" />
+        <SectionHeader title="2. Basic Usage" />
         
         <Text variant="400-14" color={theme.colors.coolgray[600]}>
           가장 기본적인 사용 형태입니다.
@@ -317,9 +317,9 @@ export default function SelectTest() {
         </div>
       </Section>
 
-      {/* 2. States */}
+      {/* 3. States */}
       <Section>
-        <SectionHeader title="2. States" />
+        <SectionHeader title="3. States" />
         
         <GridContainer>
           <div>
@@ -341,9 +341,9 @@ export default function SelectTest() {
         </GridContainer>
       </Section>
 
-      {/* 3. Auto Positioning */}
+      {/* 4. Auto Positioning */}
       <Section>
-        <SectionHeader title="3. Auto Positioning" />
+        <SectionHeader title="4. Auto Positioning" />
         
         <Text variant="400-14" color={theme.colors.coolgray[600]}>
           뷰포트 경계에 근접했을 때 메뉴가 열리는 방향(Direction)이 자동으로 보정되어야 합니다.
