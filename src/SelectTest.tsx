@@ -13,7 +13,7 @@ import Text from './components/Text';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 60px 20px;
+  padding: 50px;
   max-width: 800px;
   margin: 0 auto;
   gap: 50px;
@@ -169,10 +169,10 @@ export default function SelectTest() {
       <Header>
         <Text 
           as="h1" 
-          variant="displayMedium" 
+          variant="displayLarge" 
           style={{ marginBottom: '10px' }}
         >
-          TypeScript + Emotion Select
+          Select Component
         </Text>
         <Text 
           variant="bodyLarge" 
@@ -355,12 +355,6 @@ export default function SelectTest() {
             />
           </FlexRight>
         </CaseBox>
-
-        <ScrollGuide>
-          <Text variant="caption" color={theme.colors.coolgray[400]}>
-            ↓ 스크롤을 끝까지 내려보세요 ↓
-          </Text>
-        </ScrollGuide>
 
         <CaseBox>
           <div>
