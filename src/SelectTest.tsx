@@ -18,6 +18,12 @@ const Container = styled.div`
   margin: 0 auto;
   gap: 50px; /* 섹션 간 간격 */
   min-height: 150vh;
+
+  /* [Mobile] 전체 패딩 및 간격 축소 */
+  @media (max-width: 768px) {
+    padding: 20px;
+    gap: 30px;
+  }
 `;
 
 const Header = styled.div`
@@ -34,10 +40,15 @@ const Section = styled.section`
   background-color: ${({ theme }) => theme.colors.white};
   /* 그림자 효과 추가 */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+
+  /* [Mobile] 섹션 내부 패딩 축소 */
+  @media (max-width: 768px) {
+    padding: 24px;
+  }
 `;
 
 const SectionTitleWrapper = styled.div`
-   margin-bottom: 20px;
+  margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 2px solid ${({ theme }) => theme.colors.coolgray[900]};
 `;
@@ -48,6 +59,11 @@ const CodeBox = styled.div`
   padding: 30px;
   overflow-x: auto;
   font-family: 'Menlo', 'Monaco', monospace;
+
+  /* [Mobile] 코드박스 패딩 축소 */
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
 `;
 
 const Pre = styled.pre`
@@ -76,6 +92,13 @@ const PropItem = styled.li`
   &:first-of-type {
     border-top: 1px dotted ${({ theme }) => theme.colors.coolgray[200]};
   }
+
+  /* [Mobile] 좁은 화면에서 라벨과 설명을 상하로 배치 */
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
 `;
 
 // 속성명 배지 스타일
@@ -97,6 +120,11 @@ const GridContainer = styled.div`
   display: grid; 
   gap: 30px; 
   grid-template-columns: 1fr 1fr;
+
+  /* [Mobile] 1단 컬럼으로 변경 */
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 // 위치 감지 테스트용 그리드
@@ -108,6 +136,15 @@ const PositionGrid = styled.div`
   /* 3번째 아이템(Corner)은 가로로 길게 배치 */
   & > div:nth-of-type(3) {
     grid-column: span 2;
+  }
+
+  /* [Mobile] 1단 컬럼 변경 및 Span 해제 */
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    
+    & > div:nth-of-type(3) {
+      grid-column: span 1;
+    }
   }
 `;
 
@@ -133,6 +170,11 @@ const PositionBox = styled.div<{ align?: 'right' | 'bottom' }>`
   background-color: ${({ theme }) => theme.colors.coolgray[50]};
   border: 1px dashed ${({ theme }) => theme.colors.coolgray[300]};
   border-radius: 12px;
+
+  /* [Mobile] 패딩 축소 */
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
 `;
 
 // -------------------------------------------------------------------------
@@ -164,6 +206,7 @@ export default function SelectTest() {
         as="h2" 
         variant="700-24" 
         color={theme.colors.coolgray[900]}
+        style={{ wordBreak: 'keep-all' }}
       >
         {title}
       </Text>
@@ -173,7 +216,7 @@ export default function SelectTest() {
   return (
     <Container>
       <Header>
-        <Text as="h1" variant="900-48" style={{ marginBottom: '10px' }}>
+        <Text as="h1" variant="900-48" style={{ marginBottom: '10px', fontSize: 'clamp(32px, 5vw, 48px)' }}>
           Select Component
         </Text>
         <Text variant="400-18" color={theme.colors.coolgray[500]}>
@@ -250,12 +293,13 @@ export default function SelectTest() {
         </Text>
 
         <div style={{ padding: '30px', border: `1px solid ${theme.colors.coolgray[200]}`, borderRadius: '12px' }}>
+          {/* [Responsive] width="320px" 대신 "100%"를 사용하여 부모 컨테이너에 맞춤 */}
           <Select 
             label="프레임워크 선택" 
             options={options} 
             value={framework} 
             onChange={setFramework} 
-            width="320px" 
+            width="100%" 
             menuWidth="100%" 
             maxHeight={120}
           />

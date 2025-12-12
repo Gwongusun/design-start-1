@@ -31,6 +31,12 @@ const Container = styled.div`
   margin: 0 auto;
   gap: 50px;
   padding-bottom: 100px;
+
+  /* [Mobile] 전체 패딩 및 간격 축소 */
+  @media (max-width: 768px) {
+    padding: 20px;
+    gap: 30px;
+  }
 `;
 
 const Header = styled.div`
@@ -46,6 +52,11 @@ const Section = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.coolgray[200]};
   background-color: ${({ theme }) => theme.colors.white};
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+
+  /* [Mobile] 섹션 내부 패딩 축소 */
+  @media (max-width: 768px) {
+    padding: 24px;
+  }
 `;
 
 const SectionTitleWrapper = styled.div`
@@ -58,6 +69,9 @@ const StyledTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
+  
+  /* [Mobile] 테이블 최소 너비 설정 -> 가로 스크롤 유도 */
+  min-width: 700px; 
 `;
 
 const Th = styled.th`
@@ -79,6 +93,12 @@ const Th = styled.th`
   &:last-of-type {
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
+  }
+
+  /* [Mobile] 헤더 패딩 축소 */
+  @media (max-width: 768px) {
+    padding: 10px 4px;
+    font-size: 12px;
   }
 `;
 
@@ -116,7 +136,12 @@ const CodeBox = styled.div`
   border-radius: 8px;
   padding: 24px;
   margin-bottom: 10px;
-  overflow-x: auto;
+  overflow-x: auto; /* 코드 스크롤 */
+
+  /* [Mobile] 코드박스 패딩 축소 */
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
 `;
 
 const Pre = styled.pre`
@@ -145,6 +170,13 @@ const PropItem = styled.li`
 
   &:first-of-type {
     border-top: 1px dotted ${({ theme }) => theme.colors.coolgray[200]};
+  }
+
+  /* [Mobile] 좁은 화면에서 라벨과 설명을 상하로 배치 */
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
   }
 `;
 
@@ -176,7 +208,8 @@ export default function TextTest() {
   return (
     <Container>
       <Header>
-        <Text as="h1" variant="900-48" style={{ marginBottom: '10px' }}>
+        {/* [Responsive] 폰트 사이즈 clamp 적용 */}
+        <Text as="h1" variant="900-48" style={{ marginBottom: '10px', fontSize: 'clamp(32px, 5vw, 48px)' }}>
           Typography System
         </Text>
         <Text variant="400-18" color={theme.colors.coolgray[500]}>
@@ -187,11 +220,12 @@ export default function TextTest() {
       {/* 1. Typography Matrix Table */}
       <Section>
         <SectionHeader title="1. Full Typography Matrix" />
-        <Text variant="400-14" color={theme.colors.coolgray[500]} >
-          모든 사이즈(Size)와 두께(Weight) 조합을 보여주는 매트릭스입니다.
+        <Text variant="400-14" color={theme.colors.coolgray[500]} style={{ marginBottom: '10px' }}>
+          모든 사이즈(Size)와 두께(Weight) 조합을 보여주는 매트릭스입니다. (좌우 스크롤 가능)
         </Text>
 
-        <div style={{ overflowX: 'auto' }}>
+        {/* 가로 스크롤 컨테이너 */}
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
           <StyledTable>
             <thead>
               <tr>
