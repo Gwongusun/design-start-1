@@ -13,19 +13,17 @@ import Text from './components/Text';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 50px;
+  padding: 60px 20px;
   max-width: 800px;
   margin: 0 auto;
   gap: 50px;
-  min-height: 150vh; /* 스크롤 테스트를 위해 충분한 높이 확보 */
+  min-height: 150vh;
 `;
 
-// ✨ [에러 해결] Header 컴포넌트 정의
 const Header = styled.div`
   margin-bottom: 20px;
 `;
 
-// 흰색 카드 섹션 (기본 컨테이너)
 const Section = styled.div`
   display: flex;
   flex-direction: column;
@@ -43,12 +41,11 @@ const SectionTitleWrapper = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.coolgray[100]};
 `;
 
-// 🎨 [신규 추가] 이미지처럼 회색 박스로 감싸는 스타일
 const CaseBox = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.coolgray[50]}; /* 연한 회색 배경 */
-  border: 1px solid ${({ theme }) => theme.colors.coolgray[100]};
+  background-color: ${({ theme }) => theme.colors.coolgray[50]};
+  border: 1px dashed ${({ theme }) => theme.colors.coolgray[200]};
   border-radius: 12px;
   padding: 30px;
   gap: 20px;
@@ -70,6 +67,57 @@ const ScrollGuide = styled.div`
   text-align: center;
 `;
 
+// 코드 하이라이팅 박스
+const CodeBox = styled.div`
+  background-color: ${({ theme }) => theme.colors.coolgray[900]};
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 10px;
+  overflow-x: auto;
+`;
+
+const Pre = styled.pre`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.white};
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+`;
+
+// 속성 설명 리스트
+const PropList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const PropItem = styled.li`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 15px;
+  padding: 8px 0;
+  border-bottom: 1px dashed ${({ theme }) => theme.colors.coolgray[100]};
+  
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const PropName = styled.code`
+  background-color: ${({ theme }) => theme.colors.blue[50]};
+  color: ${({ theme }) => theme.colors.blue[600]};
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-family: monospace;
+  min-width: 100px;
+  text-align: center;
+`;
+
 // -------------------------------------------------------------------------
 // 2. 메인 컴포넌트
 // -------------------------------------------------------------------------
@@ -77,7 +125,6 @@ const ScrollGuide = styled.div`
 export default function SelectTest() {
   const theme = useTheme();
 
-  // 상태 관리
   const [framework, setFramework] = useState('');
   const [val1, setVal1] = useState('');
   const [val2, setVal2] = useState('react');
@@ -94,7 +141,6 @@ export default function SelectTest() {
     { value: 'jquery', label: 'jQuery (레거시)' },
   ];
 
-  // 헬퍼 컴포넌트
   const SectionHeader = ({ title }: { title: string }) => (
     <SectionTitleWrapper>
       <Text 
@@ -121,13 +167,12 @@ export default function SelectTest() {
   return (
     <Container>
       <Header>
-        {/* 규칙 준수: as -> variant */}
         <Text 
           as="h1" 
-          variant="displayLarge" 
+          variant="displayMedium" 
           style={{ marginBottom: '10px' }}
         >
-          Select Component
+          TypeScript + Emotion Select
         </Text>
         <Text 
           variant="bodyLarge" 
@@ -136,6 +181,94 @@ export default function SelectTest() {
           드롭다운의 다양한 상태(State) 및 위치 자동 감지 테스트
         </Text>
       </Header>
+
+      {/* ✨ 0. Quick Start */}
+      <Section>
+        <SectionHeader title="0. Quick Start (사용 예시)" />
+        
+        <Text variant="bodyMedium" color={theme.colors.coolgray[600]}>
+          기본적인 사용법과 드롭다운 관련 옵션(menuWidth, maxHeight, disabled) 예시입니다.
+        </Text>
+
+        <CodeBox>
+          <Pre>
+{`const [value, setValue] = useState('');
+
+<Select 
+  label="프레임워크 선택" 
+  options={OPTIONS}
+  value={value}
+  onChange={setValue}
+  width="320px"
+  menuWidth="400px"  // 드롭다운 너비
+  maxHeight={250}    // 드롭다운 최대 높이
+  disabled={false}   // 비활성화 여부
+/>`}
+          </Pre>
+        </CodeBox>
+
+        <Text 
+          as="h3" 
+          variant="bodyLarge" 
+          style={{ marginTop: '10px', marginBottom: '10px', fontWeight: 'bold' }}
+        >
+          Props Guide
+        </Text>
+
+        <PropList>
+          {/* 필수 Props */}
+          <PropItem>
+            <PropName>label</PropName>
+            <Text variant="bodyMedium">
+              플레이스홀더 텍스트입니다. (선택값이 없을 때 표시)
+            </Text>
+          </PropItem>
+          <PropItem>
+            <PropName>options</PropName>
+            <Text variant="bodyMedium">
+              선택 옵션 배열입니다. <b>{`{ value: string, label: string }[]`}</b>
+            </Text>
+          </PropItem>
+          <PropItem>
+            <PropName>value</PropName>
+            <Text variant="bodyMedium">
+              현재 선택된 값입니다. (제어 컴포넌트 방식)
+            </Text>
+          </PropItem>
+          <PropItem>
+            <PropName>onChange</PropName>
+            <Text variant="bodyMedium">
+              값이 변경될 때 실행되는 함수입니다.
+            </Text>
+          </PropItem>
+          
+          {/* 스타일 & 드롭다운 옵션 */}
+          <PropItem>
+            <PropName>width</PropName>
+            <Text variant="bodyMedium">
+              Select 버튼의 너비를 지정합니다. (기본값: 100%)
+            </Text>
+          </PropItem>
+          <PropItem>
+            <PropName>menuWidth</PropName>
+            <Text variant="bodyMedium">
+              드롭다운 메뉴의 너비를 별도로 지정합니다. (기본값: width와 동일)
+            </Text>
+          </PropItem>
+          <PropItem>
+            <PropName>maxHeight</PropName>
+            <Text variant="bodyMedium">
+              드롭다운 메뉴의 최대 높이입니다. 넘치면 스크롤됩니다. (기본값: 250px)
+            </Text>
+          </PropItem>
+          <PropItem>
+            <PropName>disabled</PropName>
+            <Text variant="bodyMedium">
+              true로 설정하면 선택할 수 없는 비활성화 상태가 됩니다.
+            </Text>
+          </PropItem>
+        </PropList>
+      </Section>
 
       {/* PART 1. 기본 기능 */}
       <Section>
@@ -192,7 +325,7 @@ export default function SelectTest() {
         </GridContainer>
       </Section>
 
-      {/* PART 3. 위치 감지 테스트 (이미지 스타일 적용) */}
+      {/* PART 3. 위치 감지 테스트 */}
       <Section>
         <SectionHeader title="3. Auto Positioning (위치 감지)" />
         
@@ -200,7 +333,6 @@ export default function SelectTest() {
           화면 끝부분에서 메뉴가 잘리지 않고 방향을 자동으로 전환하는지 확인합니다.
         </Text>
 
-        {/* 🎨 [CASE A] 회색 박스 적용 */}
         <CaseBox>
           <div>
             <Text as="h3" variant="h2" style={{ marginBottom: '8px' }}>
@@ -224,7 +356,12 @@ export default function SelectTest() {
           </FlexRight>
         </CaseBox>
 
-        {/* 🎨 [CASE B] 회색 박스 적용 */}
+        <ScrollGuide>
+          <Text variant="caption" color={theme.colors.coolgray[400]}>
+            ↓ 스크롤을 끝까지 내려보세요 ↓
+          </Text>
+        </ScrollGuide>
+
         <CaseBox>
           <div>
             <Text as="h3" variant="h2" style={{ marginBottom: '8px' }}>
@@ -246,7 +383,6 @@ export default function SelectTest() {
           />
         </CaseBox>
 
-        {/* 🎨 [CASE C] 회색 박스 적용 */}
         <CaseBox>
           <div>
             <Text as="h3" variant="h2" style={{ marginBottom: '8px' }}>

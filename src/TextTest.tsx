@@ -3,14 +3,14 @@ import styled from '@emotion/styled';
 import { useTheme } from '@emotion/react';
 import Text from './components/Text'; 
 
-// 🎨 SelectTest와 동일한 레이아웃 스타일 적용
+// 🎨 레이아웃 스타일
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 50px;      /* SelectTest와 동일하게 50px로 통일 */
-  max-width: 800px;   /* SelectTest와 동일하게 800px로 통일 */
-  margin: 0 auto;     /* 중앙 정렬 */
-  gap: 50px;          /* 섹션 간 간격 */
+  padding: 50px;
+  max-width: 800px;
+  margin: 0 auto;
+  gap: 50px;
 `;
 
 const Header = styled.div`
@@ -41,10 +41,61 @@ const Row = styled.div`
   margin-bottom: 5px;
 `;
 
+// 코드 하이라이팅 박스
+const CodeBox = styled.div`
+  background-color: ${({ theme }) => theme.colors.coolgray[900]};
+  border-radius: 8px;
+  padding: 24px;
+  margin-bottom: 10px;
+  overflow-x: auto;
+`;
+
+// 코드 텍스트
+const Pre = styled.pre`
+  margin: 0;
+  color: ${({ theme }) => theme.colors.white};
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+`;
+
+// 속성 설명 리스트
+const PropList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const PropItem = styled.li`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 15px;
+  padding: 8px 0;
+  border-bottom: 1px dashed ${({ theme }) => theme.colors.coolgray[100]};
+  
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+const PropName = styled.code`
+  background-color: ${({ theme }) => theme.colors.blue[50]};
+  color: ${({ theme }) => theme.colors.blue[600]};
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-family: monospace;
+  min-width: 80px;
+  text-align: center;
+`;
+
 export default function TextTest() {
   const theme = useTheme();
 
-  // 헬퍼: 설명 텍스트
   const DescriptionText = ({ children }: { children: React.ReactNode }) => (
     <Text 
       variant="caption" 
@@ -55,7 +106,6 @@ export default function TextTest() {
     </Text>
   );
 
-  // 헬퍼: 섹션 제목 (as -> variant 순서)
   const SectionHeader = ({ title }: { title: string }) => (
     <SectionTitleWrapper>
       <Text 
@@ -86,6 +136,70 @@ export default function TextTest() {
           디자인 시스템의 모든 텍스트 스타일(Variant)과 색상(Theme Color) 예시입니다.
         </Text>
       </Header>
+
+      {/* ✨ 0. Quick Start */}
+      <Section>
+        <SectionHeader title="0. Quick Start (사용 예시)" />
+        
+        <Text variant="bodyMedium" color={theme.colors.coolgray[600]}>
+          Text 컴포넌트는 아래와 같이 <b>as, variant, color, align, style</b> 속성을 조합하여 사용합니다.
+        </Text>
+
+        <CodeBox>
+          <Pre>
+{`<Text 
+  as="h1" 
+  variant="displayMedium" 
+  color={theme.colors.blue[500]}
+  align="center"
+  style={{ fontStyle: 'italic' }}
+>
+  Hello Design System!
+</Text>`}
+          </Pre>
+        </CodeBox>
+
+        <Text 
+          as="h3" 
+          variant="bodyLarge" 
+          style={{ marginTop: '10px', marginBottom: '10px', fontWeight: 'bold' }}
+        >
+          Props Guide
+        </Text>
+
+        <PropList>
+          <PropItem>
+            <PropName>as</PropName>
+            <Text variant="bodyMedium">
+              렌더링할 HTML 태그를 결정합니다. (예: h1, p, span, div, a)
+            </Text>
+          </PropItem>
+          <PropItem>
+            <PropName>variant</PropName>
+            <Text variant="bodyMedium">
+              미리 정의된 폰트 크기와 스타일을 적용합니다. (예: displayLarge, bodyMedium)
+            </Text>
+          </PropItem>
+          <PropItem>
+            <PropName>color</PropName>
+            <Text variant="bodyMedium">
+              텍스트 색상을 지정합니다. <b>theme.colors</b> 객체 사용을 권장합니다.
+            </Text>
+          </PropItem>
+          <PropItem>
+            <PropName>align</PropName>
+            <Text variant="bodyMedium">
+              텍스트 정렬을 지정합니다. (left, center, right)
+            </Text>
+          </PropItem>
+          <PropItem>
+            <PropName>style</PropName>
+            <Text variant="bodyMedium">
+              기본 스타일을 덮어쓰거나 추가 CSS를 인라인으로 적용할 때 사용합니다.
+            </Text>
+          </PropItem>
+        </PropList>
+      </Section>
 
       {/* 1. Typography Variants */}
       <Section>
