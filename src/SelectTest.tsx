@@ -193,11 +193,13 @@ export default function SelectTest() {
   const [testCorner, setTestCorner] = useState('');
 
   const options: OptionType[] = [
-    { value: 'react', label: 'React' },
-    { value: 'vue', label: 'Vue' },
-    { value: 'angular', label: 'Angular' },
-    { value: 'svelte', label: 'Svelte' },
-    { value: 'next', label: 'Next.js' },
+   { value: 'react', label: 'React' },
+   { value: 'vue', label: 'Vue' },
+   { value: 'angular', label: 'Angular' },
+   { value: 'svelte', label: 'Svelte' },
+   { value: 'next', label: 'Next.js' },
+   { value: 'remix', label: 'Remix' },
+  { value: 'gatsby', label: 'Gatsby' },
   ];
 
   const SectionHeader = ({ title }: { title: string }) => (
@@ -292,7 +294,7 @@ export default function SelectTest() {
           가장 기본적인 사용 형태입니다.
         </Text>
 
-        <div style={{ padding: '30px', border: `1px solid ${theme.colors.coolgray[200]}`, borderRadius: '12px' }}>
+        <div>
           {/* [Responsive] width="320px" 대신 "100%"를 사용하여 부모 컨테이너에 맞춤 */}
           <Select 
             label="프레임워크 선택" 
