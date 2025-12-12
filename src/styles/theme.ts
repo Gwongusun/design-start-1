@@ -1,3 +1,5 @@
+// 1. Emotion의 타입을 확장하기 위해 import가 필요합니다.
+import '@emotion/react'; 
 import { typo } from './typography';
 
 export const colors = {
@@ -40,7 +42,7 @@ export const colors = {
     900: '#840606',
   },
 
-  // Pink (Pick -> Pink)
+  // Pink
   pink: {
     50: '#FFF0F6',
     100: '#FFDEEB',
@@ -88,7 +90,7 @@ export const colors = {
     900: '#3A257B',
   },
 
-  // Indigo (Idigo -> Indigo)
+  // Indigo
   indigo: {
     50: '#EDF2FF',
     100: '#DBE4FF',
@@ -168,7 +170,7 @@ export const colors = {
     900: '#1A5325',
   },
 
-  // ✅ [New] Lime
+  // Lime
   lime: {
     50: '#F4FCE3',
     100: '#E9FAC8',
@@ -184,7 +186,7 @@ export const colors = {
     900: '#375908',
   },
 
-  // ✅ [New] Yellow
+  // Yellow
   yellow: {
     50: '#FFF9DB',
     100: '#FFF3BF',
@@ -200,7 +202,7 @@ export const colors = {
     900: '#885203',
   },
 
-  // ✅ [New] Orange
+  // Orange
   orange: {
     50: '#FFF4E6',
     100: '#FFE8CC',
@@ -220,7 +222,14 @@ export const colors = {
 // 테마 객체 생성
 export const theme = {
   colors,
-  typo, // Typography 시스템 추가
+  typo, 
 };
 
+// 사용자 정의 테마 타입 추출
 export type ThemeType = typeof theme;
+
+// ▼▼▼ 이 코드가 핵심입니다! ▼▼▼
+// Emotion의 기본 Theme 인터페이스를 우리가 만든 ThemeType 구조로 덮어씌웁니다.
+declare module '@emotion/react' {
+  export interface Theme extends ThemeType {}
+}

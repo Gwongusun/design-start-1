@@ -14,7 +14,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding: 50px;
-  max-width: 1200px;
+  max-width: 100%;
   margin: 0 auto;
   gap: 50px; /* 섹션 간 간격 */
   min-height: 150vh;
@@ -173,11 +173,11 @@ export default function SelectTest() {
   return (
     <Container>
       <Header>
-        <Text as="h1" variant="900-32" color={theme.colors.coolgray[900]}>
+        <Text as="h1" variant="900-48" style={{ marginBottom: '10px' }}>
           Select Component
         </Text>
-        <Text variant="400-16" color={theme.colors.coolgray[500]} style={{ marginTop: '10px' }}>
-          드롭다운의 다양한 상태(State) 및 위치 자동 감지 테스트 가이드
+        <Text variant="400-18" color={theme.colors.coolgray[500]}>
+          Dropdown States & Auto-Positioning Test Guide
         </Text>
       </Header>
 

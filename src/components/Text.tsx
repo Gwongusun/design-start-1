@@ -1,51 +1,52 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 import { ElementType, HTMLAttributes } from 'react';
-import { TypographyVariant } from '../styles/typography';
+import { TypographyVariant, FontWeight, FontSize } from '../styles/typography';
 
 interface TextProps extends HTMLAttributes<HTMLElement> {
-  variant?: TypographyVariant; // 예: "700-24"
   as?: ElementType;
+  variant?: TypographyVariant;
   color?: string;
   align?: 'left' | 'center' | 'right';
+  children: React.ReactNode;
+  // ▼▼▼ [추가] a 태그 사용 시 에러 방지를 위해 속성 추가 ▼▼▼
   href?: string;
   target?: string;
 }
 
-// ✨ [핵심 수정] 사이즈에 맞는 행간/자간 변수를 같이 매핑합니다.
-const getTypographyStyles = (variant: TypographyVariant) => {
-  const [weight, size] = variant.split('-');
-  
-  return `
-    font-weight: var(--fw-${weight});
-    
-    /* 사이즈 세트 적용 */
-    font-size: var(--fs-${size});
-    line-height: var(--lh-${size});
-    letter-spacing: var(--ls-${size});
-  `;
-};
-
-const StyledText = styled.div<{ 
-  variantStr: TypographyVariant; 
-  colorStr?: string; 
-  alignStr?: string;
+const StyledText = styled.p<{ 
+  variant: TypographyVariant; 
+  color?: string; 
+  align?: string;
 }>`
-  font-family: var(--font-family-base);
   margin: 0;
-  text-decoration: none;
-  
-  /* 1. 폰트 스타일(크기, 두께, 행간, 자간) 일괄 적용 */
-  ${({ variantStr }) => getTypographyStyles(variantStr)}
+  padding: 0;
+  font-family: Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
 
-  /* 2. 컬러 및 정렬 */
-  color: ${({ colorStr }) => colorStr || 'inherit'};
-  text-align: ${({ alignStr }) => alignStr || 'left'};
+  ${({ theme, variant }) => {
+    // 안전하게 타입 분리
+    const [weight, size] = variant.split('-') as [FontWeight, FontSize];
+    
+    // theme.ts가 올바르게 로드되었다면 여기서 값을 가져옵니다.
+    const { fontSize, lineHeight, letterSpacing } = theme.typo.sizes[size];
+
+    return css`
+      font-weight: ${theme.typo.weights[weight]};
+      font-size: ${fontSize};
+      line-height: ${lineHeight};
+      letter-spacing: ${letterSpacing};
+    `;
+  }}
+
+  color: ${({ color, theme }) => color || theme.colors.black};
+  text-align: ${({ align }) => align || 'left'};
+  text-decoration: none;
 `;
 
 const Text = ({ 
-  variant = '400-14', // 기본값
   as = 'p', 
+  variant = '400-16', 
   color, 
   align, 
   children, 
@@ -54,9 +55,9 @@ const Text = ({
   return (
     <StyledText 
       as={as} 
-      variantStr={variant} 
-      colorStr={color} 
-      alignStr={align} 
+      variant={variant} 
+      color={color} 
+      align={align} 
       {...props} 
     >
       {children}
