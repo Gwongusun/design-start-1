@@ -373,7 +373,7 @@ export default function SelectTest() {
             onChange={setTestBottom} 
             width="100%"      
             menuWidth="100%"
-            maxHeight={1500}
+            maxHeight={150}
           />
         </CaseBox>
 
