@@ -1,27 +1,33 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
-import { HTMLAttributes, ElementType } from 'react';
+import { ElementType, HTMLAttributes } from 'react';
 import { typo } from '../styles/typography';
 
 type TypographyVariant = keyof typeof typo;
 
-// ✨ [핵심 수정] HTMLAttributes를 상속받아야 'style'을 쓸 수 있습니다!
+// ✨ [핵심] a 태그 속성(href 등)을 받을 수 있도록 정의
 interface TextProps extends HTMLAttributes<HTMLElement> {
   variant?: TypographyVariant;
   as?: ElementType;
   color?: string;
   align?: 'left' | 'center' | 'right';
+  href?: string;
+  target?: string;
 }
 
+// ✨ StyledText도 href를 모르면 에러가 날 수 있어서 타입을 추가해줍니다.
 const StyledText = styled.div<{ 
   variant: TypographyVariant; 
   color?: string; 
-  align?: string 
+  align?: string;
+  href?: string;   // 👈 추가됨
+  target?: string; // 👈 추가됨
 }>`
   ${({ variant }) => typo[variant]}
   color: ${({ color }) => color || 'inherit'};
   text-align: ${({ align }) => align || 'left'};
   margin: 0;
+  text-decoration: none; /* 링크일 때 밑줄 제거 기본값 */
 `;
 
 const Text = ({ 
@@ -30,7 +36,7 @@ const Text = ({
   color, 
   align, 
   children, 
-  ...props // ✨ style 같은 나머지 속성들을 받아서 
+  ...props 
 }: TextProps) => {
   return (
     <StyledText 
@@ -38,7 +44,7 @@ const Text = ({
       variant={variant} 
       color={color} 
       align={align} 
-      {...props} // ✨ 여기에 전달해줍니다
+      {...props} 
     >
       {children}
     </StyledText>

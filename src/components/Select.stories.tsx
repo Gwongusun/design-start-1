@@ -1,8 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { useArgs } from '@storybook/preview-api';
+import { useState, useEffect } from 'react';
 import Select, { OptionType } from './Select';
 
-// 1. 테스트용 데이터
 const OPTIONS: OptionType[] = [
   { value: 'react', label: 'React (UI 라이브러리)' },
   { value: 'vue', label: 'Vue (프레임워크)' },
@@ -17,7 +16,6 @@ const LONG_OPTIONS = Array.from({ length: 20 }, (_, i) => ({
   value: `option-${i + 1}`,
 }));
 
-// 2. 스토리북 설정
 const meta = {
   title: 'Design System/Select',
   component: Select,
@@ -36,21 +34,24 @@ const meta = {
     menuWidth: { control: 'text' },
     maxHeight: { control: 'number' },
   },
+  // ⭐️ [해결 핵심] 여기에 필수값인 onChange의 기본 함수를 넣어줍니다.
   args: {
-    // 공통 기본값
     value: '', 
     options: OPTIONS,
     label: '기술 스택 선택',
     width: '320px',
-    onChange: (val) => console.log(`[Action] 선택됨: ${val}`),
+    onChange: () => {}, // 👈 이 줄이 없어서 빨간 줄이 떴던 겁니다!
   },
-  // ⭐️ 핵심: 모든 스토리에 공통으로 적용될 렌더 함수 (상태 동기화 로직)
   render: function Render(args) {
-    const [{ value }, updateArgs] = useArgs();
+    const [value, setValue] = useState(args.value);
+
+    useEffect(() => {
+      setValue(args.value);
+    }, [args.value]);
 
     const onChange = (newValue: string) => {
-      updateArgs({ value: newValue }); // Storybook Args 업데이트 (UI 반영)
-      args.onChange?.(newValue);       // 콘솔 로그 출력
+      setValue(newValue); 
+      args.onChange?.(newValue); 
     };
 
     return <Select {...args} value={value} onChange={onChange} />;
@@ -60,31 +61,29 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// 3. 스토리 정의 (코드가 훨씬 간결해집니다)
-
-// [케이스 1] 기본 상태
+// 1. 기본 스토리
 export const Default: Story = {
-  // meta에 정의된 render와 args를 그대로 사용하므로 내용 불필요
+  args: {}, // 빈 객체라도 넣어주면 상위 args를 잘 물려받습니다.
 };
 
-// [케이스 2] 값이 이미 선택된 상태
+// 2. 값이 선택된 상태
 export const WithValue: Story = {
   args: {
     label: '이미 선택된 상태',
-    value: 'react', // 초기값 설정
+    value: 'react',
   },
 };
 
-// [케이스 3] 옵션이 많을 때 (스크롤 테스트)
+// 3. 옵션이 많은 경우
 export const ManyOptions: Story = {
   args: {
     label: '스크롤 테스트 (maxHeight: 200)',
     maxHeight: 200,
-    options: LONG_OPTIONS, // 긴 옵션 리스트로 교체
+    options: LONG_OPTIONS,
   },
 };
 
-// [케이스 4] 비활성화 상태
+// 4. 비활성화 상태
 export const Disabled: Story = {
   args: {
     label: '비활성화 상태',
