@@ -158,7 +158,7 @@ function Select({
     };
   }, [isOpen]);
 
-  // 🎨 색상 반환 함수 (Theme Token 사용)
+  // 🎨 색상 반환 함수
   const getLabelColor = () => { 
     if (disabled) return theme.colors.coolgray[250];
     if (isOpen) return theme.colors.coolgray[800];
@@ -181,7 +181,12 @@ function Select({
 
   return (
     <Wrapper ref={containerRef} width={width}>
-      <Text as="label" variant="label" color={getLabelColor()} style={{ fontWeight: 'bold' }}>
+      {/* ✅ [수정 1] 상단 라벨 
+          기존: variant="label"
+          변경: variant="700-14" (Bold 14px)
+          설명: variant에 이미 font-weight: 700이 포함되므로 style 속성은 제거해도 되지만, 안전을 위해 둠.
+      */}
+      <Text as="label" variant="700-14" color={getLabelColor()}>
         {label}
       </Text>
 
@@ -195,8 +200,12 @@ function Select({
           onMouseLeave={() => setIsHovered(false)}
         >
           <SelectedValueWrapper>
+            {/* ✅ [수정 2] 선택된 값 표시
+                기존: variant="label"
+                변경: variant="400-14" (Regular 14px)
+            */}
             <Text 
-              variant="label" 
+              variant="400-14" 
               color={getTextColor()}
               style={{ 
                 whiteSpace: 'nowrap',
@@ -210,7 +219,6 @@ function Select({
             </Text>
           </SelectedValueWrapper>
 
-          {/* 화살표 아이콘 */}
           <svg
             width="16"
             height="16"
@@ -247,8 +255,13 @@ function Select({
                 isSelected={option.value === value}
                 onClick={() => handleOptionClick(option.value)}
               >
+                {/* ✅ [수정 3] 드롭다운 리스트 아이템
+                    기존: variant="label"
+                    변경: variant="400-14" (기본값)
+                    설명: 선택 시 볼드 처리는 아래 style에서 제어하므로 기본은 400-14로 설정
+                */}
                 <Text 
-                  variant="label" 
+                  variant="400-14" 
                   color={option.value === value ? theme.colors.green[600] : theme.colors.coolgray[800]}
                   style={{ fontWeight: option.value === value ? 'bold' : 'normal' }}
                 >

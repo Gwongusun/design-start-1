@@ -1,60 +1,90 @@
 /* src/styles/typography.css */
 
-/* 1. 폰트 불러오기 (Pretendard 예시) */
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 
-/* 2. 폰트 시스템 변수 정의 */
 :root {
-  /* [기본 폰트 패밀리] */
   --font-family-base: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
 
-  /* [Font Weights - 굵기] */
-  --fw-regular: 400;
-  --fw-medium: 500;
-  --fw-bold: 700;
-  --fw-black: 900;
+  /* [Font Weights] */
+  --fw-400: 400;
+  --fw-500: 500;
+  --fw-700: 700;
+  --fw-900: 900;
 
-  /* =========================================
-     [Figma Typography System 매핑]
-     네이밍 규칙: --font-{용도}-{속성}
-     ========================================= */
-
-  /* 1. Display (큰 제목) */
-  --font-display-large-size: 64px;
-  --font-display-large-height: 1.2;
-  --font-display-large-spacing: -1px; /* 자간(Letter Spacing)도 챙기세요 */
-  --font-display-large-weight: var(--fw-black);
-
-  --font-display-medium-size: 48px;
-  --font-display-medium-height: 1.25;
-  --font-display-medium-spacing: -0.5px;
-  --font-display-medium-weight: var(--fw-bold);
-
-  /* 2. Heading (중간 제목) */
-  --font-h1-size: 32px;
-  --font-h1-height: 1.4;
-  --font-h1-weight: var(--fw-bold);
-
-  --font-h2-size: 24px;
-  --font-h2-height: 1.45;
-  --font-h2-weight: var(--fw-bold);
-
-  /* 3. Body (본문) */
-  --font-body-large-size: 18px;
-  --font-body-large-height: 1.6;
-  --font-body-large-weight: var(--fw-regular);
-
-  --font-body-medium-size: 16px;
-  --font-body-medium-height: 1.5;
-  --font-body-medium-weight: var(--fw-regular);
-
-  /* 4. Label & Caption (라벨 및 설명) */
-  --font-label-size: 14px;
-  --font-label-height: 22px;
-  --font-label-weight: var(--fw-medium);
+  /* [Font Size Set] - 사이즈 / 행간 / 자간 */
   
-  --font-caption-size: 12px;
-  --font-caption-height: 20px;
-  --font-caption-weight: var(--fw-medium);
+  /* Size 64 (Display Large) */
+  --fs-64: 64px;
+  --lh-64: 1.2;
+  --ls-64: -1px;
 
+  /* Size 56 (New) */
+  --fs-56: 56px;
+  --lh-56: 1.2;
+  --ls-56: -0.8px;
+
+  /* Size 48 (Display Medium) */
+  --fs-48: 48px;
+  --lh-48: 1.25;
+  --ls-48: -0.5px;
+
+  /* Size 40 (New) */
+  --fs-40: 40px;
+  --lh-40: 1.3;
+  --ls-40: -0.3px;
+
+  /* Size 36 (New) */
+  --fs-36: 36px;
+  --lh-36: 1.35;
+  --ls-36: 0px;
+
+  /* Size 32 (H1) */
+  --fs-32: 32px;
+  --lh-32: 1.4;
+  --ls-32: 0px;
+
+  /* Size 28 (New) */
+  --fs-28: 28px;
+  --lh-28: 1.4;
+  --ls-28: 0px;
+
+  /* Size 24 (H2) */
+  --fs-24: 24px;
+  --lh-24: 1.45;
+  --ls-24: 0px;
+
+  /* Size 20 (New) */
+  --fs-20: 20px;
+  --lh-20: 1.5;
+  --ls-20: 0px;
+
+  /* Size 18 (Body Large) */
+  --fs-18: 18px;
+  --lh-18: 1.6;
+  --ls-18: 0px;
+
+  /* Size 16 (Body Medium) */
+  --fs-16: 16px;
+  --lh-16: 1.5;
+  --ls-16: 0px;
+
+  /* Size 14 (Label - 22px height) */
+  --fs-14: 14px;
+  --lh-14: 1.57; /* 약 22px */
+  --ls-14: 0px;
+
+  /* Size 13 (New) */
+  --fs-13: 13px;
+  --lh-13: 1.6;
+  --ls-13: 0px;
+
+  /* Size 12 (Caption - 20px height) */
+  --fs-12: 12px;
+  --lh-12: 1.66; /* 약 20px */
+  --ls-12: 0px;
+
+  /* Size 11 (New) */
+  --fs-11: 11px;
+  --lh-11: 1.66;
+  --ls-11: 0px;
 }
