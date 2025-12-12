@@ -199,7 +199,7 @@ export default function TextTest() {
 
   const SectionHeader = ({ title }: { title: string }) => (
     <SectionTitleWrapper>
-      <Text as="h2" variant="700-24" color={theme.colors.coolgray[900]}>
+      <Text as="h2" variant="700-24" color={theme.colors.coolgray[900]} >
         {title}
       </Text>
     </SectionTitleWrapper>

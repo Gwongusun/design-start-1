@@ -306,7 +306,7 @@ export default function SelectTest() {
             maxHeight={120}
           />
 
-          <div style={{ marginTop: '20px', padding: '16px', background: theme.colors.coolgray[50], borderRadius: '8px' }}>
+          <div style={{ marginTop: '10px', padding: '16px', background: theme.colors.coolgray[50], borderRadius: '8px' }}>
             <Text variant="400-14" color={theme.colors.coolgray[600]}>
               Current Value: 
               <Text as="span" variant="700-14" color={theme.colors.blue[600]} style={{ marginLeft: '8px' }}>
