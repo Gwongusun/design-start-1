@@ -172,7 +172,7 @@ export default function SelectTest() {
           variant="displayLarge" 
           style={{ marginBottom: '10px' }}
         >
-          Select Component
+          Select Component 
         </Text>
         <Text 
           variant="bodyLarge" 
@@ -182,12 +182,12 @@ export default function SelectTest() {
         </Text>
       </Header>
 
-      {/* ✨ 0. Quick Start */}
+      {/* ✨ 0. Quick Start (모든 옵션 포함) */}
       <Section>
         <SectionHeader title="0. Quick Start (사용 예시)" />
         
         <Text variant="bodyMedium" color={theme.colors.coolgray[600]}>
-          기본적인 사용법과 드롭다운 관련 옵션(menuWidth, maxHeight, disabled) 예시입니다.
+          Select 컴포넌트의 모든 옵션(Props)을 적용한 예시입니다.
         </Text>
 
         <CodeBox>
@@ -196,13 +196,16 @@ export default function SelectTest() {
 
 <Select 
   label="프레임워크 선택" 
-  options={OPTIONS}
+  options={[
+    { value: 'react', label: 'React' },
+    { value: 'vue', label: 'Vue' }
+  ]}
   value={value}
   onChange={setValue}
   width="320px"
-  menuWidth="400px"  // 드롭다운 너비
-  maxHeight={250}    // 드롭다운 최대 높이
-  disabled={false}   // 비활성화 여부
+  menuWidth="400px"  // 드롭다운 너비 (생략 시 width와 동일)
+  maxHeight={250}    // 드롭다운 최대 높이 (생략 시 250px)
+  disabled={false}   // 비활성화 여부 (생략 시 false)
 />`}
           </Pre>
         </CodeBox>
@@ -216,7 +219,6 @@ export default function SelectTest() {
         </Text>
 
         <PropList>
-          {/* 필수 Props */}
           <PropItem>
             <PropName>label</PropName>
             <Text variant="bodyMedium">
@@ -241,8 +243,6 @@ export default function SelectTest() {
               값이 변경될 때 실행되는 함수입니다.
             </Text>
           </PropItem>
-          
-          {/* 스타일 & 드롭다운 옵션 */}
           <PropItem>
             <PropName>width</PropName>
             <Text variant="bodyMedium">
@@ -282,7 +282,7 @@ export default function SelectTest() {
             onChange={setFramework} 
             width="320px" 
             menuWidth="100%" 
-            maxHeight={200}
+            maxHeight={150}
           />
         </div>
 
@@ -308,19 +308,19 @@ export default function SelectTest() {
         <GridContainer>
           <div>
             <LabelText>Default (기본)</LabelText>
-            <Select label="선택해주세요" options={options} value={val1} onChange={setVal1} width="100%" />
+            <Select label="선택해주세요" options={options} value={val1} onChange={setVal1} width="100%" maxHeight={150} />
           </div>
           <div>
             <LabelText>Selected (값 있음)</LabelText>
-            <Select label="프레임워크" options={options} value={val2} onChange={setVal2} width="100%" />
+            <Select label="프레임워크" options={options} value={val2} onChange={setVal2} width="100%" maxHeight={150}/>
           </div>
           <div>
             <LabelText>Disabled (비활성)</LabelText>
-            <Select label="선택 불가" options={options} value="" onChange={() => {}} disabled width="100%" />
+            <Select label="선택 불가" options={options} value="" onChange={() => {}} disabled width="100%" maxHeight={150}/>
           </div>
           <div>
             <LabelText>Disabled with Value</LabelText>
-            <Select label="값 있고 비활성" options={options} value="react" onChange={() => {}} disabled width="100%" />
+            <Select label="값 있고 비활성" options={options} value="react" onChange={() => {}} disabled width="100%" maxHeight={150}/>
           </div>
         </GridContainer>
       </Section>
@@ -351,7 +351,7 @@ export default function SelectTest() {
               onChange={setTestRight} 
               width="240px"      
               menuWidth="400px" 
-              maxHeight={200}
+              maxHeight={150}
             />
           </FlexRight>
         </CaseBox>
@@ -373,7 +373,7 @@ export default function SelectTest() {
             onChange={setTestBottom} 
             width="100%"      
             menuWidth="100%"
-            maxHeight={200}
+            maxHeight={1500}
           />
         </CaseBox>
 
