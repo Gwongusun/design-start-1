@@ -24,13 +24,11 @@ interface DropdownProps extends HTMLAttributes<HTMLDivElement> {
 // Helper: 모드별 색상 매핑 함수
 // ------------------------------------------------------------------
 const getDropdownStyle = (theme: Theme, mode: DropdownMode = 'light') => {
-  // ✅ 1. 다크 모드 (요청하신 색상 적용)
+  // 1. 다크 모드 
   if (mode === 'dark') {
     return {
       menuBg: theme.colors.coolgray[800],
       menuBorder: theme.colors.coolgray[700],
-      
-      // 요청하신 값: 텍스트는 밝게(100), 선택된 배경은 진한 회색(200)
       text: theme.colors.coolgray[100],          
       textSelected: theme.colors.green[400],     
       itemBgSelected: theme.colors.coolgray[700],       

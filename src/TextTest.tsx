@@ -71,7 +71,7 @@ const StyledTable = styled.table`
   table-layout: fixed;
   
   /* [Mobile] 테이블 최소 너비 설정 -> 가로 스크롤 유도 */
-  min-width: 700px; 
+  min-width: 1680px; 
 `;
 
 const Th = styled.th`
@@ -199,7 +199,7 @@ export default function TextTest() {
 
   const SectionHeader = ({ title }: { title: string }) => (
     <SectionTitleWrapper>
-      <Text as="h2" variant="700-24" color={theme.colors.coolgray[900]} >
+      <Text as="h2" variant="700-24" color={theme.colors.coolgray[900]}>
         {title}
       </Text>
     </SectionTitleWrapper>
