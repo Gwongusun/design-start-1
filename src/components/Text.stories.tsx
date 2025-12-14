@@ -9,14 +9,16 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
-    // variant를 선택할 때 직접 입력하지 않고, 드롭다운으로 선택하게 설정
+    // ✅ 올바른 타입으로 옵션 변경
     variant: {
       control: 'select',
       options: [
-        'displayLarge', 'displayMedium',
-        'h1', 'h2',
-        'bodyLarge', 'bodyMedium',
-        'label', 'caption'
+        '900-64', 
+        '700-32', 
+        '500-18', 
+        '400-16', 
+        '700-14', 
+        '400-12', 
       ],
     },
     color: { control: 'color' },
@@ -26,42 +28,38 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// 1. Display (큰 제목)
 export const DisplayLarge: Story = {
   args: {
-    variant: 'displayLarge',
-    children: 'Display Large (64px)',
+    variant: '900-64', 
+    children: 'Display Large',
   },
 };
 
-// 2. Heading (중간 제목)
 export const Heading1: Story = {
   args: {
-    variant: 'h1',
-    children: 'Heading 1 (32px)',
+    variant: '700-32', 
+    children: 'Heading 1',
   },
 };
 
-// 3. Body (본문)
 export const BodyMedium: Story = {
   args: {
-    variant: 'bodyMedium',
-    children: '본문 텍스트입니다. Pretendard 폰트가 적용되어 가독성이 좋습니다.',
+    variant: '400-16', 
+    children: 'Body text example.',
   },
 };
 
-// 4. Label & Caption
 export const Label: Story = {
   args: {
-    variant: 'label',
-    children: '라벨 텍스트',
+    variant: '700-14', 
+    children: 'Label',
   },
 };
 
 export const Caption: Story = {
   args: {
-    variant: 'caption',
-    children: '캡션 텍스트입니다.',
-    color: '#848B93', // coolgray 300
+    variant: '400-12', 
+    children: 'Caption text',
+    color: '#848B93',
   },
 };

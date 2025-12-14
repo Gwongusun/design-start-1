@@ -16,10 +16,9 @@ const Container = styled.div`
   padding: 50px;
   max-width: 100%;
   margin: 0 auto;
-  gap: 50px; /* 섹션 간 간격 */
+  gap: 50px;
   min-height: 150vh;
 
-  /* [Mobile] 전체 패딩 및 간격 축소 */
   @media (max-width: 768px) {
     padding: 20px;
     gap: 30px;
@@ -38,10 +37,8 @@ const Section = styled.section`
   border: 1px solid ${({ theme }) => theme.colors.coolgray[200]};
   border-radius: 16px;
   background-color: ${({ theme }) => theme.colors.white};
-  /* 그림자 효과 추가 */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 
-  /* [Mobile] 섹션 내부 패딩 축소 */
   @media (max-width: 768px) {
     padding: 24px;
   }
@@ -60,7 +57,6 @@ const CodeBox = styled.div`
   overflow-x: auto;
   font-family: 'Menlo', 'Monaco', monospace;
 
-  /* [Mobile] 코드박스 패딩 축소 */
   @media (max-width: 768px) {
     padding: 20px;
   }
@@ -73,7 +69,6 @@ const Pre = styled.pre`
   line-height: 1.6;
 `;
 
-// Props 리스트 스타일
 const PropList = styled.ul`
   display: flex;
   flex-direction: column;
@@ -93,7 +88,6 @@ const PropItem = styled.li`
     border-top: 1px dotted ${({ theme }) => theme.colors.coolgray[200]};
   }
 
-  /* [Mobile] 좁은 화면에서 라벨과 설명을 상하로 배치 */
   @media (max-width: 600px) {
     flex-direction: column;
     align-items: flex-start;
@@ -101,7 +95,6 @@ const PropItem = styled.li`
   }
 `;
 
-// 속성명 배지 스타일
 const PropBadge = styled.span`
   display: inline-flex;
   align-items: center;
@@ -113,7 +106,7 @@ const PropBadge = styled.span`
   font-weight: 700;
   font-family: monospace;
   font-size: 14px;
-  min-width: 80px;
+  min-width: 100px; /* 뱃지 너비 확보 */
 `;
 
 const GridContainer = styled.div`
@@ -121,57 +114,46 @@ const GridContainer = styled.div`
   gap: 30px; 
   grid-template-columns: 1fr 1fr;
 
-  /* [Mobile] 1단 컬럼으로 변경 */
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
 `;
 
-// 위치 감지 테스트용 그리드
 const PositionGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 30px; /* 간격 넓힘 */
+  gap: 30px;
   
-  /* 3번째 아이템(Corner)은 가로로 길게 배치 */
   & > div:nth-of-type(3) {
     grid-column: span 2;
   }
 
-  /* [Mobile] 1단 컬럼 변경 및 Span 해제 */
   @media (max-width: 900px) {
     grid-template-columns: 1fr;
-    
     & > div:nth-of-type(3) {
       grid-column: span 1;
     }
   }
 `;
 
-// 텍스트와 박스를 묶어줄 래퍼
 const CaseWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px; /* 텍스트와 박스 사이 간격 */
+  gap: 12px;
 `;
 
-// PositionBox: 내부 라벨 제거 및 단순화
 const PositionBox = styled.div<{ align?: 'right' | 'bottom' }>`
   position: relative;
   display: flex;
   flex-direction: column;
-  
-  /* 아이템 배치 로직 (Select 위치 잡기용) */
   justify-content: ${({ align }) => (align === 'bottom' ? 'flex-end' : 'flex-start')};
   align-items: ${({ align }) => (align === 'right' ? 'flex-end' : 'flex-start')};
-  
   height: 320px;
   padding: 30px;
-  background-color: ${({ theme }) => theme.colors.coolgray[50]};
-  border: 1px dashed ${({ theme }) => theme.colors.coolgray[300]};
+  background-color: ${({ theme }) => theme.colors.white};
+  border: 1px dashed ${({ theme }) => theme.colors.coolgray[200]};
   border-radius: 12px;
 
-  /* [Mobile] 패딩 축소 */
   @media (max-width: 768px) {
     padding: 20px;
   }
@@ -185,21 +167,31 @@ export default function SelectTest() {
   const theme = useTheme();
 
   const [framework, setFramework] = useState('');
-  const [val1, setVal1] = useState('');
-  const [val2, setVal2] = useState('react');
+  
+  // Light Mode States
+  const [lightVal1, setLightVal1] = useState('');
+  const [lightVal2, setLightVal2] = useState('react');
+
+  // Dark Mode States
+  const [darkVal1, setDarkVal1] = useState('');
+  const [darkVal2, setDarkVal2] = useState('react');
+
+  // Transparent Mode States
+  const [transVal1, setTransVal1] = useState('');
+  const [transVal2, setTransVal2] = useState('react');
   
   const [testRight, setTestRight] = useState('');
   const [testBottom, setTestBottom] = useState('');
   const [testCorner, setTestCorner] = useState('');
 
   const options: OptionType[] = [
-   { value: 'react', label: 'React' },
-   { value: 'vue', label: 'Vue' },
-   { value: 'angular', label: 'Angular' },
-   { value: 'svelte', label: 'Svelte' },
-   { value: 'next', label: 'Next.js' },
-   { value: 'remix', label: 'Remix' },
-  { value: 'gatsby', label: 'Gatsby' },
+    { value: 'react', label: 'React' },
+    { value: 'vue', label: 'Vue' },
+    { value: 'angular', label: 'Angular' },
+    { value: 'svelte', label: 'Svelte' },
+    { value: 'next', label: 'Next.js' },
+    { value: 'remix', label: 'Remix' },
+    { value: 'gatsby', label: 'Gatsby' },
   ];
 
   const SectionHeader = ({ title }: { title: string }) => (
@@ -229,37 +221,37 @@ export default function SelectTest() {
       {/* 1. Quick Start & Props */}
       <Section>
         <SectionHeader title="1. Quick Start & Props" />
-        
         <Text variant="400-14" color={theme.colors.coolgray[600]}>
-          Select 컴포넌트의 모든 옵션(Props)을 적용한 기본 사용 예시입니다.
+          아래 코드는 Select 컴포넌트가 지원하는 <b>모든 옵션(Props)</b>을 포함한 예시입니다.
         </Text>
-
         <CodeBox>
           <Pre>
 {`const [value, setValue] = useState('');
 
 <Select 
+  // [Required] 필수 항목
   label="프레임워크 선택" 
-  options={[
-    { value: 'react', label: 'React' },
-    { value: 'vue', label: 'Vue' }
-  ]}
+  options={[{ value: 'react', label: 'React' }]}
   value={value}
   onChange={setValue}
-  width="320px"
-  menuWidth="400px"
+
+  // [Optional] 선택 항목
+  width="100%"
+  menuWidth="100%"
   maxHeight={250}
   disabled={false}
+  mode="light" // 'light' | 'dark' | 'transparent'
 />`}
           </Pre>
         </CodeBox>
-
+        
+        {/* ✅ 복구된 PropList (속성 가이드) */}
         <div>
-          <Text 
+           <Text 
             as="h3" 
             variant="700-16" 
             color={theme.colors.coolgray[900]}
-            style={{ marginBottom: '16px' }}
+            style={{ marginBottom: '16px', marginTop: '20px' }}
           >
             Props Guide
           </Text>
@@ -272,8 +264,9 @@ export default function SelectTest() {
               { name: 'onChange', desc: '값이 변경될 때 실행되는 핸들러' },
               { name: 'width', desc: '버튼 너비 (기본값: 100%)' },
               { name: 'menuWidth', desc: '드롭다운 메뉴 너비 (기본값: width와 동일)' },
-              { name: 'maxHeight', desc: '드롭다운 메뉴 최대 높이 (기본값: 250px)' },
-              { name: 'disabled', desc: '비활성화 여부' },
+              { name: 'maxHeight', desc: '드롭다운 메뉴 최대 높이 (기본값: 200px)' },
+              { name: 'disabled', desc: '비활성화 여부 (기본값: false)' },
+              { name: 'mode', desc: <span><b>'light'</b> | <b>'dark'</b> | <b>'transparent'</b> 테마 모드 (기본값: light)</span> },
             ].map((prop) => (
               <PropItem key={prop.name}>
                 <PropBadge>{prop.name}</PropBadge>
@@ -286,16 +279,10 @@ export default function SelectTest() {
         </div>
       </Section>
 
-      {/* 2. Basic Usage */}
+      {/* 2. Basic Usage (Light Mode) */}
       <Section>
-        <SectionHeader title="2. Basic Usage" />
-        
-        <Text variant="400-14" color={theme.colors.coolgray[600]}>
-          가장 기본적인 사용 형태입니다.
-        </Text>
-
+        <SectionHeader title="2. Basic Usage (Light)" />
         <div>
-          {/* [Responsive] width="320px" 대신 "100%"를 사용하여 부모 컨테이너에 맞춤 */}
           <Select 
             label="프레임워크 선택" 
             options={options} 
@@ -303,118 +290,119 @@ export default function SelectTest() {
             onChange={setFramework} 
             width="100%" 
             menuWidth="100%" 
-            maxHeight={120}
+            maxHeight={200}
+            disabled={false}
+            mode="light"
           />
-
-          <div style={{ marginTop: '10px', padding: '16px', background: theme.colors.coolgray[50], borderRadius: '8px' }}>
-            <Text variant="400-14" color={theme.colors.coolgray[600]}>
-              Current Value: 
-              <Text as="span" variant="700-14" color={theme.colors.blue[600]} style={{ marginLeft: '8px' }}>
-                {framework || '-'}
-              </Text>
-            </Text>
-          </div>
         </div>
       </Section>
 
-      {/* 3. States */}
+      {/* 3. Auto Positioning */}
       <Section>
-        <SectionHeader title="3. States" />
-        
-        <GridContainer>
-          <div>
-            <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Default</Text>
-            <Select label="선택해주세요" options={options} value={val1} onChange={setVal1} width="100%" maxHeight={120} />
-          </div>
-          <div>
-            <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Selected</Text>
-            <Select label="프레임워크" options={options} value={val2} onChange={setVal2} width="100%" maxHeight={120} />
-          </div>
-          <div>
-            <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Disabled</Text>
-            <Select label="선택 불가" options={options} value="" onChange={() => {}} width="100%" disabled />
-          </div>
-          <div>
-            <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Disabled (Value)</Text>
-            <Select label="값 있음" options={options} value="react" onChange={() => {}} width="100%" disabled />
-          </div>
-        </GridContainer>
-      </Section>
-
-      {/* 4. Auto Positioning */}
-      <Section>
-        <SectionHeader title="4. Auto Positioning" />
-        
-        <Text variant="400-14" color={theme.colors.coolgray[600]}>
-          뷰포트 경계에 근접했을 때 메뉴가 열리는 방향(Direction)이 자동으로 보정되어야 합니다.
-        </Text>
-
+        <SectionHeader title="3. Auto Positioning" />
         <PositionGrid>
-          {/* CASE A */}
           <CaseWrapper>
-            <div>
-              <Text variant="700-16" color={theme.colors.coolgray[800]}>CASE A. Right Edge</Text>
-              <Text variant="400-14" color={theme.colors.coolgray[500]} style={{ marginTop: '4px' }}>
-                오른쪽 공간 부족 → 왼쪽 정렬
-              </Text>
-            </div>
+            <div><Text variant="700-16">CASE A. Right Edge</Text></div>
             <PositionBox align="right">
-              <Select 
-                label="오른쪽 끝 Select" 
-                options={options} 
-                value={testRight} 
-                onChange={setTestRight} 
-                width="240px"      
-                menuWidth="300px" 
-                maxHeight={120}
-              />
+              <Select label="오른쪽 끝" options={options} value={testRight} onChange={setTestRight} width="240px" menuWidth="300px" mode="light" />
             </PositionBox>
           </CaseWrapper>
-
-          {/* CASE B */}
           <CaseWrapper>
-            <div>
-              <Text variant="700-16" color={theme.colors.coolgray[800]}>CASE B. Bottom Edge</Text>
-              <Text variant="400-14" color={theme.colors.coolgray[500]} style={{ marginTop: '4px' }}>
-                아래 공간 부족 → 위쪽 열림
-              </Text>
-            </div>
+            <div><Text variant="700-16">CASE B. Bottom Edge</Text></div>
             <PositionBox align="bottom">
-              <Select 
-                label="바닥 Select" 
-                options={options} 
-                value={testBottom} 
-                onChange={setTestBottom} 
-                width="100%"      
-                menuWidth="100%"
-                maxHeight={120}
-              />
+              <Select label="바닥" options={options} value={testBottom} onChange={setTestBottom} width="100%" mode="light" />
             </PositionBox>
           </CaseWrapper>
-
-          {/* CASE C */}
           <CaseWrapper>
-            <div>
-              <Text variant="700-16" color={theme.colors.coolgray[800]}>CASE C. Corner</Text>
-              <Text variant="400-14" color={theme.colors.coolgray[500]} style={{ marginTop: '4px' }}>
-                오른쪽+아래 공간 부족 → 왼쪽 정렬 & 위쪽 열림
-              </Text>
-            </div>
-            {/* Corner 케이스는 align="right" + justifyContent: 'flex-end'로 우측 하단 배치 */}
+            <div><Text variant="700-16">CASE C. Corner</Text></div>
             <PositionBox align="right" style={{ justifyContent: 'flex-end' }}>
-              <Select 
-                label="구석탱이 Select" 
-                options={options} 
-                value={testCorner} 
-                onChange={setTestCorner} 
-                width="240px"      
-                menuWidth="300px"
-                maxHeight={120} 
-              />
+              <Select label="구석탱이" options={options} value={testCorner} onChange={setTestCorner} width="240px" menuWidth="300px" mode="light" />
             </PositionBox>
           </CaseWrapper>
         </PositionGrid>
       </Section>
+
+      {/* 4. States (Light Mode) - ✅ 4개 상태 모두 표시 */}
+      <Section>
+        <SectionHeader title="4. Light Mode States" />
+        <div style={{ padding: '30px', backgroundColor: theme.colors.white, border: `1px solid ${theme.colors.coolgray[200]}`, borderRadius: '12px' }}>
+          <GridContainer>
+            <div>
+              <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Default</Text>
+              <Select label="선택해주세요" options={options} value={lightVal1} onChange={setLightVal1} width="100%" mode="light" />
+            </div>
+            <div>
+              <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Selected</Text>
+              <Select label="프레임워크" options={options} value={lightVal2} onChange={setLightVal2} width="100%" mode="light" />
+            </div>
+            <div>
+              <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Disabled</Text>
+              <Select label="선택 불가" options={options} value="" onChange={() => {}} width="100%" disabled={true} mode="light" />
+            </div>
+            <div>
+              <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Disabled (Value)</Text>
+              <Select label="값 있음" options={options} value="react" onChange={() => {}} width="100%" disabled={true} mode="light" />
+            </div>
+          </GridContainer>
+        </div>
+      </Section>
+
+      {/* 5. Dark Mode States - ✅ 4개 상태 모두 표시 */}
+      <Section>
+        <SectionHeader title="5. Dark Mode States" />
+        <div style={{
+          padding: '40px',
+          backgroundColor: theme.colors.coolgray[900], // 다크 모드 배경
+          borderRadius: '12px',
+        }}>
+           <GridContainer>
+            <div>
+              <Text as="h4" variant="700-14" color={theme.colors.white} style={{ marginBottom: '8px' }}>Default</Text>
+              <Select label="선택해주세요" options={options} value={darkVal1} onChange={setDarkVal1} width="100%" mode="dark" />
+            </div>
+            <div>
+              <Text as="h4" variant="700-14" color={theme.colors.white} style={{ marginBottom: '8px' }}>Selected</Text>
+              <Select label="프레임워크" options={options} value={darkVal2} onChange={setDarkVal2} width="100%" mode="dark" />
+            </div>
+            <div>
+              <Text as="h4" variant="700-14" color={theme.colors.white} style={{ marginBottom: '8px' }}>Disabled</Text>
+              <Select label="선택 불가" options={options} value="" onChange={() => {}} width="100%" disabled={true} mode="dark" />
+            </div>
+            <div>
+              <Text as="h4" variant="700-14" color={theme.colors.white} style={{ marginBottom: '8px' }}>Disabled (Value)</Text>
+              <Select label="값 있음" options={options} value="react" onChange={() => {}} width="100%" disabled={true} mode="dark" />
+            </div>
+          </GridContainer>
+        </div>
+      </Section>
+
+      {/* 6. Transparent Mode States - ✅ 4개 상태 모두 표시 */}
+      <Section>
+        <SectionHeader title="6. Transparent Mode States" />
+
+        {/* 투명성을 확인하기 위해 옅은 배경색 추가 */}
+        <div style={{ padding: '30px', backgroundColor: theme.colors.coolgray[50], borderRadius: '12px' }}>
+          <GridContainer>
+            <div>
+              <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Default</Text>
+              <Select label="선택해주세요" options={options} value={transVal1} onChange={setTransVal1} width="100%" mode="transparent" />
+            </div>
+            <div>
+              <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Selected</Text>
+              <Select label="프레임워크" options={options} value={transVal2} onChange={setTransVal2} width="100%" mode="transparent" />
+            </div>
+            <div>
+              <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Disabled</Text>
+              <Select label="선택 불가" options={options} value="" onChange={() => {}} width="100%" disabled={true} mode="transparent" />
+            </div>
+            <div>
+              <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Disabled (Value)</Text>
+              <Select label="값 있음" options={options} value="react" onChange={() => {}} width="100%" disabled={true} mode="transparent" />
+            </div>
+          </GridContainer>
+        </div>
+      </Section>
+
     </Container>
   );
 }
