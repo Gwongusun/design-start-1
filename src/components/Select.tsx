@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect, useLayoutEffect, useMemo } from 'react';
 import styled from '@emotion/styled';
 import { useTheme, Theme } from '@emotion/react'; 
-import Dropdown, { OptionItem } from './Dropdown';
+import Dropdown, { OptionItem } from './Dropdown'; // DropdownMode 타입 필요 시 import
 import Text from './Text';
 
 export interface OptionType {
@@ -24,7 +24,8 @@ interface SelectProps {
   mode?: SelectMode; 
 }
 
-const useSelectColors = ({
+// ✅ [간소화] Trigger(버튼)와 Label 색상만 계산
+const useTriggerColors = ({
   theme,
   mode,
   disabled,
@@ -41,9 +42,7 @@ const useSelectColors = ({
 }) => {
   return useMemo(() => {
     // 1. 비활성화 (Disabled)
-  // 1. 비활성화 (Disabled) 상태
     if (disabled) {
-      // 1-1. 투명 모드 (Transparent) - Disabled
       if (mode === 'transparent') {
         return {
           label: theme.colors.coolgray[250],
@@ -51,14 +50,9 @@ const useSelectColors = ({
           border: 'transparent',
           text: theme.colors.coolgray[300],
           icon: theme.colors.coolgray[200],
-          menuBackground: theme.colors.white,
-          optionText: theme.colors.coolgray[300],
-          optionSelectedText: theme.colors.coolgray[300],
           cursor: 'not-allowed',
         };
       }
-
-      // 1-2. 다크 모드 (Dark) - Disabled  ✅ 분리됨
       if (mode === 'dark') {
         return {
           label: theme.colors.coolgray[250],
@@ -66,44 +60,32 @@ const useSelectColors = ({
           border: 'transparent',
           text: `${theme.colors.white}40`,
           icon: theme.colors.coolgray[400],
-          menuBackground: theme.colors.coolgray[900],
-          optionText: theme.colors.coolgray[300],
-          optionSelectedText: theme.colors.coolgray[300],
           cursor: 'not-allowed',
         };
       }
-
-      // 1-3. 라이트 모드 (Light) - Disabled  ✅ 분리됨
-      return {
+      return { // Light Disabled
         label: theme.colors.coolgray[250],
         background: theme.colors.coolgray[75],
         border: 'transparent',
         text: theme.colors.coolgray[200],
         icon: theme.colors.coolgray[200],
-        menuBackground: theme.colors.white,
-        optionText: theme.colors.coolgray[300],
-        optionSelectedText: theme.colors.coolgray[300],
         cursor: 'not-allowed',
       };
     }
 
-    // 2. 투명 모드 (Transparent)
+    // 2. 투명 모드
     if (mode === 'transparent') {
       return {
         label: theme.colors.coolgray[800],
-        // ✅ [수정] 호버 시 3% 투명도 (Hex 08) 적용
         background: isHovered ? `${theme.colors.black}0A` : 'transparent',
         border: isHovered ? 'transparent' : 'transparent',
         text: isPlaceholder ? theme.colors.coolgray[300] : theme.colors.coolgray[900],
         icon: isHovered || isOpen ? theme.colors.coolgray[900] : theme.colors.coolgray[300],
-        menuBackground: theme.colors.white,
-        optionText: theme.colors.coolgray[800],
-        optionSelectedText: theme.colors.green[600],
         cursor: 'pointer',
       };
     }
 
-    // 3. 다크 모드 (Dark)
+    // 3. 다크 모드
     if (mode === 'dark') {
       return {
         label: theme.colors.coolgray[300],
@@ -115,9 +97,6 @@ const useSelectColors = ({
           : (isHovered ? theme.colors.coolgray[600] : 'transparent'),
         text: isPlaceholder ? `${theme.colors.white}80` : theme.colors.white,
         icon: isHovered || isOpen ? theme.colors.white : theme.colors.coolgray[400],
-        menuBackground: theme.colors.coolgray[900],
-        optionText: theme.colors.coolgray[200],
-        optionSelectedText: theme.colors.green[400],
         cursor: 'pointer',
       };
     }
@@ -133,15 +112,12 @@ const useSelectColors = ({
         : (isHovered ? theme.colors.coolgray[300] : 'transparent'),
       text: isPlaceholder ? theme.colors.coolgray[300] : theme.colors.coolgray[900],
       icon: isHovered || isOpen ? theme.colors.coolgray[900] : theme.colors.coolgray[300],
-      menuBackground: theme.colors.white,
-      optionText: theme.colors.coolgray[800],
-      optionSelectedText: theme.colors.green[600],
       cursor: 'pointer',
     };
   }, [theme, mode, disabled, isOpen, isPlaceholder, isHovered]);
 };
 
-// --- 스타일 정의 ---
+// ... (Wrapper, InputArea, TriggerButton, SelectedValueWrapper 스타일은 그대로 유지) ...
 const Wrapper = styled.div<{ width?: string }>`
   display: flex;
   flex-direction: column;
@@ -149,35 +125,15 @@ const Wrapper = styled.div<{ width?: string }>`
   text-align: left;
   width: ${(props) => props.width || '100%'};
 `;
-
-const InputArea = styled.div`
-  position: relative;
-  width: 100%;
-`;
-
+const InputArea = styled.div` position: relative; width: 100%; `;
 const TriggerButton = styled.div`
-  padding: 4px 10px;
-  border-radius: 6px;
-  height : 32px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: all 0.2s;
-  box-sizing: border-box;
-  overflow: hidden;
-  border-width: 1px;
-  border-style: solid;
+  padding: 4px 10px; border-radius: 6px; height : 32px; display: flex;
+  justify-content: space-between; align-items: center; transition: all 0.2s;
+  box-sizing: border-box; overflow: hidden; border-width: 1px; border-style: solid;
 `;
+const SelectedValueWrapper = styled.div` flex: 1; min-width: 0; margin-right: 10px; display: flex; align-items: center; `;
 
-const SelectedValueWrapper = styled.div`
-  flex: 1;
-  min-width: 0;
-  margin-right: 10px;
-  display: flex;
-  align-items: center;
-`;
 
-// --- 컴포넌트 ---
 function Select({ 
   label, 
   options, 
@@ -204,7 +160,8 @@ function Select({
   const isPlaceholder = !selectedOption;
   const displayValue = selectedOption ? selectedOption.label : '선택하세요';
 
-  const colors = useSelectColors({
+  // ✅ 훅 이름 변경 (의도에 맞게)
+  const colors = useTriggerColors({
     theme, mode, disabled, isOpen, isPlaceholder, isHovered
   });
 
@@ -260,19 +217,12 @@ function Select({
             </Text>
           </SelectedValueWrapper>
 
-          {/* ✅ [복구] 화살표 회전 스타일 추가 (transition + transform) */}
           <svg 
-            width="16" 
-            height="16" 
-            viewBox="0 0 24 24" 
-            fill="none" 
-            stroke={colors.icon} 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
+            width="16" height="16" viewBox="0 0 24 24" fill="none" 
+            stroke={colors.icon} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
             style={{
               transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-              transition: 'transform 0.2s ease-in-out', // 부드러운 회전 애니메이션
+              transition: 'transform 0.2s ease-in-out',
               flexShrink: 0
             }}
           >
@@ -281,6 +231,7 @@ function Select({
         </TriggerButton>
 
         {!disabled && isOpen && (
+          // ✅ Dropdown에는 이제 mode만 넘겨줍니다. (하드코딩 스타일 제거됨)
           <Dropdown 
             ref={dropdownRef} 
             isOpen={isOpen} 
@@ -288,22 +239,18 @@ function Select({
             verticalPos={dropdownPos.vertical}
             alignPos={dropdownPos.align}
             maxHeight={maxHeight}
-            style={{ 
-              backgroundColor: colors.menuBackground,
-              borderColor: mode === 'dark' ? theme.colors.coolgray[700] : theme.colors.coolgray[200]
-            }}
+            mode={mode} // 모드 전달
           >
             {options.map((option) => (
               <OptionItem
                 key={option.value}
                 isSelected={option.value === value}
+                mode={mode} // OptionItem에도 모드 전달
                 onClick={() => { onChange(option.value); setIsOpen(false); }}
               >
-                <Text 
-                  variant="400-14" 
-                  color={option.value === value ? theme.colors.green[600] : theme.colors.coolgray[800]}
-                  style={{ fontWeight: option.value === value ? 'bold' : 'normal' }}
-                >
+                {/* ✅ Text에서는 color 속성을 제거합니다. */}
+                {/* OptionItem에서 color를 CSS로 제어하므로 자동으로 상속받습니다. */}
+                <Text variant={option.value === value ? "700-14" : "400-14"}>
                   {option.label}
                 </Text>
               </OptionItem>
