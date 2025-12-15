@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { useState, useRef, useEffect, useLayoutEffect, useMemo } from 'react';
 import styled from '@emotion/styled';
-import { useTheme, Theme } from '@emotion/react'; 
-import Dropdown, { OptionItem } from './Dropdown'; // DropdownMode 타입 필요 시 import
+import { useTheme } from '@emotion/react'; 
+import Dropdown, { OptionItem } from './Dropdown'; 
 import Text from './Text';
 
 export interface OptionType {
@@ -10,6 +10,7 @@ export interface OptionType {
   value: string;
 }
 
+// theme.ts에 정의된 input 모드 키값과 일치시킴
 export type SelectMode = 'light' | 'dark' | 'transparent';
 
 interface SelectProps {
@@ -24,7 +25,7 @@ interface SelectProps {
   mode?: SelectMode; 
 }
 
-// ✅ [간소화] Trigger(버튼)와 Label 색상만 계산
+// ✅ Theme Token Mapping Logic
 const useTriggerColors = ({
   theme,
   mode,
@@ -33,7 +34,7 @@ const useTriggerColors = ({
   isPlaceholder,
   isHovered
 }: {
-  theme: Theme;
+  theme: any; 
   mode: SelectMode;
   disabled: boolean;
   isOpen: boolean;
@@ -41,89 +42,62 @@ const useTriggerColors = ({
   isHovered: boolean;
 }) => {
   return useMemo(() => {
-    // 1. 비활성화 (Disabled)
+    // 1. 테마에서 현재 모드(light/dark/transparent)에 맞는 토큰 가져오기
+    const token = theme.components.input[mode];
+
+    // 2. 상태별 스타일 반환
+    
+    // Disabled (비활성화)
     if (disabled) {
-      if (mode === 'transparent') {
-        return {
-          label: theme.colors.coolgray[250],
-          background: 'transparent',
-          border: 'transparent',
-          text: theme.colors.coolgray[300],
-          icon: theme.colors.coolgray[200],
-          cursor: 'not-allowed',
-        };
-      }
-      if (mode === 'dark') {
-        return {
-          label: theme.colors.coolgray[250],
-          background: `${theme.colors.white}0F`,
-          border: 'transparent',
-          text: `${theme.colors.white}40`,
-          icon: theme.colors.coolgray[400],
-          cursor: 'not-allowed',
-        };
-      }
-      return { // Light Disabled
-        label: theme.colors.coolgray[250],
-        background: theme.colors.coolgray[75],
+      return {
+        label: token.label.disabled,
+        background: token.bg.disabled,
         border: 'transparent',
-        text: theme.colors.coolgray[200],
-        icon: theme.colors.coolgray[200],
+        text: token.text.disabled,
+        icon: token.icon.disabled,
         cursor: 'not-allowed',
       };
     }
 
-    // 2. 투명 모드
-    if (mode === 'transparent') {
+    // Active (열림 상태)
+    if (isOpen) {
       return {
-        label: theme.colors.coolgray[800],
-        background: isHovered ? `${theme.colors.black}0A` : 'transparent',
-        border: isHovered ? 'transparent' : 'transparent',
-        text: isPlaceholder ? theme.colors.coolgray[300] : theme.colors.coolgray[900],
-        icon: isHovered || isOpen ? theme.colors.coolgray[900] : theme.colors.coolgray[300],
+        label: token.label.default,
+        background: token.bg.active,
+        border: token.border.active,
+        text: isPlaceholder ? token.text.placeholder : token.text.default,
+        icon: token.icon.active,
         cursor: 'pointer',
       };
     }
 
-    // 3. 다크 모드
-    if (mode === 'dark') {
+    // Hover (마우스 올림)
+    if (isHovered) {
       return {
-        label: theme.colors.coolgray[300],
-        background: isOpen 
-          ? `${theme.colors.white}00` 
-          : (isHovered ? `${theme.colors.white}14` : `${theme.colors.white}14`),
-        border: isOpen 
-          ? theme.colors.coolgray[700] 
-          : (isHovered ? theme.colors.coolgray[600] : 'transparent'),
-        text: isPlaceholder ? `${theme.colors.white}80` : theme.colors.white,
-        icon: isHovered || isOpen ? theme.colors.white : theme.colors.coolgray[400],
+        label: token.label.default,
+        background: token.bg.hover,
+        border: token.border.hover,
+        text: isPlaceholder ? token.text.placeholder : token.text.default,
+        icon: token.icon.active, // Hover시 아이콘도 진하게
         cursor: 'pointer',
       };
     }
 
-    // 4. 라이트 모드 (Default)
+    // Default (기본)
     return {
-      label: theme.colors.coolgray[800],
-      background: isOpen 
-        ? theme.colors.white 
-        : (isHovered ? `${theme.colors.black}0A` : theme.colors.coolgray[50]),
-      border: isOpen 
-        ? theme.colors.coolgray[200] 
-        : (isHovered ? theme.colors.coolgray[300] : 'transparent'),
-      text: isPlaceholder ? theme.colors.coolgray[300] : theme.colors.coolgray[900],
-      icon: isHovered || isOpen ? theme.colors.coolgray[900] : theme.colors.coolgray[300],
+      label: token.label.default,
+      background: token.bg.default,
+      border: token.border.default,
+      text: isPlaceholder ? token.text.placeholder : token.text.default,
+      icon: token.icon.default,
       cursor: 'pointer',
     };
   }, [theme, mode, disabled, isOpen, isPlaceholder, isHovered]);
 };
 
-// ... (Wrapper, InputArea, TriggerButton, SelectedValueWrapper 스타일은 그대로 유지) ...
+// ... (스타일 컴포넌트 Wrapper, InputArea 등은 기존과 동일하므로 생략하거나 그대로 유지) ...
 const Wrapper = styled.div<{ width?: string }>`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  text-align: left;
-  width: ${(props) => props.width || '100%'};
+  display: flex; flex-direction: column; gap: 8px; text-align: left; width: ${(props) => props.width || '100%'};
 `;
 const InputArea = styled.div` position: relative; width: 100%; `;
 const TriggerButton = styled.div`
@@ -133,22 +107,14 @@ const TriggerButton = styled.div`
 `;
 const SelectedValueWrapper = styled.div` flex: 1; min-width: 0; margin-right: 10px; display: flex; align-items: center; `;
 
-
 function Select({ 
-  label, 
-  options, 
-  value, 
-  onChange, 
-  width, 
-  menuWidth, 
-  disabled = false,
-  maxHeight = 200,
-  mode = 'light' 
+  label, options, value, onChange, width, menuWidth, 
+  disabled = false, maxHeight = 200, mode = 'light' 
 }: SelectProps) {
   
-  const theme = useTheme();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isHovered, setIsHovered] = useState<boolean>(false); 
+  const theme = useTheme(); // Emotion Theme Hook
+  const [isOpen, setIsOpen] = useState(false);
+  const [isHovered, setIsHovered] = useState(false); 
   const [dropdownPos, setDropdownPos] = useState<{ vertical: 'top' | 'bottom', align: 'left' | 'right' }>({
     vertical: 'bottom', align: 'left'
   });
@@ -160,11 +126,12 @@ function Select({
   const isPlaceholder = !selectedOption;
   const displayValue = selectedOption ? selectedOption.label : '선택하세요';
 
-  // ✅ 훅 이름 변경 (의도에 맞게)
+  // ✅ 훅 사용
   const colors = useTriggerColors({
     theme, mode, disabled, isOpen, isPlaceholder, isHovered
   });
 
+  // ... (Dropdown 위치 계산 로직 기존 동일) ...
   useLayoutEffect(() => {
     if (isOpen && containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
@@ -231,7 +198,6 @@ function Select({
         </TriggerButton>
 
         {!disabled && isOpen && (
-          // ✅ Dropdown에는 이제 mode만 넘겨줍니다. (하드코딩 스타일 제거됨)
           <Dropdown 
             ref={dropdownRef} 
             isOpen={isOpen} 
@@ -239,17 +205,15 @@ function Select({
             verticalPos={dropdownPos.vertical}
             alignPos={dropdownPos.align}
             maxHeight={maxHeight}
-            mode={mode} // 모드 전달
+            mode={mode} // Dropdown 내부에서 mode에 따라 배경색 처리 필요
           >
             {options.map((option) => (
               <OptionItem
                 key={option.value}
                 isSelected={option.value === value}
-                mode={mode} // OptionItem에도 모드 전달
+                mode={mode}
                 onClick={() => { onChange(option.value); setIsOpen(false); }}
               >
-                {/* ✅ Text에서는 color 속성을 제거합니다. */}
-                {/* OptionItem에서 color를 CSS로 제어하므로 자동으로 상속받습니다. */}
                 <Text variant={option.value === value ? "700-14" : "400-14"}>
                   {option.label}
                 </Text>

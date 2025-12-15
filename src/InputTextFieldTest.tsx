@@ -3,7 +3,8 @@ import { useState } from 'react';
 import styled from '@emotion/styled';
 import { useTheme } from '@emotion/react';
 
-import Select, { OptionType } from './components/Select';
+// ✅ [수정 1] Default Import로 변경 (중괄호 제거)
+import InputTextField from './components/InputTextField';
 import Text from './components/Text';
 
 // -------------------------------------------------------------------------
@@ -120,47 +121,7 @@ const GridContainer = styled.div`
   }
 `;
 
-const PositionGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-  
-  & > div:nth-of-type(3) {
-    grid-column: span 2;
-  }
-
-  @media (max-width: 900px) {
-    grid-template-columns: 1fr;
-    & > div:nth-of-type(3) {
-      grid-column: span 1;
-    }
-  }
-`;
-
-const CaseWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-`;
-
-const PositionBox = styled.div<{ align?: 'right' | 'bottom' }>`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: ${({ align }) => (align === 'bottom' ? 'flex-end' : 'flex-start')};
-  align-items: ${({ align }) => (align === 'right' ? 'flex-end' : 'flex-start')};
-  height: 320px;
-  padding: 30px;
-  background-color: ${({ theme }) => theme.colors.white};
-  border: 1px dashed ${({ theme }) => theme.colors.coolgray[200]};
-  border-radius: 12px;
-
-  @media (max-width: 768px) {
-    padding: 20px;
-  }
-`;
-
-// 🔥 [Style Updated] 시맨틱 컬러 가이드용 스타일
+// 🔥 [Style Updated] 시맨틱 컬러 가이드용 스타일 컴포넌트
 const ColorGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -177,7 +138,7 @@ const ColorCard = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.coolgray[100]};
 `;
 
-// ✅ [수정됨] 투명도 체크무늬 패턴 적용
+// ✅ [수정됨] 투명도 체크무늬 패턴 적용 (SelectTest와 동일)
 const Swatch = styled.div<{ color: string; hasBorder?: boolean }>`
   width: 40px;
   height: 40px;
@@ -218,36 +179,23 @@ const Swatch = styled.div<{ color: string; hasBorder?: boolean }>`
 // 2. 메인 컴포넌트
 // -------------------------------------------------------------------------
 
-export default function SelectTest() {
-  const theme = useTheme() as any;
+export default function InputTextFieldTest() {
+  const theme = useTheme();
 
-  const [framework, setFramework] = useState('');
+  // Basic Usage State
+  const [basicValue, setBasicValue] = useState('');
   
   // Light Mode States
   const [lightVal1, setLightVal1] = useState('');
-  const [lightVal2, setLightVal2] = useState('react');
+  const [lightVal2, setLightVal2] = useState('텍스트 입력됨');
 
   // Dark Mode States
   const [darkVal1, setDarkVal1] = useState('');
-  const [darkVal2, setDarkVal2] = useState('react');
+  const [darkVal2, setDarkVal2] = useState('다크모드 텍스트');
 
   // Transparent Mode States
   const [transVal1, setTransVal1] = useState('');
-  const [transVal2, setTransVal2] = useState('react');
-  
-  const [testRight, setTestRight] = useState('');
-  const [testBottom, setTestBottom] = useState('');
-  const [testCorner, setTestCorner] = useState('');
-
-  const options: OptionType[] = [
-    { value: 'react', label: 'React' },
-    { value: 'vue', label: 'Vue' },
-    { value: 'angular', label: 'Angular' },
-    { value: 'svelte', label: 'Svelte' },
-    { value: 'next', label: 'Next.js' },
-    { value: 'remix', label: 'Remix' },
-    { value: 'gatsby', label: 'Gatsby' },
-  ];
+  const [transVal2, setTransVal2] = useState('투명모드 텍스트');
 
   const SectionHeader = ({ title }: { title: string }) => (
     <SectionTitleWrapper>
@@ -262,14 +210,20 @@ export default function SelectTest() {
     </SectionTitleWrapper>
   );
 
+  // ✅ [수정 2] 공통 핸들러 타입 정의
+  const handleChange = (setter: React.Dispatch<React.SetStateAction<string>>) => 
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setter(e.target.value);
+    };
+
   return (
     <Container>
       <Header>
         <Text as="h1" variant="900-48" style={{ marginBottom: '10px', fontSize: 'clamp(32px, 5vw, 48px)' }}>
-          Select Component
+          InputTextField Component
         </Text>
         <Text variant="400-18" color={theme.colors.coolgray[500]}>
-          Dropdown States & Auto-Positioning Test Guide
+          Text Input Fields & States Guide
         </Text>
       </Header>
 
@@ -277,23 +231,21 @@ export default function SelectTest() {
       <Section>
         <SectionHeader title="1. Quick Start & Props" />
         <Text variant="400-14" color={theme.colors.coolgray[600]}>
-          아래 코드는 Select 컴포넌트가 지원하는 <b>모든 옵션(Props)</b>을 포함한 예시입니다.
+          아래 코드는 InputTextField 컴포넌트가 지원하는 <b>모든 옵션(Props)</b>을 포함한 예시입니다.
         </Text>
         <CodeBox>
           <Pre>
 {`const [value, setValue] = useState('');
 
-<Select 
-  // [Required] 필수 항목
-  label="프레임워크 선택" 
-  options={[{ value: 'react', label: 'React' }]}
+<InputTextField 
+  // [Optional] 기본 항목
+  label="이메일" 
+  placeholder="example@email.com"
   value={value}
-  onChange={setValue}
+  onChange={(e) => setValue(e.target.value)}
 
-  // [Optional] 선택 항목
+  // [Optional] 스타일 및 상태
   width="100%"
-  menuWidth="100%"
-  maxHeight={250}
   disabled={false}
   mode="light" // 'light' | 'dark' | 'transparent'
 />`}
@@ -312,15 +264,13 @@ export default function SelectTest() {
 
           <PropList>
             {[
-              { name: 'label', desc: '플레이스홀더 텍스트 (선택값 없을 때 표시)' },
-              { name: 'options', desc: '{ value, label } 형태의 객체 배열' },
-              { name: 'value', desc: '현재 선택된 값 (Controlled Component)' },
-              { name: 'onChange', desc: '값이 변경될 때 실행되는 핸들러' },
-              { name: 'width', desc: '버튼 너비 (기본값: 100%)' },
-              { name: 'menuWidth', desc: '드롭다운 메뉴 너비 (기본값: width와 동일)' },
-              { name: 'maxHeight', desc: '드롭다운 메뉴 최대 높이 (기본값: 200px)' },
+              { name: 'label', desc: '입력창 상단 라벨 텍스트' },
+              { name: 'placeholder', desc: '값이 없을 때 표시되는 힌트 텍스트' },
+              { name: 'value', desc: '입력된 값 (Controlled Component)' },
+              { name: 'onChange', desc: '값이 변경될 때 실행되는 핸들러 (e: React.ChangeEvent)' },
+              { name: 'width', desc: '입력창 너비 (기본값: 100%)' },
               { name: 'disabled', desc: '비활성화 여부 (기본값: false)' },
-              { name: 'mode', desc: <span><b>'light'</b> | <b>'dark'</b> | <b>'transparent'</b> 테마 모드 (기본값: light)</span> },
+              { name: 'mode', desc: <span><b>'light'</b> | <b>'dark'</b> | <b>'transparent'</b> (기본값: light)</span> },
             ].map((prop) => (
               <PropItem key={prop.name}>
                 <PropBadge>{prop.name}</PropBadge>
@@ -333,14 +283,15 @@ export default function SelectTest() {
         </div>
       </Section>
 
-      {/* 🔥 [UPDATED SECTION] 2. Semantic Color System Guide */}
+      {/* 🔥 [NEW SECTION] 2. Semantic Color System Guide */}
       <Section>
         <SectionHeader title="2. Semantic Color System (Theme Tokens)" />
         <Text variant="400-14" color={theme.colors.coolgray[600]}>
-            Select 컴포넌트는 <code>theme.components.input</code>에 정의된 시맨틱 토큰을 공유하여 사용합니다.
-            <br/>각 모드별(Light, Dark, Transparent) 색상 토큰 정의는 아래와 같습니다.
+            InputTextField 컴포넌트는 <code>theme.components.input</code>에 정의된 시맨틱 토큰을 사용합니다.
+            <br/>Light, Dark, Transparent 모드별로 정의된 모든 색상 토큰은 아래와 같습니다.
         </Text>
 
+      
         {/* =========================================
             2-1. Light Mode Tokens
         ========================================= */}
@@ -523,41 +474,60 @@ export default function SelectTest() {
       {/* 3. Basic Usage (Light Mode) */}
       <Section>
         <SectionHeader title="3. Basic Usage (Light)" />
-        <div style={{ maxWidth: '400px' }}>
-          <Select 
-            label="프레임워크 선택" 
-            options={options} 
-            value={framework} 
-            onChange={setFramework} 
+        <div style={{ maxWidth: '100%' }}>
+          <InputTextField 
+            label="기본 입력창" 
+            placeholder="내용을 입력하세요"
+            value={basicValue} 
+            onChange={handleChange(setBasicValue)} 
             width="100%" 
-            menuWidth="100%" 
-            maxHeight={200}
-            disabled={false}
             mode="light"
           />
         </div>
       </Section>
 
-     {/* 4. Light Mode States */}
+      {/* 4. States (Light Mode) */}
       <Section>
         <SectionHeader title="4. Light Mode States" />
         <div style={{ padding: '30px', backgroundColor: theme.colors.white, border: `1px dashed ${theme.colors.coolgray[200]}`, borderRadius: '12px' }}>
           <GridContainer>
             <div>
-              <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Default</Text>
-              <Select label="선택해주세요" options={options} value={lightVal1} onChange={setLightVal1} width="100%" mode="light" />
+              <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Default (Empty)</Text>
+              <InputTextField 
+                label="라벨" 
+                placeholder="플레이스홀더" 
+                value={lightVal1} 
+                onChange={handleChange(setLightVal1)} 
+                mode="light" 
+              />
             </div>
             <div>
-              <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Selected</Text>
-              <Select label="프레임워크" options={options} value={lightVal2} onChange={setLightVal2} width="100%" mode="light" />
+              <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Filled</Text>
+              <InputTextField 
+                label="라벨" 
+                placeholder="플레이스홀더" 
+                value={lightVal2} 
+                onChange={handleChange(setLightVal2)} 
+                mode="light" 
+              />
             </div>
             <div>
               <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Disabled</Text>
-              <Select label="선택 불가" options={options} value="" onChange={() => {}} width="100%" disabled={true} mode="light" />
+              <InputTextField 
+                label="비활성화" 
+                placeholder="입력 불가" 
+                disabled={true} 
+                mode="light" 
+              />
             </div>
             <div>
               <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Disabled (Value)</Text>
-              <Select label="값 있음" options={options} value="react" onChange={() => {}} width="100%" disabled={true} mode="light" />
+              <InputTextField 
+                label="비활성화 (값 있음)" 
+                value="수정 불가 데이터" 
+                disabled={true} 
+                mode="light" 
+              />
             </div>
           </GridContainer>
         </div>
@@ -574,19 +544,40 @@ export default function SelectTest() {
            <GridContainer>
             <div>
               <Text as="h4" variant="700-14" color={theme.colors.white} style={{ marginBottom: '8px' }}>Default</Text>
-              <Select label="선택해주세요" options={options} value={darkVal1} onChange={setDarkVal1} width="100%" mode="dark" />
+              <InputTextField 
+                label="다크 라벨" 
+                placeholder="다크 플레이스홀더" 
+                value={darkVal1} 
+                onChange={handleChange(setDarkVal1)} 
+                mode="dark" 
+              />
             </div>
             <div>
-              <Text as="h4" variant="700-14" color={theme.colors.white} style={{ marginBottom: '8px' }}>Selected</Text>
-              <Select label="프레임워크" options={options} value={darkVal2} onChange={setDarkVal2} width="100%" mode="dark" />
+              <Text as="h4" variant="700-14" color={theme.colors.white} style={{ marginBottom: '8px' }}>Filled</Text>
+              <InputTextField 
+                label="다크 라벨" 
+                value={darkVal2} 
+                onChange={handleChange(setDarkVal2)} 
+                mode="dark" 
+              />
             </div>
             <div>
               <Text as="h4" variant="700-14" color={theme.colors.white} style={{ marginBottom: '8px' }}>Disabled</Text>
-              <Select label="선택 불가" options={options} value="" onChange={() => {}} width="100%" disabled={true} mode="dark" />
+              <InputTextField 
+                label="다크 비활성화" 
+                placeholder="입력 불가" 
+                disabled={true} 
+                mode="dark" 
+              />
             </div>
             <div>
               <Text as="h4" variant="700-14" color={theme.colors.white} style={{ marginBottom: '8px' }}>Disabled (Value)</Text>
-              <Select label="값 있음" options={options} value="react" onChange={() => {}} width="100%" disabled={true} mode="dark" />
+              <InputTextField 
+                label="다크 비활성화" 
+                value="수정 불가" 
+                disabled={true} 
+                mode="dark" 
+              />
             </div>
           </GridContainer>
         </div>
@@ -599,47 +590,43 @@ export default function SelectTest() {
           <GridContainer>
             <div>
               <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Default</Text>
-              <Select label="선택해주세요" options={options} value={transVal1} onChange={setTransVal1} width="100%" mode="transparent" />
+              <InputTextField 
+                label="투명 라벨" 
+                placeholder="배경 투명" 
+                value={transVal1} 
+                onChange={handleChange(setTransVal1)} 
+                mode="transparent" 
+              />
             </div>
             <div>
-              <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Selected</Text>
-              <Select label="프레임워크" options={options} value={transVal2} onChange={setTransVal2} width="100%" mode="transparent" />
+              <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Filled</Text>
+              <InputTextField 
+                label="투명 라벨" 
+                value={transVal2} 
+                onChange={handleChange(setTransVal2)} 
+                mode="transparent" 
+              />
             </div>
             <div>
               <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Disabled</Text>
-              <Select label="선택 불가" options={options} value="" onChange={() => {}} width="100%" disabled={true} mode="transparent" />
+              <InputTextField 
+                label="투명 비활성화" 
+                placeholder="입력 불가" 
+                disabled={true} 
+                mode="transparent" 
+              />
             </div>
             <div>
               <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Disabled (Value)</Text>
-              <Select label="값 있음" options={options} value="react" onChange={() => {}} width="100%" disabled={true} mode="transparent" />
+              <InputTextField 
+                label="투명 비활성화" 
+                value="수정 불가" 
+                disabled={true} 
+                mode="transparent" 
+              />
             </div>
           </GridContainer>
         </div>
-      </Section>
-
-      {/* 7. Auto Positioning */}
-      <Section>
-        <SectionHeader title="7. Auto Positioning" />
-        <PositionGrid>
-          <CaseWrapper>
-            <div><Text variant="700-16">CASE A. Right Edge</Text></div>
-            <PositionBox align="right">
-              <Select label="오른쪽 끝" options={options} value={testRight} onChange={setTestRight} width="240px" menuWidth="300px" mode="light" />
-            </PositionBox>
-          </CaseWrapper>
-          <CaseWrapper>
-            <div><Text variant="700-16">CASE B. Bottom Edge</Text></div>
-            <PositionBox align="bottom">
-              <Select label="바닥" options={options} value={testBottom} onChange={setTestBottom} width="100%" mode="light" />
-            </PositionBox>
-          </CaseWrapper>
-          <CaseWrapper>
-            <div><Text variant="700-16">CASE C. Corner</Text></div>
-            <PositionBox align="right" style={{ justifyContent: 'flex-end' }}>
-              <Select label="구석탱이" options={options} value={testCorner} onChange={setTestCorner} width="240px" menuWidth="300px" mode="light" />
-            </PositionBox>
-          </CaseWrapper>
-        </PositionGrid>
       </Section>
 
     </Container>
