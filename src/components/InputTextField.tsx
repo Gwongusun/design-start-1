@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useState } from 'react';
 import styled from '@emotion/styled';
-import { useTheme, Theme } from '@emotion/react'; // Theme 타입 import
+import { useTheme, Theme } from '@emotion/react'; 
 import Text from './Text';
 
 export type InputMode = 'light' | 'dark' | 'transparent';
@@ -13,8 +13,18 @@ interface InputTextFieldProps extends React.InputHTMLAttributes<HTMLInputElement
   mode?: InputMode;
 }
 
+// ------------------------------------------------------------------
+// Helper: 상태별 색상 객체 타입 정의 (추가됨)
+// ------------------------------------------------------------------
+interface CustomColors {
+  label: string;
+  background: string;
+  border: string;
+  text: string;
+  placeholder: string;
+}
+
 // 1. 스타일드 컴포넌트: Props로 계산된 색상 객체(customColors)를 받아서 처리
-// 이유: input의 placeholder 색상은 inline style로 변경 불가능하기 때문
 const Wrapper = styled.div<{ width?: string }>`
   display: flex;
   flex-direction: column;
@@ -23,7 +33,8 @@ const Wrapper = styled.div<{ width?: string }>`
   width: ${(props) => props.width || '100%'};
 `;
 
-const StyledInput = styled.input<{ customColors: any }>`
+// customColors 타입 명시
+const StyledInput = styled.input<{ customColors: CustomColors }>` 
   width: 100%;
   height: 32px;
   padding: 4px 10px;
@@ -61,12 +72,20 @@ function InputTextField({
   const [isHovered, setIsHovered] = useState(false);
 
   // 2. 상태별 색상 계산 로직
-  // theme.ts에 정의된 components.input 값을 가져옵니다.
-  const getColors = () => {
+  const getColors = (): CustomColors => { // ✅ 반환 타입 CustomColors 명시
     // 방어 코드: theme.components가 없을 경우 에러 방지
     const token = theme.components?.input?.[mode] || theme.components?.input?.light;
 
-    if (!token) return {}; // 토큰이 아예 로드 안 됐을 때
+    // 토큰이 아예 로드 안 됐을 때 기본값 (Fallback)
+    if (!token) {
+        return {
+            label: '#000000',
+            background: '#FFFFFF',
+            border: '#000000',
+            text: '#000000',
+            placeholder: '#A0A0A0',
+        };
+    } 
 
     // Disabled
     if (disabled) {
@@ -111,7 +130,7 @@ function InputTextField({
     };
   };
 
-  const colors = getColors();
+  const colors: CustomColors = getColors(); // ✅ 타입 단언
 
   return (
     <Wrapper width={width}>

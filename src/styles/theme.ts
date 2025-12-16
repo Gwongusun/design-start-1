@@ -1,30 +1,15 @@
-// 1. Emotion의 타입을 확장하기 위해 import가 필요합니다.
 import '@emotion/react'; 
-import { typo } from './typography';
+import { typo } from './typography'; 
 
+// 1. Color Palette (동일)
 export const colors = {
-  // 1. Base Colors (기본)
   white: '#FFFFFF',
   black: '#000000',
-
-  // 2. Grayscale (Coolgray)
   coolgray: {
-    50: '#F5F6F7',
-    75: '#ECEEF0',
-    100: '#E2E5E8',
-    150: '#D0D5DA',
-    200: '#B8BFC6',
-    250: '#A0A8B0',
-    300: '#848B93',
-    400: '#676E74',
-    500: '#52585E',
-    600: '#44494E',
-    700: '#32363B',
-    800: '#222529',
-    900: '#111214',
+    50: '#F5F6F7', 75: '#ECEEF0', 100: '#E2E5E8', 150: '#D0D5DA', 200: '#B8BFC6',
+    250: '#A0A8B0', 300: '#848B93', 400: '#676E74', 500: '#52585E', 600: '#44494E',
+    700: '#32363B', 800: '#222529', 900: '#111214',
   },
-
-  // 3. Brand & Palette Colors (기존 코드 그대로 유지)
   red: {
     50: '#FFF5F5', 100: '#FFE3E3', 150: '#FFC9C9', 200: '#FFA8A8', 250: '#FF8787',
     300: '#FF6B6B', 400: '#FA5252', 500: '#F03E3E', 600: '#E03131', 700: '#C92A2A',
@@ -87,10 +72,8 @@ export const colors = {
   },
 };
 
-// 🔥 [NEW] 컴포넌트 전용 시맨틱 토큰 추가
-// colors 객체의 값을 '참조'하여 의미를 부여합니다.
+// 2. Component Semantic Tokens
 const components = {
-  // 1. Input & Select 공통 토큰
   input: {
     light: {
       bg: { default: colors.coolgray[50], hover: colors.coolgray[75], active: colors.white, disabled: colors.coolgray[75] },
@@ -100,7 +83,6 @@ const components = {
       icon: { default: colors.coolgray[300], active: colors.coolgray[900], disabled: colors.coolgray[200] },
     },
     dark: {
-      // 투명도(Alpha) 값은 팔레트에 없으므로 Hex Alpha 코드 직접 사용
       bg: { default: `${colors.white}14`, hover: `${colors.white}1f`, active: `${colors.white}00`, disabled: `${colors.white}14` },
       border: { default: 'transparent', hover: colors.coolgray[600], active: colors.coolgray[700] },
       text: { default: colors.white, placeholder: colors.coolgray[200], disabled: colors.coolgray[400] },
@@ -115,47 +97,75 @@ const components = {
       icon: { default: colors.coolgray[300], active: colors.coolgray[900], disabled: colors.coolgray[200] },
     },
   },
-  
-  // 2. Button 토큰 (Colors 팔레트의 50, 500, 600번대를 활용)
+
   button: {
-    gray: { 
-      main: colors.coolgray[600], 
-      sub: colors.coolgray[75], 
-      contrast: colors.white, 
-      hover: colors.coolgray[700] 
+    light: {
+      // 🔴 1. Disabled Variant 토큰 그룹 (Variant 이름으로 키 정의)
+      disabled: {
+        'filled-disabled': {
+          gray: { bg: colors.coolgray[200], text: colors.coolgray[400] },
+          blue: { bg: colors.blue[200], text: colors.white },
+          green: { bg: colors.green[200], text: colors.white },
+          red: { bg: colors.red[200], text: colors.white },
+        },
+        'outlined-disabled': {
+          gray: { bg: 'transparent', border: colors.coolgray[300], text: colors.coolgray[300] },
+          blue: { bg: 'transparent', border: colors.blue[300], text: colors.blue[300] },
+          green: { bg: 'transparent', border: colors.green[300], text: colors.green[300] },
+          red: { bg: 'transparent', border: colors.red[300], text: colors.red[300] },
+        },
+        'transparent-disabled': { 
+          gray: { bg: colors.coolgray[75], border: 'transparent', text: colors.coolgray[300] }, // Transparent는 Disabled 시 배경색 유지
+          blue: { bg: colors.blue[50], border: 'transparent', text: colors.blue[300] },
+          green: { bg: colors.green[50], border: 'transparent', text: colors.green[300] },
+          red: { bg: colors.red[50], border: 'transparent', text: colors.red[300] },
+        },
+        'ghost-disabled': { 
+          gray: { bg: 'transparent', border: 'transparent', text: colors.coolgray[300] },
+          blue: { bg: 'transparent', border: 'transparent', text: colors.blue[300] },
+          green: { bg: 'transparent', border: 'transparent', text: colors.green[300] },
+          red: { bg: 'transparent', border: 'transparent', text: colors.red[300] },
+        },
+      },
+
+      // 🔴 2. 텍스트 컬러 전용 토큰 그룹 (비활성화 상태 제거)
+      text: {
+        gray: { default: colors.coolgray[900], hover: colors.coolgray[700] },
+        blue: { default: colors.white, hover: colors.blue[700] },
+        green: { default: colors.white, hover: colors.green[700] },
+        red: { default: colors.white, hover: colors.red[700] },
+      },
+      
+      // 🔴 3. 배경/보더 토큰 그룹 (비활성화 상태 제거)
+      gray: {
+        bg: { default: colors.coolgray[900], hover: colors.coolgray[700], active: colors.black },
+        sub: colors.coolgray[75], // Transparent의 Hover 배경
+      },
+      blue: {
+        bg: { default: colors.blue[600], hover: colors.blue[700], active: colors.blue[800] }, 
+        sub: colors.blue[50],
+      },
+      green: {
+        bg: { default: colors.green[600], hover: colors.green[700], active: colors.green[800] },
+        sub: colors.green[50],
+      },
+      red: {
+        bg: { default: colors.red[600], hover: colors.red[700], active: colors.red[800] },
+        sub: colors.red[50],
+      },
     },
-    blue: { 
-      main: colors.blue[500], 
-      sub: colors.blue[50], 
-      contrast: colors.white, 
-      hover: colors.blue[600] 
-    },
-    green: { 
-      main: colors.green[500], 
-      sub: colors.green[50], 
-      contrast: colors.white, 
-      hover: colors.green[600] 
-    },
-    red: { 
-      main: colors.red[500], 
-      sub: colors.red[50], 
-      contrast: colors.white, 
-      hover: colors.red[600] 
-    },
-  }
+    // dark, transparent 모드도 유사하게 정의해야 합니다.
+  },
 };
 
-// 테마 객체 생성
 export const theme = {
   colors,
   typo, 
-  components, // 🔥 추가됨
+  components,
 };
 
-// 사용자 정의 테마 타입 추출
 export type ThemeType = typeof theme;
 
-// Emotion의 기본 Theme 인터페이스를 우리가 만든 ThemeType 구조로 덮어씌웁니다.
 declare module '@emotion/react' {
   export interface Theme extends ThemeType {}
 }
