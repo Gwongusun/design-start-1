@@ -1,38 +1,23 @@
 import '@emotion/react'; 
 import { typo } from './typography'; 
 
-// 1. Color Palette (동일)
+// 1. Primitive Tokens
 export const colors = {
   white: '#FFFFFF',
   black: '#000000',
   coolgray: {
-    50: '#F5F6F7', 75: '#ECEEF0', 100: '#E2E5E8', 150: '#D0D5DA', 200: '#B8BFC6',
+    50: '#F4F6F9', 75: '#ECEEF0', 100: '#E2E5E8', 150: '#D0D5DA', 200: '#B8BFC6',
     250: '#A0A8B0', 300: '#848B93', 400: '#676E74', 500: '#52585E', 600: '#44494E',
     700: '#32363B', 800: '#222529', 900: '#111214',
   },
   red: {
-    50: '#FFF5F5', 100: '#FFE3E3', 150: '#FFC9C9', 200: '#FFA8A8', 250: '#FF8787',
-    300: '#FF6B6B', 400: '#FA5252', 500: '#F03E3E', 600: '#E03131', 700: '#C92A2A',
+    50: '#FFF4F4', 100: '#FFE3E3', 150: '#FFC9C9', 200: '#FFA8A8', 250: '#FF8787',
+    300: '#F96868', 400: '#EF4F4F', 500: '#DB3434', 600: '#D62525', 700: '#C12020',
     800: '#A12222', 900: '#840606',
   },
-  pink: {
-    50: '#FFF0F6', 100: '#FFDEEB', 150: '#FCC2D7', 200: '#FAA2C1', 250: '#F783AC',
-    300: '#F06595', 400: '#E64980', 500: '#D6336C', 600: '#C2255C', 700: '#A61E4D',
-    800: '#85183E', 900: '#660A29',
-  },
-  grape: {
-    50: '#F8F0FC', 100: '#F3D9FA', 150: '#EEBEFA', 200: '#E599F7', 250: '#DA77F2',
-    300: '#CC5DE8', 400: '#BE4BDB', 500: '#AE3EC9', 600: '#9C36B5', 700: '#862E9C',
-    800: '#6B257D', 900: '#521363',
-  },
-  violet: {
-    50: '#F3F0FF', 100: '#E5DBFF', 150: '#D0BFFF', 200: '#B197FC', 250: '#9775FA',
-    300: '#845EF7', 400: '#7950F2', 500: '#7048E8', 600: '#6741D9', 700: '#5D3AC4',
-    800: '#4C2DA6', 900: '#3A257B',
-  },
   indigo: {
-    50: '#EDF2FF', 100: '#DBE4FF', 150: '#BAC8FF', 200: '#91A7FF', 250: '#748FFC',
-    300: '#5C7CFA', 400: '#4C6EF5', 500: '#4263EB', 600: '#3B5BDB', 700: '#364FC7',
+    50: '#F2F5FF', 100: '#DBE4FF', 150: '#BECAFB', 200: '#91A7FF', 250: '#7F98FF',
+    300: '#6786FF', 400: '#4C6EF5', 500: '#4263EB', 600: '#3B5BDB', 700: '#364FC7',
     800: '#2B3F9F', 900: '#202F77',
   },
   blue: {
@@ -40,39 +25,15 @@ export const colors = {
     300: '#339AF0', 400: '#228BE6', 500: '#1C7ED6', 600: '#1971C2', 700: '#1864AB',
     800: '#135089', 900: '#0E3C67',
   },
-  cyan: {
-    50: '#E3FAFC', 100: '#CFF6F9', 150: '#99E9F2', 200: '#66D9E8', 250: '#3BC9DB',
-    300: '#22B8CF', 400: '#15AABF', 500: '#1098AD', 600: '#0C8599', 700: '#0B7285',
-    800: '#095B6A', 900: '#074450',
-  },
-  teal: {
-    50: '#E6FCF5', 100: '#CDFAEB', 150: '#96F2D7', 200: '#77E9C6', 250: '#38D9A9',
-    300: '#20C997', 400: '#12B886', 500: '#0CA678', 600: '#099268', 700: '#087F5B',
-    800: '#066649', 900: '#054C37',
-  },
   green: {
-    50: '#EBFBEE', 100: '#D3F9D8', 150: '#B2F2BB', 200: '#8CE99A', 250: '#69DB7C',
-    300: '#51CF66', 400: '#40C057', 500: '#37B24D', 600: '#2F9E44', 700: '#2B8A3E',
+    50: '#E9F9EC', 100: '#D3F9D8', 150: '#99DFA3', 200: '#6BD47B', 250: '#4EC662',
+    300: '#3ABD50', 400: '#2FA644', 500: '#229A37', 600: '#198A2E', 700: '#1C8330',
     800: '#226E32', 900: '#1A5325',
-  },
-  lime: {
-    50: '#F4FCE3', 100: '#E9FAC8', 150: '#D8F5A2', 200: '#C0EB75', 250: '#A9E34B',
-    300: '#94D82D', 400: '#82C91E', 500: '#74B816', 600: '#66A80F', 700: '#5C940D',
-    800: '#4A760A', 900: '#375908',
-  },
-  yellow: {
-    50: '#FFF9DB', 100: '#FFF3BF', 150: '#FFEC99', 200: '#FFE066', 250: '#FFD43B',
-    300: '#FCC419', 400: '#EFB609', 500: '#E1A201', 600: '#D78E00', 700: '#CE7C00',
-    800: '#B06A01', 900: '#885203',
-  },
-  orange: {
-    50: '#FFF4E6', 100: '#FFE8CC', 150: '#FFD8A8', 200: '#FFC078', 250: '#FFA94D',
-    300: '#FF922B', 400: '#FD7E14', 500: '#F76707', 600: '#E8590C', 700: '#D9480F',
-    800: '#AE3A0C', 900: '#832A08',
   },
 };
 
-// 2. Component Semantic Tokens
+
+// 2. Semantic Tokens
 const components = {
   input: {
     light: {
@@ -97,64 +58,84 @@ const components = {
       icon: { default: colors.coolgray[300], active: colors.coolgray[900], disabled: colors.coolgray[200] },
     },
   },
-
+  
   button: {
     light: {
-      // 🔴 1. Disabled Variant 토큰 그룹 (Variant 이름으로 키 정의)
+      // (1) Normal State
+      filled: {
+        gray: { bg: colors.coolgray[700], text: colors.white, border: 'transparent', hover: { bg: colors.coolgray[900], text: colors.white, border: 'transparent' }, active: { bg:  colors.coolgray[700], text: colors.white, border: 'transparent' } },
+        indigo: { bg: colors.indigo[400], text: colors.white, border: 'transparent', hover: { bg: colors.indigo[600], text: colors.white, border: 'transparent' }, active: { bg: colors.indigo[700], text: colors.white, border: 'transparent' } },
+        green: { bg: colors.green[400], text: colors.white, border: 'transparent', hover: { bg: colors.green[600], text: colors.white, border: 'transparent' }, active: { bg: colors.green[700], text: colors.white, border: 'transparent' } },
+        red: { bg: colors.red[400], text: colors.white, border: 'transparent', hover: { bg: colors.red[600], text: colors.white, border: 'transparent' }, active: { bg: colors.red[700], text: colors.white, border: 'transparent' } },
+      },
+      outlined: {
+        gray: { bg: 'transparent', text: colors.coolgray[800], border: colors.coolgray[200], hover: { bg: colors.coolgray[50], text: colors.coolgray[800], border: colors.coolgray[400] }, active: { bg: colors.coolgray[100], text: colors.coolgray[900], border: colors.coolgray[600] } },
+        indigo: { bg: 'transparent', text: colors.indigo[400], border: colors.indigo[150], hover: { bg: colors.indigo[50], text: colors.indigo[500], border: colors.indigo[400] }, active: { bg: colors.indigo[100], text: colors.indigo[600], border: colors.indigo[600] } },
+        green: { bg: 'transparent', text: colors.green[400], border: colors.green[150], hover: { bg: colors.green[50], text: colors.green[500], border: colors.green[400] }, active: { bg: colors.green[100], text: colors.green[600], border: colors.green[700] } },
+        red: { bg: 'transparent', text: colors.red[400], border: colors.red[150], hover: { bg: colors.red[50], text: colors.red[500], border: colors.red[400] }, active: { bg: colors.red[100], text: colors.red[600], border: colors.red[600] } },
+      },
+      transparent: {
+        gray: { bg: 'transparent', text: colors.coolgray[800], border: 'transparent', hover: { bg: colors.coolgray[50], text: colors.coolgray[800], border: 'transparent' }, active: { bg: colors.coolgray[100], text: colors.coolgray[900], border: 'transparent' } },
+        indigo: { bg: 'transparent', text: colors.indigo[400], border: 'transparent', hover: { bg: colors.indigo[50], text: colors.indigo[500], border: 'transparent' }, active: { bg: colors.indigo[100], text: colors.indigo[600], border: 'transparent' } },
+        green: { bg: 'transparent', text: colors.green[400], border: 'transparent', hover: { bg: colors.green[50], text: colors.green[500], border: 'transparent' }, active: { bg: colors.green[100], text: colors.green[600], border: 'transparent' } },
+        red: { bg: 'transparent', text: colors.red[400], border: 'transparent', hover: { bg: colors.red[50], text: colors.red[500], border: 'transparent' }, active: { bg: colors.red[100], text: colors.red[600], border: 'transparent' } },
+      },
+
+
+      // (2) Disabled State
       disabled: {
-        'filled-disabled': {
-          gray: { bg: colors.coolgray[200], text: colors.coolgray[400] },
-          blue: { bg: colors.blue[200], text: colors.white },
-          green: { bg: colors.green[200], text: colors.white },
-          red: { bg: colors.red[200], text: colors.white },
+        filled: { // key: filled
+          gray: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
+          indigo: { bg: colors.coolgray[50], text: colors.coolgray[150], border:'transparent' },
+          green: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
+          red: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
         },
-        'outlined-disabled': {
-          gray: { bg: 'transparent', border: colors.coolgray[300], text: colors.coolgray[300] },
-          blue: { bg: 'transparent', border: colors.blue[300], text: colors.blue[300] },
-          green: { bg: 'transparent', border: colors.green[300], text: colors.green[300] },
-          red: { bg: 'transparent', border: colors.red[300], text: colors.red[300] },
+        outlined: {
+          gray: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
+          indigo: { bg: colors.coolgray[50], text: colors.coolgray[150], border:'transparent' },
+          green: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
+          red: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
         },
-        'transparent-disabled': { 
-          gray: { bg: colors.coolgray[75], border: 'transparent', text: colors.coolgray[300] }, // Transparent는 Disabled 시 배경색 유지
-          blue: { bg: colors.blue[50], border: 'transparent', text: colors.blue[300] },
+        transparent: { 
+          gray: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
+          indigo: { bg: colors.coolgray[50], text: colors.coolgray[150], border:'transparent' },
+          green: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
+          red: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
+        },
+
+      },
+
+      // (3) Loading State
+      loading: {
+        filled: {
+          gray: { bg: colors.coolgray[700], border: 'transparent', text: colors.coolgray[400] },
+          indigo: { bg: colors.indigo[400], border: 'transparent', text: colors.indigo[200] },
+          green: { bg: colors.green[400], border: 'transparent', text: colors.green[200] },
+          red: { bg: colors.red[400], border: 'transparent', text: colors.red[200] },
+        },
+        outlined: {
+          gray: { bg: 'transparent', border: colors.coolgray[200], text: colors.coolgray[300] },
+          indigo: { bg: 'transparent', border: colors.indigo[200], text: colors.indigo[300] },
+          green: { bg: 'transparent', border: colors.green[200], text: colors.green[300] },
+          red: { bg: 'transparent', border: colors.red[200], text: colors.red[300] },
+        },
+        transparent: {
+          gray: { bg: colors.coolgray[50], border: 'transparent', text: colors.coolgray[400] },
+          indigo: { bg: colors.indigo[50], border: 'transparent', text: colors.indigo[300] },
           green: { bg: colors.green[50], border: 'transparent', text: colors.green[300] },
           red: { bg: colors.red[50], border: 'transparent', text: colors.red[300] },
         },
-        'ghost-disabled': { 
-          gray: { bg: 'transparent', border: 'transparent', text: colors.coolgray[300] },
-          blue: { bg: 'transparent', border: 'transparent', text: colors.blue[300] },
-          green: { bg: 'transparent', border: 'transparent', text: colors.green[300] },
-          red: { bg: 'transparent', border: 'transparent', text: colors.red[300] },
-        },
-      },
 
-      // 🔴 2. 텍스트 컬러 전용 토큰 그룹 (비활성화 상태 제거)
-      text: {
-        gray: { default: colors.coolgray[900], hover: colors.coolgray[700] },
-        blue: { default: colors.white, hover: colors.blue[700] },
-        green: { default: colors.white, hover: colors.green[700] },
-        red: { default: colors.white, hover: colors.red[700] },
       },
       
-      // 🔴 3. 배경/보더 토큰 그룹 (비활성화 상태 제거)
-      gray: {
-        bg: { default: colors.coolgray[900], hover: colors.coolgray[700], active: colors.black },
-        sub: colors.coolgray[75], // Transparent의 Hover 배경
-      },
-      blue: {
-        bg: { default: colors.blue[600], hover: colors.blue[700], active: colors.blue[800] }, 
-        sub: colors.blue[50],
-      },
-      green: {
-        bg: { default: colors.green[600], hover: colors.green[700], active: colors.green[800] },
-        sub: colors.green[50],
-      },
-      red: {
-        bg: { default: colors.red[600], hover: colors.red[700], active: colors.red[800] },
-        sub: colors.red[50],
+      // Text fallback (Optional)
+      text: {
+        gray: { default: colors.coolgray[900] },
+        indigo: { default: colors.white },
+        green: { default: colors.white },
+        red: { default: colors.white },
       },
     },
-    // dark, transparent 모드도 유사하게 정의해야 합니다.
   },
 };
 

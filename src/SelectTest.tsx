@@ -80,7 +80,7 @@ const PropList = styled.ul`
 
 const PropItem = styled.li`
   display: flex;
-  align-items: center; 
+  align-items: center;
   gap: 20px;
   padding: 20px 0;
   border-bottom: 1px dotted ${({ theme }) => theme.colors.coolgray[200]};
@@ -100,8 +100,8 @@ const PropBadge = styled.span`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.colors.blue[50]};
-  color: ${({ theme }) => theme.colors.blue[600]};
+  background-color: ${({ theme }) => theme.colors.indigo[50]};
+  color: ${({ theme }) => theme.colors.indigo[600]};
   padding: 6px 12px;
   border-radius: 4px;
   font-weight: 700;
@@ -111,8 +111,8 @@ const PropBadge = styled.span`
 `;
 
 const GridContainer = styled.div`
-  display: grid; 
-  gap: 30px; 
+  display: grid;
+  gap: 30px;
   grid-template-columns: 1fr 1fr;
 
   @media (max-width: 768px) {
@@ -124,7 +124,7 @@ const PositionGrid = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 30px;
-  
+
   & > div:nth-of-type(3) {
     grid-column: span 2;
   }
@@ -186,25 +186,25 @@ const Swatch = styled.div<{ color: string; hasBorder?: boolean }>`
   flex-shrink: 0;
 
   background-color: #ffffff;
-  background-image: 
+  background-image:
     linear-gradient(${({ color }) => color}, ${({ color }) => color}),
     linear-gradient(45deg, #e5e7eb 25%, transparent 25%),
     linear-gradient(-45deg, #e5e7eb 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, #e5e7eb 75%),
     linear-gradient(-45deg, transparent 75%, #e5e7eb 75%);
-    
-  background-size: 
-    100% 100%, 
-    16px 16px, 
-    16px 16px, 
-    16px 16px, 
+
+  background-size:
+    100% 100%,
+    16px 16px,
+    16px 16px,
+    16px 16px,
     16px 16px;
-    
-  background-position: 
-    0 0, 
-    0 0, 
-    0 8px, 
-    8px -8px, 
+
+  background-position:
+    0 0,
+    0 0,
+    0 8px,
+    8px -8px,
     -8px 0px;
 `;
 
@@ -224,7 +224,7 @@ export default function SelectTest() {
   const theme = useTheme() as any;
 
   const [framework, setFramework] = useState('');
-  
+
   // Light Mode States
   const [lightVal1, setLightVal1] = useState('');
   const [lightVal2, setLightVal2] = useState('react');
@@ -236,7 +236,7 @@ export default function SelectTest() {
   // Transparent Mode States
   const [transVal1, setTransVal1] = useState('');
   const [transVal2, setTransVal2] = useState('react');
-  
+
   const [testRight, setTestRight] = useState('');
   const [testBottom, setTestBottom] = useState('');
   const [testCorner, setTestCorner] = useState('');
@@ -253,9 +253,9 @@ export default function SelectTest() {
 
   const SectionHeader = ({ title }: { title: string }) => (
     <SectionTitleWrapper>
-      <Text 
-        as="h2" 
-        variant="700-24" 
+      <Text
+        as="h2"
+        variant="700-24"
         color={theme.colors.coolgray[900]}
         style={{ wordBreak: 'keep-all' }}
       >
@@ -285,9 +285,9 @@ export default function SelectTest() {
           <Pre>
 {`const [value, setValue] = useState('');
 
-<Select 
+<Select
   // [Required] 필수 항목
-  label="프레임워크 선택" 
+  label="프레임워크 선택"
   options={[{ value: 'react', label: 'React' }]}
   value={value}
   onChange={setValue}
@@ -301,11 +301,11 @@ export default function SelectTest() {
 />`}
           </Pre>
         </CodeBox>
-        
+
         <div>
-           <Text 
-            as="h3" 
-            variant="700-16" 
+           <Text
+            as="h3"
+            variant="700-16"
             color={theme.colors.coolgray[900]}
             style={{ marginBottom: '16px', marginTop: '20px' }}
           >
@@ -339,13 +339,13 @@ export default function SelectTest() {
       <Section>
         <SectionHeader title="2. Basic Usage (Light)" />
         <div>
-          <Select 
-            label="프레임워크 선택" 
-            options={options} 
-            value={framework} 
-            onChange={setFramework} 
-            width="100%" 
-            menuWidth="100%" 
+          <Select
+            label="프레임워크 선택"
+            options={options}
+            value={framework}
+            onChange={setFramework}
+            width="100%"
+            menuWidth="100%"
             maxHeight={200}
             disabled={false}
             mode="light"
@@ -356,7 +356,7 @@ export default function SelectTest() {
       {/* 3. Light Mode Guide (Tokens & Usage) */}
       <Section>
         <SectionHeader title="3. Light Mode Guide" />
-        
+
         {/* 3-1. Light Mode Tokens */}
         <Text variant="700-16">Semantic Color Tokens (Light)</Text>
         <div style={{ marginBottom: 10, padding: 30, background: '#fff', borderRadius: 12, border: `1px dashed ${theme.colors.coolgray[200]}` }}>
@@ -365,7 +365,7 @@ export default function SelectTest() {
                 <ColorCard><Swatch color={theme.components.input.light.bg.hover} hasBorder /><div><Text variant="700-14">Bg (Hov)</Text><Text variant="400-12" color="#666">coolgray[75]</Text></div></ColorCard>
                 <ColorCard><Swatch color={theme.components.input.light.bg.active} hasBorder /><div><Text variant="700-14">Bg (Act)</Text><Text variant="400-12" color="#666">white</Text></div></ColorCard>
                 <ColorCard><Swatch color={theme.components.input.light.bg.disabled} hasBorder /><div><Text variant="700-14">Bg (Dis)</Text><Text variant="400-12" color="#666">coolgray[75]</Text></div></ColorCard>
-                
+
                 <ColorCard><Swatch color={theme.components.input.light.border.default} hasBorder /><div><Text variant="700-14">Border (Def)</Text><Text variant="400-12" color="#666">transparent</Text></div></ColorCard>
                 <ColorCard><Swatch color={theme.components.input.light.border.hover}  /><div><Text variant="700-14">Border (Hov)</Text><Text variant="400-12" color="#666">coolgray[200]</Text></div></ColorCard>
                 <ColorCard><Swatch color={theme.components.input.light.border.active}  /><div><Text variant="700-14">Border (Act)</Text><Text variant="400-12" color="#666">coolgray[200]</Text></div></ColorCard>
@@ -408,7 +408,7 @@ export default function SelectTest() {
       {/* 4. Dark Mode Guide (Tokens & Usage) */}
       <Section>
         <SectionHeader title="4. Dark Mode Guide" />
-        
+
         {/* 4-1. Dark Mode Tokens */}
         <Text variant="700-16">Semantic Color Tokens (Dark)</Text>
         <div style={{ marginBottom: 10, padding: 30, background: '#111827', borderRadius: 12 }}>
@@ -416,7 +416,7 @@ export default function SelectTest() {
                 <ColorCard><Swatch color={theme.components.input.dark.bg.default} hasBorder/><div><Text variant="700-14">Bg (Def)</Text><Text variant="400-12" color="#666">white 8%</Text></div></ColorCard>
                 <ColorCard><Swatch color={theme.components.input.dark.bg.hover} hasBorder/><div><Text variant="700-14">Bg (Hov)</Text><Text variant="400-12" color="#666">white 12%</Text></div></ColorCard>
                 <ColorCard><Swatch color={theme.components.input.dark.bg.active} hasBorder/><div><Text variant="700-14">Bg (Act)</Text><Text variant="400-12" color="#666">white 0%</Text></div></ColorCard>
-                
+
                 <ColorCard><Swatch color={theme.components.input.dark.border.default} hasBorder/><div><Text variant="700-14">Border (Def)</Text><Text variant="400-12" color="#666">transparent</Text></div></ColorCard>
                 <ColorCard><Swatch color={theme.components.input.dark.border.hover} /><div><Text variant="700-14">Border (Hov)</Text><Text variant="400-12" color="#666">coolgray[600]</Text></div></ColorCard>
 
@@ -470,7 +470,7 @@ export default function SelectTest() {
 
                 <ColorCard><Swatch color={theme.components.input.transparent.text.default}  /><div><Text variant="700-14">Text (Def)</Text><Text variant="400-12" color="#666">coolgray[900]</Text></div></ColorCard>
                 <ColorCard><Swatch color={theme.components.input.transparent.text.placeholder}  /><div><Text variant="700-14">Text (Place)</Text><Text variant="400-12" color="#666">coolgray[400]</Text></div></ColorCard>
-                
+
                 <ColorCard><Swatch color={theme.components.input.transparent.icon.default}  /><div><Text variant="700-14">Icon (Def)</Text><Text variant="400-12" color="#666">coolgray[300]</Text></div></ColorCard>
                 <ColorCard><Swatch color={theme.components.input.transparent.icon.active}  /><div><Text variant="700-14">Icon (Act)</Text><Text variant="400-12" color="#666">coolgray[900]</Text></div></ColorCard>
             </ColorGrid>

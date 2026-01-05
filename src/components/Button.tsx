@@ -1,16 +1,26 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
-import { css } from '@emotion/react';
-import { ButtonHTMLAttributes, ReactNode } from 'react';
-import Text from './Text'; 
-import { useTheme } from '@emotion/react'; 
+import { css, keyframes } from '@emotion/react';
+import type { ButtonHTMLAttributes, ReactNode, CSSProperties } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-// 1. 타입 정의
-// 🔥 수정: Disabled 상태를 별도의 Variant로 분리
-export type ButtonVariant = 'filled' | 'outlined' | 'transparent' | 'ghost' | 
-                            'filled-disabled' | 'outlined-disabled' | 'transparent-disabled' | 'ghost-disabled'; 
+import Text from './Text';
+
+// -------------------------------------------------------------------------
+// Types
+// -------------------------------------------------------------------------
+export type ButtonVariant =
+  | 'filled'
+  | 'outlined'
+  | 'transparent'
+  | 'ghost'
+  | 'filled-disabled'
+  | 'outlined-disabled'
+  | 'transparent-disabled'
+  | 'ghost-disabled';
+
 export type ButtonSize = 'small' | 'medium' | 'large';
-export type ButtonColor = 'gray' | 'blue' | 'green' | 'red'; 
+export type ButtonColor = 'gray' | 'indigo' | 'green' | 'red';
 export type ButtonMode = 'light' | 'dark' | 'transparent';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -24,230 +34,302 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
-  // disabled prop은 이제 내부 로직에서 처리하거나, ButtonBase에 직접 전달 (Disabled Variant를 사용하면 무시됨)
 }
 
-// 2. 스타일 유틸리티 (사이즈)
-const getSizeStyle = (size: ButtonSize, hasLeftIcon: boolean, hasRightIcon: boolean) => {
-  const specs = {
-    small: { height: 24, padding: 8, radius: 4, iconSize: 12 },
-    medium: { height: 32, padding: 12, radius: 6, iconSize: 14 },
-    large: { height: 40, padding: 16, radius: 8, iconSize: 18 },
-  };
+// -------------------------------------------------------------------------
+// Constants / Helpers
+// -------------------------------------------------------------------------
+const DEFAULTS = {
+  variant: 'filled' as ButtonVariant,
+  color: 'gray' as ButtonColor,
+  size: 'medium' as ButtonSize,
+  mode: 'light' as ButtonMode,
+};
 
-  const { height, padding, radius, iconSize } = specs[size];
-  
+const TEXT_VARIANT_BY_SIZE: Record<ButtonSize, any> = {
+  small: '500-12',
+  medium: '500-14',
+  large: '500-16',
+};
+
+const SIZE_SPECS: Record<
+  ButtonSize,
+  { height: number; padding: number; radius: number; iconSize: number; strokeWidth: number; gapDiff: number }
+> = {
+  small: { height: 24, padding: 6, radius: 4, iconSize: 12, strokeWidth: 2.4, gapDiff: 4 },
+  medium: { height: 32, padding: 10, radius: 6, iconSize: 14, strokeWidth: 2.2, gapDiff: 3 },
+  large: { height: 40, padding: 14, radius: 8, iconSize: 18, strokeWidth: 1.8, gapDiff: 2 },
+};
+
+const isDisabledVariant = (variant: ButtonVariant) => variant.includes('-disabled');
+
+const getBaseVariant = (variant: ButtonVariant): Exclude<ButtonVariant, `${string}-disabled`> => {
+  return (isDisabledVariant(variant) ? variant.replace('-disabled', '') : variant) as any;
+};
+
+const isTextLike = (children: ReactNode) => typeof children === 'string' || typeof children === 'number';
+
+const hasMeaningfulText = (children: ReactNode) => {
+  if (!isTextLike(children)) return false;
+  const text = String(children);
+  return text.trim().length > 0;
+};
+
+const getSizeStyle = (size: ButtonSize, args: { hasLeftIcon: boolean; hasRightIcon: boolean; isOnlyIcon: boolean }) => {
+  const { height, padding, radius, iconSize, strokeWidth, gapDiff } = SIZE_SPECS[size];
+
   let paddingLeft = padding;
   let paddingRight = padding;
-  
-  if (!hasLeftIcon && hasRightIcon) paddingLeft += 2;
-  if (hasLeftIcon && !hasRightIcon) paddingRight += 2;
+
+  if (!args.isOnlyIcon) {
+    // 아이콘 반대편(텍스트 쪽) 여백을 gapDiff 만큼 늘림
+    if (!args.hasLeftIcon && args.hasRightIcon) paddingLeft += gapDiff;
+    if (args.hasLeftIcon && !args.hasRightIcon) paddingRight += gapDiff;
+  }
 
   return css`
     height: ${height}px;
+    border-radius: ${radius}px;
     padding-left: ${paddingLeft}px;
     padding-right: ${paddingRight}px;
-    border-radius: ${radius}px;
-    gap: ${size === 'small' ? 4 : 6}px;
-    
+
     & svg {
+      flex-shrink: 0;
       width: ${iconSize}px;
       height: ${iconSize}px;
+      stroke-width: ${strokeWidth}px !important;
     }
   `;
 };
 
-// 3. 스타일드 컴포넌트
-const ButtonBase = styled.button<ButtonProps>`
+// -------------------------------------------------------------------------
+// Loading Spinner
+// -------------------------------------------------------------------------
+const spin = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`;
+
+const Spinner = styled.svg<{ $size: ButtonSize }>`
+  animation: ${spin} 0.8s linear infinite;
+  width: ${({ $size }) => ($size === 'small' ? 12 : $size === 'large' ? 18 : 14)}px;
+  height: ${({ $size }) => ($size === 'small' ? 12 : $size === 'large' ? 18 : 14)}px;
+  stroke-width: 2.5px;
+  fill: none;
+  stroke: currentColor;
+`;
+
+const LoadingSpinner = ({ size }: { size: ButtonSize }) => (
+  <Spinner $size={size} viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeOpacity="0.3" strokeWidth="2" fill="none" />
+    <path d="M22 12c0-5.52-4.48-10-10-10" />
+  </Spinner>
+);
+
+const SpinnerContainer = styled.span`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ContentWrapper = styled.span<{ $isLoading: boolean; $size: ButtonSize }>`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+  opacity: ${({ $isLoading }) => ($isLoading ? 0 : 1)};
+  height: 100%;
+  gap: ${({ $size }) => ($size === 'small' ? 4 : 6)}px;
+`;
+
+// -------------------------------------------------------------------------
+// Styled Button
+// -------------------------------------------------------------------------
+interface ButtonBaseProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  $variant: ButtonVariant;
+  $color: ButtonColor;
+  $size: ButtonSize;
+  $mode: ButtonMode;
+  $fullWidth: boolean;
+  $width?: string;
+  $isLoading: boolean;
+  $isOnlyIcon: boolean;
+  $hasLeftIcon: boolean;
+  $hasRightIcon: boolean;
+  $isDisabledState: boolean;
+}
+
+const ButtonBase = styled.button<ButtonBaseProps>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  border: none; 
+  border-style: solid;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   outline: none;
   box-sizing: border-box;
   white-space: nowrap;
   user-select: none;
-
-  /* width 처리 (fullWidth 또는 width prop) */
-  width: ${({ fullWidth, width }) => fullWidth ? '100%' : width || 'auto'};
+  width: ${({ $fullWidth, $width }) => ($fullWidth ? '100%' : $width || 'auto')};
 
   & svg {
     flex-shrink: 0;
     fill: none;
     stroke: currentColor;
-    stroke-width: 2px;
     stroke-linecap: round;
     stroke-linejoin: round;
   }
 
-  /* 🔴 Disabled prop은 Variant에서 직접 처리하므로, 여기서는 제외 */
   &:disabled {
     cursor: not-allowed;
-    opacity: 0.6;
   }
 
-  ${({ size = 'medium', leftIcon, rightIcon }) => 
-    getSizeStyle(size, !!leftIcon, !!rightIcon)}
+  ${({ $size, $hasLeftIcon, $hasRightIcon, $isOnlyIcon }) =>
+    getSizeStyle($size, { hasLeftIcon: $hasLeftIcon, hasRightIcon: $hasRightIcon, isOnlyIcon: $isOnlyIcon })}
 
-  /* 🔥 [핵심] 테마 및 모드 기반 스타일 적용 */
-  ${({ theme, variant = 'filled', color = 'gray', mode = 'light' }) => {
-    const currentTheme = theme as any;
-    
-    // 1. 토큰 경로 설정
-    const buttonTheme = currentTheme.components?.button?.[mode];
-    const isDisabledVariant = variant.includes('-disabled');
-    
-    // Disabled가 아닌 경우: 일반 토큰 사용
-    const regularVariant = isDisabledVariant ? variant.replace('-disabled', '') as ButtonVariant : variant;
-    const bgToken = buttonTheme?.[color]; 
-    const textToken = buttonTheme?.text?.[color]; 
-    
-    // Disabled인 경우: Disabled 토큰 참조
-    const disabledTokenSet = isDisabledVariant ? buttonTheme?.disabled?.[variant]?.[color] : null;
+  ${({ theme, $variant, $color, $mode, $isLoading, $isDisabledState }) => {
+    const buttonTheme = (theme as any)?.components?.button?.[$mode];
+    if (!buttonTheme) return css``;
 
-    if (!bgToken) return css``; 
+    const baseVariant = getBaseVariant($variant);
+    const disabledByVariant = isDisabledVariant($variant);
 
-    // 🔴 Disabled Variant 스타일 처리
-    if (isDisabledVariant && disabledTokenSet) {
-      return css`
-        cursor: not-allowed;
-        opacity: 1; /* opacity 0.6은 ButtonBase 밖에서 설정되거나, 여기서는 1로 강제 */
-        background-color: ${disabledTokenSet.bg || 'transparent'};
-        border: 1px solid ${disabledTokenSet.border || 'transparent'};
-        color: ${disabledTokenSet.text || currentTheme.colors.coolgray[300]};
-        
+    const tokenGroup = $isLoading
+      ? buttonTheme.loading?.[baseVariant]?.[$color]
+      : $isDisabledState || disabledByVariant
+        ? buttonTheme.disabled?.[baseVariant]?.[$color]
+        : buttonTheme[baseVariant]?.[$color];
+
+    if (!tokenGroup) return css``;
+
+    const hoverToken = tokenGroup.hover || tokenGroup;
+    const activeToken = tokenGroup.active || tokenGroup;
+    const canInteract = !$isDisabledState && !disabledByVariant && !$isLoading;
+
+    return css`
+      background-color: ${tokenGroup.bg};
+      border: 1px solid ${tokenGroup.border};
+      color: ${tokenGroup.text};
+
+      ${canInteract &&
+      css`
         &:hover {
-          /* Disabled 상태는 hover 효과 없음 */
-          background-color: ${disabledTokenSet.bg || 'transparent'};
-          border-color: ${disabledTokenSet.border || 'transparent'};
-          color: ${disabledTokenSet.text || currentTheme.colors.coolgray[300]};
+          background-color: ${hoverToken.bg};
+          border-color: ${hoverToken.border};
+          color: ${hoverToken.text};
         }
-      `;
-    }
 
-    // 🔴 일반 Variant 스타일 처리
-    switch (regularVariant) {
-      case 'outlined':
-        const outlinedColor = (mode === 'light') ? bgToken.bg.default : textToken?.default || currentTheme.colors.coolgray[900];
-
-        return css`
-          background-color: transparent;
-          border: 1px solid ${outlinedColor}; 
-          color: ${outlinedColor}; 
-          
-          &:hover {
-            background-color: ${bgToken.sub || 'rgba(0,0,0,0.05)'};
-          }
-        `;
-        
-      case 'transparent':
-        const transparentColor = (mode === 'light') ? bgToken.bg.default : textToken?.default || currentTheme.colors.coolgray[900];
-        
-        return css`
-          background-color: transparent;
-          border: 1px solid transparent;
-          color: ${transparentColor};
-
-          &:hover {
-            background-color: ${bgToken.sub || 'rgba(0,0,0,0.05)'}; 
-          }
-        `;
-
-      case 'ghost':
-        const ghostColor = (mode === 'light') ? bgToken.bg.default : textToken?.default || currentTheme.colors.coolgray[900];
-        
-        return css`
-          background-color: transparent;
-          border: 1px solid transparent;
-          color: ${ghostColor};
-
-          &:hover {
-            color: ${textToken?.hover || bgToken.bg.hover}; 
-          }
-        `;
-
-      case 'filled': 
-      default:
-        const filledTextColor = textToken?.default || currentTheme.colors.white; 
-        
-        return css`
-          background-color: ${bgToken.bg.default};
-          color: ${filledTextColor};
-          border: 1px solid transparent; 
-
-          &:hover {
-            background-color: ${bgToken.bg.hover};
-          }
-
-          &:active {
-            background-color: ${bgToken.bg.active};
-          }
-        `;
-    }
+        &:active {
+          background-color: ${activeToken.bg};
+          border-color: ${activeToken.border};
+          color: ${activeToken.text};
+        }
+      `}
+    `;
   }}
 `;
 
-// 4. 컴포넌트 구현
+// -------------------------------------------------------------------------
+// Component
+// -------------------------------------------------------------------------
 export const Button = ({
   children,
-  variant = 'filled',
-  color = 'gray',     
-  size = 'medium',    
-  mode = 'light',     
+  variant = DEFAULTS.variant,
+  color = DEFAULTS.color,
+  size = DEFAULTS.size,
+  mode = DEFAULTS.mode,
   width,
   fullWidth = false,
   isLoading = false,
-  disabled: propDisabled, // propDisabled로 이름 변경
+  disabled: propDisabled,
   leftIcon,
   rightIcon,
+  style,
   ...props
 }: ButtonProps) => {
-  
-  const textVariantMap: Record<ButtonSize, any> = {
-    small: '500-12',  
-    medium: '500-14', 
-    large: '500-16'   
-  };
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [measuredWidth, setMeasuredWidth] = useState<number | undefined>(undefined);
 
-  const textVariant = textVariantMap[size] || '500-14';
-  
-  // Variant가 Disabled 상태라면, disabled prop을 무시하고 Variant에 의해 Disabled 스타일이 적용되도록 합니다.
-  const isDisabledVariant = variant.includes('-disabled');
-  const actualDisabled = isDisabledVariant || propDisabled || isLoading;
+  const hasIcon = Boolean(leftIcon) || Boolean(rightIcon);
+  const hasText = hasMeaningfulText(children);
+  const hasNonTextChildren = Boolean(children) && !isTextLike(children);
+  const hasContent = hasText || hasNonTextChildren;
 
-  // Disabled Variant의 경우, ButtonBase의 disabled prop을 false로 설정하여, CSS에서 제어하도록 함
-  const disabledPropToPass = isDisabledVariant ? false : actualDisabled;
+  const isOnlyIcon = hasIcon && !hasContent && !isLoading;
+  const height = SIZE_SPECS[size].height;
 
+  useEffect(() => {
+    // 로딩 전 "기본 너비"를 한 번만 측정 (width/fullWidth 미사용 시)
+    if (!buttonRef.current) return;
+    if (measuredWidth) return;
+    if (isLoading) return;
+    if (width || fullWidth) return;
+
+    setMeasuredWidth(buttonRef.current.getBoundingClientRect().width);
+  }, [measuredWidth, isLoading, width, fullWidth]);
+
+  const disabledByVariant = isDisabledVariant(variant);
+  const isActuallyDisabled = Boolean(propDisabled) || disabledByVariant || isLoading;
+
+  const dynamicStyle = { ...style } as CSSProperties;
+
+  // 로딩 중 레이아웃 점프 방지: 기존 너비를 유지
+  if (isLoading && !width && !fullWidth && measuredWidth) {
+    dynamicStyle.width = `${measuredWidth}px`;
+    dynamicStyle.minWidth = `${measuredWidth}px`;
+  }
+
+  // 아이콘-only 버튼은 height 기반 정사각형으로 고정(요구 시)
+  if (isOnlyIcon && !width && !fullWidth) {
+    dynamicStyle.width = `${height}px`;
+    dynamicStyle.minWidth = `${height}px`;
+  }
+
+  const textVariant = TEXT_VARIANT_BY_SIZE[size] || TEXT_VARIANT_BY_SIZE.medium;
 
   return (
     <ButtonBase
-      variant={variant}
-      color={color}
-      size={size}
-      mode={mode}
-      width={width}
-      fullWidth={fullWidth}
-      disabled={disabledPropToPass}
-      leftIcon={leftIcon}
-      rightIcon={rightIcon}
+      ref={buttonRef}
+      $variant={variant}
+      $color={color}
+      $size={size}
+      $mode={mode}
+      $width={width}
+      $fullWidth={fullWidth}
+      $isLoading={isLoading}
+      $isOnlyIcon={isOnlyIcon}
+      $hasLeftIcon={Boolean(leftIcon)}
+      $hasRightIcon={Boolean(rightIcon)}
+      $isDisabledState={isActuallyDisabled}
+      disabled={isActuallyDisabled}
+      style={dynamicStyle}
+      aria-busy={isLoading || undefined}
       {...props}
     >
-      {isLoading ? (
-        <Text variant={textVariant} as="span" color="inherit">
-          Loading...
-        </Text>
-      ) : (
-        <>
-          {leftIcon}
+      {isLoading && (
+        <SpinnerContainer>
+          <LoadingSpinner size={size} />
+        </SpinnerContainer>
+      )}
+
+      <ContentWrapper $isLoading={isLoading} $size={size}>
+        {leftIcon}
+
+        {hasText ? (
           <Text variant={textVariant} as="span" color="inherit">
             {children}
           </Text>
-          {rightIcon}
-        </>
-      )}
+        ) : hasNonTextChildren ? (
+          children
+        ) : null}
+
+        {rightIcon}
+      </ContentWrapper>
     </ButtonBase>
   );
 };

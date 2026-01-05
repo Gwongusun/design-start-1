@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { useTheme } from '@emotion/react';
+import { useTheme, Global, css } from '@emotion/react';
 
 // 기존 컴포넌트들
 import SelectTest from './SelectTest';
@@ -70,6 +70,25 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Global
+        styles={css`
+          html,
+          body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+          }
+
+          button,
+          input,
+          textarea,
+          select {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+          }
+        `}
+      />
       <Layout>
         {/* 왼쪽 메뉴 영역 */}
         <Sidebar theme={theme}>

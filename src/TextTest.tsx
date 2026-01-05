@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
 import { useTheme } from '@emotion/react';
-import Text from './components/Text'; 
+import Text from './components/Text';
 
 // -------------------------------------------------------------------------
 // 스타일 정의
@@ -50,7 +50,7 @@ const StyledTable = styled.table`
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
-  min-width: 1640px; 
+  min-width: 1640px;
 `;
 
 /* Tr 정의 */
@@ -58,7 +58,7 @@ const Tr = styled.tr`
   border-bottom: 1px dashed ${({ theme }) => theme.colors.coolgray[100]};
   /* 오류 원인 제거: Hover 배경색 전환 효과 잠시 제거하거나 단순화 */
   transition: background-color 0.2s;
-  
+
   &:hover {
     background-color: ${({ theme }) => theme.colors.blue[50]};
   }
@@ -74,7 +74,7 @@ const Th = styled.th`
   background-color: ${({ theme }) => theme.colors.coolgray[50]};
   border-bottom: 1px solid ${({ theme }) => theme.colors.coolgray[200]};
   text-align: center;
-  
+
   /* [Sticky Column] Size 헤더 */
   &:first-of-type {
     position: sticky;
@@ -82,13 +82,13 @@ const Th = styled.th`
     z-index: 2;
     background-color: ${({ theme }) => theme.colors.coolgray[50]};
     box-shadow: 2px 0 5px rgba(0,0,0,0.05);
-    width: 80px; 
+    width: 80px;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
-    text-align: center; 
+    text-align: center;
     padding-right: 0;
   }
-  
+
   &:last-of-type {
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
@@ -116,7 +116,7 @@ const Td = styled.td`
     padding-right: 0;
   }
 
-  /* 🚨 [삭제함] 에러의 주범인 Hover 연동 코드를 삭제했습니다. 
+  /* 🚨 [삭제함] 에러의 주범인 Hover 연동 코드를 삭제했습니다.
      이제 화면이 하얗게 되는 일은 없을 것입니다. */
 `;
 
@@ -131,7 +131,7 @@ const CodeBox = styled.div`
 const Pre = styled.pre` margin: 0; color: ${({ theme }) => theme.colors.white}; font-family: 'Menlo', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.6; `;
 const PropList = styled.ul` display: flex; flex-direction: column; padding: 0; margin: 0; list-style: none; `;
 const PropItem = styled.li` display: flex; align-items: center; gap: 20px; padding: 20px 0; border-bottom: 1px dotted ${({ theme }) => theme.colors.coolgray[200]}; &:first-of-type { border-top: 1px dotted ${({ theme }) => theme.colors.coolgray[200]}; } @media (max-width: 600px) { flex-direction: column; align-items: flex-start; gap: 8px; } `;
-const PropBadge = styled.span` display: inline-flex; align-items: center; justify-content: center; background-color: ${({ theme }) => theme.colors.blue[50]}; color: ${({ theme }) => theme.colors.blue[600]}; padding: 6px 12px; border-radius: 4px; font-weight: 700; font-family: monospace; font-size: 14px; min-width: 80px; `;
+const PropBadge = styled.span` display: inline-flex; align-items: center; justify-content: center; background-color: ${({ theme }) => theme.colors.indigo[50]}; color: ${({ theme }) => theme.colors.indigo[600]}; padding: 6px 12px; border-radius: 4px; font-weight: 700; font-family: monospace; font-size: 14px; min-width: 80px; `;
 
 export default function TextTest() {
   const theme = useTheme();
@@ -316,15 +316,15 @@ export default function TextTest() {
       {/* 2. Quick Start & Props Guide */}
       <Section>
         <SectionHeader title="2. Quick Start & Props" />
-        
+
         <Text variant="400-16" color={theme.colors.coolgray[600]}>
           Text 컴포넌트는 <b>"두께-사이즈"</b> 조합의 문자열(String Literal)로 스타일을 지정합니다.
         </Text>
 
         <CodeBox>
           <Pre>
-{`<Text 
-  as="h1" 
+{`<Text
+  as="h1"
   variant="900-48"   // 900(Black) + 48px
   color={theme.colors.blue[500]}
   align="center"
@@ -376,7 +376,7 @@ export default function TextTest() {
       {/* 3. Colors */}
       <Section>
         <SectionHeader title="3. Colors (테마 색상)" />
-        
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           <Text variant="700-24" color={theme.colors.blue[500]}>
             Primary Blue (Brand Color)
@@ -401,25 +401,25 @@ export default function TextTest() {
       {/* 4. Alignment */}
       <Section>
         <SectionHeader title="4. Text Alignment (정렬)" />
-        
+
         <div style={{ background: theme.colors.coolgray[50], padding: '20px', borderRadius: '8px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <Text 
-            variant="400-16" 
-            align="left" 
+          <Text
+            variant="400-16"
+            align="left"
             style={{ border: `1px dashed ${theme.colors.coolgray[300]}`, padding: '5px' }}
           >
             Left Aligned (Default)
           </Text>
-          <Text 
-            variant="400-16" 
-            align="center" 
+          <Text
+            variant="400-16"
+            align="center"
             style={{ border: `1px dashed ${theme.colors.coolgray[300]}`, padding: '5px' }}
           >
             Center Aligned
           </Text>
-          <Text 
-            variant="400-16" 
-            align="right" 
+          <Text
+            variant="400-16"
+            align="right"
             style={{ border: `1px dashed ${theme.colors.coolgray[300]}`, padding: '5px' }}
           >
             Right Aligned
@@ -430,7 +430,7 @@ export default function TextTest() {
       {/* 5. Polymorphism & Links */}
       <Section>
         <SectionHeader title="5. Polymorphism & Links (태그 변환)" />
-        
+
         <Text variant="400-16" color={theme.colors.coolgray[600]}>
           아래 텍스트들은 겉보기엔 비슷해 보이지만, 실제 HTML 태그는 다릅니다. (SEO 최적화)
         </Text>
@@ -450,11 +450,11 @@ export default function TextTest() {
             </Text>
           </li>
           <li>
-            <Text 
-              as="a" 
-              variant="400-18" 
+            <Text
+              as="a"
+              variant="400-18"
               color={theme.colors.indigo[600]}
-              href="https://google.com" 
+              href="https://google.com"
               target="_blank"
               style={{ textDecoration: 'underline', cursor: 'pointer' }}
             >
@@ -467,7 +467,7 @@ export default function TextTest() {
       {/* 6. Custom Styles */}
       <Section>
         <SectionHeader title="6. Custom Styles (스타일 커스텀)" />
-        
+
         <Text variant="400-16">
           기본 스타일에 <b style={{ color: theme.colors.red[500] }}>style 속성</b>을 추가하여 마음대로 꾸밀 수 있습니다.
         </Text>
@@ -476,15 +476,15 @@ export default function TextTest() {
           <Text variant="400-18" color={theme.colors.coolgray[400]} style={{ textDecoration: 'line-through' }}>
             취소선 텍스트
           </Text>
-          
+
           <Text variant="400-18" style={{ textDecoration: 'underline' }}>
             밑줄 텍스트
           </Text>
-          
-          <Text variant="400-18" color={theme.colors.violet[600]} style={{ fontStyle: 'italic' }}>
+
+          <Text variant="400-18" color={theme.colors.blue[600]} style={{ fontStyle: 'italic' }}>
             이탤릭체 + 보라색
           </Text>
-          
+
           <Text variant="700-18" style={{ letterSpacing: '5px' }}>
             자간넓음
           </Text>
