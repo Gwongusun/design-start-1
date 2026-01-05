@@ -616,7 +616,7 @@ export default function ButtonTest() {
                 leftIcon={leftIcon}
                 rightIcon={rightIcon}
               >
-                버튼
+                확인
               </Button>
             </div>
             {/* Icon Only */}
@@ -685,7 +685,7 @@ export default function ButtonTest() {
                 leftIcon={leftIcon}
                 rightIcon={rightIcon}
               >
-                버튼
+                확인
               </Button>
             </div>
             {/* Icon Only */}
