@@ -14,6 +14,7 @@ const Container = styled.div`
   margin: 0 auto;
   gap: 50px;
   padding-bottom: 100px;
+  background-color: #F9FAFB;
 
   @media (max-width: 768px) {
     padding: 20px;
