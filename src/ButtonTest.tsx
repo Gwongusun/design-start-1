@@ -7,10 +7,10 @@ import { useTheme } from '@emotion/react';
 import { CircleChevronLeft, CircleChevronRight, ChevronLeft, ChevronRight } from 'lucide-react';
 
 import {
-    Button,
-    ButtonColor,
-    ButtonVariant,
-    ButtonMode
+  Button,
+  ButtonColor,
+  ButtonVariant,
+  ButtonMode
 } from './components/Button';
 import Text from './components/Text';
 
@@ -223,13 +223,13 @@ export default function ButtonTest() {
             localTokens.push({ name: `Active Bg`, value: tokenSet.active.bg });
           }
           if (tokenSet.border && tokenSet.border !== 'transparent') {
-             localTokens.push({ name: `Default Border`, value: tokenSet.border });
+            localTokens.push({ name: `Default Border`, value: tokenSet.border });
           }
           if (tokenSet.text) {
-             localTokens.push({ name: `Default Text`, value: tokenSet.text });
+            localTokens.push({ name: `Default Text`, value: tokenSet.text });
           }
-           if (disabledTokenSet.text) {
-             localTokens.push({ name: `Disabled Text`, value: disabledTokenSet.text });
+          if (disabledTokenSet.text) {
+            localTokens.push({ name: `Disabled Text`, value: disabledTokenSet.text });
           }
           if (disabledTokenSet.bg) {
             localTokens.push({ name: `Disabled Bg`, value: disabledTokenSet.bg });
@@ -240,7 +240,7 @@ export default function ButtonTest() {
           return (
             <div key={color}>
               <ColorGroupHeader>
-                 <Text variant="700-14" color={theme.colors.coolgray[500]}>{colorName} Series</Text>
+                <Text variant="700-14" color={theme.colors.coolgray[500]}>{colorName} Series</Text>
               </ColorGroupHeader>
               <ColorGrid>
                 {localTokens.map((token, idx) => (
@@ -273,7 +273,7 @@ export default function ButtonTest() {
     <Container>
       <Header>
         <Text as="h1" variant="900-48" style={{ marginBottom: '10px', fontSize: 'clamp(32px, 5vw, 48px)' }}>
-          Button Component
+          Button Components
         </Text>
         <Text variant="400-18" color={theme.colors.coolgray[500]}>
           Light Mode Color, Variant, and Size Guide.
@@ -288,7 +288,7 @@ export default function ButtonTest() {
         </Text>
         <CodeBox>
           <Pre>
-{`<Button
+            {`<Button
   color="indigo"
   variant="filled"
   mode="light"
@@ -306,7 +306,7 @@ export default function ButtonTest() {
         </CodeBox>
 
         <div>
-           <Text
+          <Text
             as="h3"
             variant="700-16"
             color={theme.colors.coolgray[900]}
@@ -347,7 +347,7 @@ export default function ButtonTest() {
         </SubHeader>
         <TokenSectionBox style={{ overflowX: 'auto' }}>
           <MatrixGrid>
-            <div/>
+            <div />
             <Text variant="700-14" color={theme.colors.coolgray[600]} style={{ textAlign: 'center' }}>Default</Text>
             <Text variant="700-14" color={theme.colors.coolgray[600]} style={{ textAlign: 'center' }}>Loading</Text>
             <Text variant="700-14" color={theme.colors.coolgray[600]} style={{ textAlign: 'center' }}>Disabled</Text>
@@ -361,7 +361,7 @@ export default function ButtonTest() {
                 </Button>
 
                 <Button mode="light" color={color} variant="filled" size="medium" isLoading={true}>
-                 확인
+                  확인
                 </Button>
 
                 <Button mode="light" color={color} variant="filled-disabled" size="medium" disabled={true}>
@@ -390,7 +390,7 @@ export default function ButtonTest() {
         </SubHeader>
         <TokenSectionBox style={{ overflowX: 'auto' }}>
           <MatrixGrid>
-            <div/>
+            <div />
             <Text variant="700-14" color={theme.colors.coolgray[600]} style={{ textAlign: 'center' }}>Default</Text>
             <Text variant="700-14" color={theme.colors.coolgray[600]} style={{ textAlign: 'center' }}>Loading</Text>
             <Text variant="700-14" color={theme.colors.coolgray[600]} style={{ textAlign: 'center' }}>Disabled</Text>
@@ -433,7 +433,7 @@ export default function ButtonTest() {
         </SubHeader>
         <TokenSectionBox style={{ overflowX: 'auto' }}>
           <MatrixGrid>
-            <div/>
+            <div />
             <Text variant="700-14" color={theme.colors.coolgray[600]} style={{ textAlign: 'center' }}>Default</Text>
             <Text variant="700-14" color={theme.colors.coolgray[600]} style={{ textAlign: 'center' }}>Loading</Text>
             <Text variant="700-14" color={theme.colors.coolgray[600]} style={{ textAlign: 'center' }}>Disabled</Text>
@@ -451,7 +451,7 @@ export default function ButtonTest() {
                 </Button>
 
                 <Button mode="light" color={color} variant="transparent-disabled" size="medium" disabled={true}>
-                 확인
+                  확인
                 </Button>
               </React.Fragment>
             ))}
@@ -465,246 +465,246 @@ export default function ButtonTest() {
           {renderTokenGrid('transparent')}
         </TokenSectionBox>
       </Section>
-{/* 5. Sizes & Layouts (Unified Matrix - Dotted Separator) */}
-<Section>
-  <SectionHeader title="5. Sizes & Layouts" />
+      {/* 5. Sizes & Layouts (Unified Matrix - Dotted Separator) */}
+      <Section>
+        <SectionHeader title="5. Sizes & Layouts" />
 
-  <TokenSectionBox style={{ overflowX: 'auto' }}>
-    <div
-      style={{
-        display: 'grid',
-        // 라벨 컬럼(150px) + 5개의 콘텐츠 컬럼
-        gridTemplateColumns: '150px repeat(5, minmax(110px, 1fr))',
-        gap: '20px 12px',
-        alignItems: 'center',
-      }}
-    >
-      {/* --- Table Header --- */}
-      <div /> {/* Empty Corner */}
-      <div>
-        <Text variant="500-12" color={theme.colors.coolgray[600]} style={{ textAlign: 'center', display: 'block' }}>
-          Text Only
-        </Text>
-      </div>
-      <div>
-        <Text variant="500-12" color={theme.colors.coolgray[600]} style={{ textAlign: 'center', display: 'block' }}>
-          Left Icon
-        </Text>
-      </div>
-      <div>
-        <Text variant="500-12" color={theme.colors.coolgray[600]} style={{ textAlign: 'center', display: 'block' }}>
-          Right Icon
-        </Text>
-      </div>
-      <div>
-        <Text variant="500-12" color={theme.colors.coolgray[600]} style={{ textAlign: 'center', display: 'block' }}>
-          Both Icons
-        </Text>
-      </div>
-      <div>
-        <Text variant="500-12" color={theme.colors.coolgray[600]} style={{ textAlign: 'center', display: 'block' }}>
-          Icon Only
-        </Text>
-      </div>
-
-      {/* --- 1. Filled Variant --- */}
-      {['small', 'medium', 'large'].map((size) => {
-        const leftIcon = size === 'small' ? <ChevronLeft /> : <CircleChevronLeft />;
-        const rightIcon = size === 'small' ? <ChevronRight /> : <CircleChevronRight />;
-
-        return (
-          <React.Fragment key={`filled-${size}`}>
-            {/* Row Label */}
+        <TokenSectionBox style={{ overflowX: 'auto' }}>
+          <div
+            style={{
+              display: 'grid',
+              // 라벨 컬럼(150px) + 5개의 콘텐츠 컬럼
+              gridTemplateColumns: '150px repeat(5, minmax(110px, 1fr))',
+              gap: '20px 12px',
+              alignItems: 'center',
+            }}
+          >
+            {/* --- Table Header --- */}
+            <div /> {/* Empty Corner */}
             <div>
-              <Text variant="500-12" color={theme.colors.coolgray[900]}>
-                Filled ({size})
+              <Text variant="500-12" color={theme.colors.coolgray[600]} style={{ textAlign: 'center', display: 'block' }}>
+                Text Only
               </Text>
             </div>
-            {/* Text Only */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button variant="filled" color="gray" mode="light" size={size as any}>
-                확인
-              </Button>
-            </div>
-            {/* Left Icon */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button variant="filled" color="gray" mode="light" size={size as any} leftIcon={leftIcon}>
-                확인
-              </Button>
-            </div>
-            {/* Right Icon */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button variant="filled" color="gray" mode="light" size={size as any} rightIcon={rightIcon}>
-                확인
-              </Button>
-            </div>
-            {/* Both Icons */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button
-                variant="filled"
-                color="gray"
-                mode="light"
-                size={size as any}
-                leftIcon={leftIcon}
-                rightIcon={rightIcon}
-              >
-                확인
-              </Button>
-            </div>
-            {/* Icon Only */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button
-                variant="filled"
-                color="gray"
-                mode="light"
-                size={size as any}
-                leftIcon={leftIcon}
-                children=""
-              />
-            </div>
-          </React.Fragment>
-        );
-      })}
-
-      {/* 구분선 (도트선으로 수정됨) */}
-      <div
-        style={{
-          gridColumn: '1 / -1',
-          borderTop: `1px dotted ${theme.colors.coolgray[200]}`,
-          margin: '12px 0'
-        }}
-      />
-
-      {/* --- 2. Outlined Variant --- */}
-      {['small', 'medium', 'large'].map((size) => {
-        const leftIcon = size === 'small' ? <ChevronLeft /> : <CircleChevronLeft />;
-        const rightIcon = size === 'small' ? <ChevronRight /> : <CircleChevronRight />;
-
-        return (
-          <React.Fragment key={`outlined-${size}`}>
-            {/* Row Label */}
             <div>
-              <Text variant="500-12" color={theme.colors.coolgray[900]}>
-                Outlined ({size})
+              <Text variant="500-12" color={theme.colors.coolgray[600]} style={{ textAlign: 'center', display: 'block' }}>
+                Left Icon
               </Text>
             </div>
-            {/* Text Only */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button variant="outlined" color="gray" mode="light" size={size as any}>
-                확인
-              </Button>
-            </div>
-            {/* Left Icon */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button variant="outlined" color="gray" mode="light" size={size as any} leftIcon={leftIcon}>
-                확인
-              </Button>
-            </div>
-            {/* Right Icon */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button variant="outlined" color="gray" mode="light" size={size as any} rightIcon={rightIcon}>
-                확인
-              </Button>
-            </div>
-            {/* Both Icons */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button
-                variant="outlined"
-                color="gray"
-                mode="light"
-                size={size as any}
-                leftIcon={leftIcon}
-                rightIcon={rightIcon}
-              >
-                확인
-              </Button>
-            </div>
-            {/* Icon Only */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button
-                variant="outlined"
-                color="gray"
-                mode="light"
-                size={size as any}
-                leftIcon={leftIcon}
-                children=""
-              />
-            </div>
-          </React.Fragment>
-        );
-      })}
-
-      {/* 구분선 (도트선으로 수정됨) */}
-      <div
-        style={{
-          gridColumn: '1 / -1',
-          borderTop: `1px dotted ${theme.colors.coolgray[200]}`,
-          margin: '12px 0'
-        }}
-      />
-
-      {/* --- 3. Transparent Variant --- */}
-      {['small', 'medium', 'large'].map((size) => {
-        const leftIcon = size === 'small' ? <ChevronLeft /> : <CircleChevronLeft />;
-        const rightIcon = size === 'small' ? <ChevronRight /> : <CircleChevronRight />;
-
-        return (
-          <React.Fragment key={`transparent-${size}`}>
-            {/* Row Label */}
             <div>
-              <Text variant="500-12" color={theme.colors.coolgray[900]}>
-                Transparent ({size})
+              <Text variant="500-12" color={theme.colors.coolgray[600]} style={{ textAlign: 'center', display: 'block' }}>
+                Right Icon
               </Text>
             </div>
-            {/* Text Only */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button variant="transparent" color="gray" mode="light" size={size as any}>
-                확인
-              </Button>
+            <div>
+              <Text variant="500-12" color={theme.colors.coolgray[600]} style={{ textAlign: 'center', display: 'block' }}>
+                Both Icons
+              </Text>
             </div>
-            {/* Left Icon */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button variant="transparent" color="gray" mode="light" size={size as any} leftIcon={leftIcon}>
-                확인
-              </Button>
-            </div>
-            {/* Right Icon */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button variant="transparent" color="gray" mode="light" size={size as any} rightIcon={rightIcon}>
-                확인
-              </Button>
+            <div>
+              <Text variant="500-12" color={theme.colors.coolgray[600]} style={{ textAlign: 'center', display: 'block' }}>
+                Icon Only
+              </Text>
             </div>
 
-            {/* Both Icons */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button
-                variant="transparent"
-                color="gray"
-                mode="light"
-                size={size as any}
-                leftIcon={leftIcon}
-                rightIcon={rightIcon}
-              >
-                확인
-              </Button>
-            </div>
-            {/* Icon Only */}
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <Button
-                variant="transparent"
-                color="gray"
-                mode="light"
-                size={size as any}
-                leftIcon={leftIcon}
-                children=""
-              />
-            </div>
-          </React.Fragment>
-        );
-      })}
-    </div>
-  </TokenSectionBox>
-</Section>
+            {/* --- 1. Filled Variant --- */}
+            {['small', 'medium', 'large'].map((size) => {
+              const leftIcon = size === 'small' ? <ChevronLeft /> : <CircleChevronLeft />;
+              const rightIcon = size === 'small' ? <ChevronRight /> : <CircleChevronRight />;
+
+              return (
+                <React.Fragment key={`filled-${size}`}>
+                  {/* Row Label */}
+                  <div>
+                    <Text variant="500-12" color={theme.colors.coolgray[900]}>
+                      Filled ({size})
+                    </Text>
+                  </div>
+                  {/* Text Only */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="filled" color="gray" mode="light" size={size as any}>
+                      확인
+                    </Button>
+                  </div>
+                  {/* Left Icon */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="filled" color="gray" mode="light" size={size as any} leftIcon={leftIcon}>
+                      확인
+                    </Button>
+                  </div>
+                  {/* Right Icon */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="filled" color="gray" mode="light" size={size as any} rightIcon={rightIcon}>
+                      확인
+                    </Button>
+                  </div>
+                  {/* Both Icons */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button
+                      variant="filled"
+                      color="gray"
+                      mode="light"
+                      size={size as any}
+                      leftIcon={leftIcon}
+                      rightIcon={rightIcon}
+                    >
+                      확인
+                    </Button>
+                  </div>
+                  {/* Icon Only */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button
+                      variant="filled"
+                      color="gray"
+                      mode="light"
+                      size={size as any}
+                      leftIcon={leftIcon}
+                      children=""
+                    />
+                  </div>
+                </React.Fragment>
+              );
+            })}
+
+            {/* 구분선 (도트선으로 수정됨) */}
+            <div
+              style={{
+                gridColumn: '1 / -1',
+                borderTop: `1px dotted ${theme.colors.coolgray[200]}`,
+                margin: '12px 0'
+              }}
+            />
+
+            {/* --- 2. Outlined Variant --- */}
+            {['small', 'medium', 'large'].map((size) => {
+              const leftIcon = size === 'small' ? <ChevronLeft /> : <CircleChevronLeft />;
+              const rightIcon = size === 'small' ? <ChevronRight /> : <CircleChevronRight />;
+
+              return (
+                <React.Fragment key={`outlined-${size}`}>
+                  {/* Row Label */}
+                  <div>
+                    <Text variant="500-12" color={theme.colors.coolgray[900]}>
+                      Outlined ({size})
+                    </Text>
+                  </div>
+                  {/* Text Only */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="outlined" color="gray" mode="light" size={size as any}>
+                      확인
+                    </Button>
+                  </div>
+                  {/* Left Icon */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="outlined" color="gray" mode="light" size={size as any} leftIcon={leftIcon}>
+                      확인
+                    </Button>
+                  </div>
+                  {/* Right Icon */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="outlined" color="gray" mode="light" size={size as any} rightIcon={rightIcon}>
+                      확인
+                    </Button>
+                  </div>
+                  {/* Both Icons */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button
+                      variant="outlined"
+                      color="gray"
+                      mode="light"
+                      size={size as any}
+                      leftIcon={leftIcon}
+                      rightIcon={rightIcon}
+                    >
+                      확인
+                    </Button>
+                  </div>
+                  {/* Icon Only */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button
+                      variant="outlined"
+                      color="gray"
+                      mode="light"
+                      size={size as any}
+                      leftIcon={leftIcon}
+                      children=""
+                    />
+                  </div>
+                </React.Fragment>
+              );
+            })}
+
+            {/* 구분선 (도트선으로 수정됨) */}
+            <div
+              style={{
+                gridColumn: '1 / -1',
+                borderTop: `1px dotted ${theme.colors.coolgray[200]}`,
+                margin: '12px 0'
+              }}
+            />
+
+            {/* --- 3. Transparent Variant --- */}
+            {['small', 'medium', 'large'].map((size) => {
+              const leftIcon = size === 'small' ? <ChevronLeft /> : <CircleChevronLeft />;
+              const rightIcon = size === 'small' ? <ChevronRight /> : <CircleChevronRight />;
+
+              return (
+                <React.Fragment key={`transparent-${size}`}>
+                  {/* Row Label */}
+                  <div>
+                    <Text variant="500-12" color={theme.colors.coolgray[900]}>
+                      Transparent ({size})
+                    </Text>
+                  </div>
+                  {/* Text Only */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="transparent" color="gray" mode="light" size={size as any}>
+                      확인
+                    </Button>
+                  </div>
+                  {/* Left Icon */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="transparent" color="gray" mode="light" size={size as any} leftIcon={leftIcon}>
+                      확인
+                    </Button>
+                  </div>
+                  {/* Right Icon */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button variant="transparent" color="gray" mode="light" size={size as any} rightIcon={rightIcon}>
+                      확인
+                    </Button>
+                  </div>
+
+                  {/* Both Icons */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button
+                      variant="transparent"
+                      color="gray"
+                      mode="light"
+                      size={size as any}
+                      leftIcon={leftIcon}
+                      rightIcon={rightIcon}
+                    >
+                      확인
+                    </Button>
+                  </div>
+                  {/* Icon Only */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <Button
+                      variant="transparent"
+                      color="gray"
+                      mode="light"
+                      size={size as any}
+                      leftIcon={leftIcon}
+                      children=""
+                    />
+                  </div>
+                </React.Fragment>
+              );
+            })}
+          </div>
+        </TokenSectionBox>
+      </Section>
     </Container>
   );
 }
