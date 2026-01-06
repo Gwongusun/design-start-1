@@ -386,7 +386,7 @@ const [value, setValue] = useState('');
 
         {/* 3-1. Light Mode Tokens */}
         <Text variant="700-16">Semantic Color Tokens </Text>
-        <div style={{ background: '#fff', borderRadius: 12, border: `1px dashed ${theme.colors.coolgray[200]}` }}>
+        <div style={{ padding: 30, background: '#fff', borderRadius: 12, border: `1px dashed ${theme.colors.coolgray[200]}` }}>
           <ColorGrid>
             <ColorCard><Swatch color={theme.components.input.light.bg.default} hasBorder /><div><Text variant="700-14">Bg (Def)</Text><Text variant="400-12" color="#666">coolgray[50]</Text></div></ColorCard>
             <ColorCard><Swatch color={theme.components.input.light.bg.hover} hasBorder /><div><Text variant="700-14">Bg (Hov)</Text><Text variant="400-12" color="#666">coolgray[75]</Text></div></ColorCard>
