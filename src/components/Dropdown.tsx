@@ -1,17 +1,28 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
-import type { HTMLAttributes, ReactNode } from 'react';
-import { forwardRef } from 'react';
+import type { HTMLAttributes, ReactNode, MouseEvent } from 'react';
+import { forwardRef, useState, useLayoutEffect, useRef } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import type { Theme } from '@emotion/react';
+
+import Text from './Text';
 
 // ------------------------------------------------------------------
 // Types
 // ------------------------------------------------------------------
 export type DropdownMode = 'light' | 'dark' | 'transparent';
 
-export interface DropdownProps extends HTMLAttributes<HTMLDivElement> {
-  children: ReactNode;
+export interface DropdownOption {
+  label: string;
+  value: string;
+  onClick?: (value: string, e: MouseEvent<HTMLDivElement>) => void;
+}
+
+export interface DropdownProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onSelect'> {
+  children?: ReactNode;
+  options?: DropdownOption[];
+  onSelect?: (value: string) => void;
+  selectedValue?: string;
   isOpen: boolean;
   width?: string;
   verticalPos?: 'top' | 'bottom';
@@ -29,33 +40,6 @@ export interface OptionItemProps extends HTMLAttributes<HTMLDivElement> {
 // ------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------
-const getDropdownPalette = (theme: Theme, mode: DropdownMode = 'light') => {
-  if (mode === 'dark') {
-    return {
-      menuBg: theme.colors.coolgray[800],
-      menuBorder: theme.colors.coolgray[700],
-      text: theme.colors.coolgray[100],
-      textSelected: theme.colors.indigo[300],
-      itemBgSelected: theme.colors.coolgray[700],
-      itemBgHover: theme.colors.coolgray[700],
-      scrollbar: theme.colors.coolgray[600],
-      scrollbarHover: theme.colors.coolgray[500],
-    };
-  }
-
-  // light + transparent는 동일 팔레트(배경/보더만 컴포넌트에서 조정 필요 시 분기)
-  return {
-    menuBg: theme.colors.white,
-    menuBorder: theme.colors.coolgray[150],
-    text: theme.colors.coolgray[800],
-    textSelected: theme.colors.indigo[600],
-    itemBgSelected: theme.colors.indigo[50],
-    itemBgHover: theme.colors.coolgray[50],
-    scrollbar: theme.colors.coolgray[200],
-    scrollbarHover: theme.colors.coolgray[300],
-  };
-};
-
 // ------------------------------------------------------------------
 // Styled Components (Root)
 // ------------------------------------------------------------------
@@ -68,16 +52,21 @@ const OptionItemRoot = styled.div<{ $isSelected: boolean; $mode: DropdownMode }>
   transition: all 0.2s;
 
   ${({ theme, $mode, $isSelected }) => {
-    const palette = getDropdownPalette(theme, $mode);
+    // 1. Get token group based on mode (default: light)
+    // Safe access with fallback since we are updating live
+    const tokens = (theme.components as any).dropdown?.[$mode] || (theme.components as any).dropdown?.light;
+
+    if (!tokens) return '';
+
     return `
-      background-color: ${$isSelected ? palette.itemBgSelected : 'transparent'};
-      color: ${$isSelected ? palette.textSelected : palette.text};
+      background-color: ${$isSelected ? tokens.item.selected : 'transparent'};
+      color: ${$isSelected ? tokens.text.selected : tokens.text.default};
 
       /* 자식(<Text>)이 반드시 부모 색상을 따르도록 강제 */
       & > * { color: inherit !important; }
 
       &:hover {
-        background-color: ${$isSelected ? palette.itemBgSelected : palette.itemBgHover};
+        background-color: ${$isSelected ? tokens.item.selected : tokens.item.hover};
       }
     `;
   }}
@@ -105,10 +94,11 @@ const MenuContainerRoot = styled.div<{
   border-radius: 6px;
 
   ${({ theme, $mode }) => {
-    const palette = getDropdownPalette(theme, $mode);
+    const tokens = (theme.components as any).dropdown?.[$mode] || (theme.components as any).dropdown?.light;
+    if (!tokens) return '';
     return `
-      background-color: ${palette.menuBg};
-      border: 1px solid ${palette.menuBorder};
+      background-color: ${tokens.bg};
+      border: 1px solid ${tokens.border};
     `;
   }}
 
@@ -126,10 +116,11 @@ const ThumbRoot = styled.div<{ $mode: DropdownMode }>`
   background-clip: content-box;
 
   ${({ theme, $mode }) => {
-    const palette = getDropdownPalette(theme, $mode);
+    const tokens = (theme.components as any).dropdown?.[$mode] || (theme.components as any).dropdown?.light;
+    if (!tokens) return '';
     return `
-      background-color: ${palette.scrollbar};
-      &:hover { background-color: ${palette.scrollbarHover}; }
+      background-color: ${tokens.scrollbar.default};
+      &:hover { background-color: ${tokens.scrollbar.hover}; }
     `;
   }}
 `;
@@ -147,6 +138,9 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
   (
     {
       children,
+      options,
+      onSelect,
+      selectedValue,
       isOpen,
       width,
       verticalPos = 'bottom',
@@ -159,14 +153,99 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
     },
     ref
   ) => {
+    // Internal state for resolved positions
+    const [adjustedVerticalPos, setAdjustedVerticalPos] = useState<'top' | 'bottom'>(verticalPos);
+    const [adjustedAlignPos, setAdjustedAlignPos] = useState<'left' | 'right'>(alignPos);
+
+    // Internal ref for measurement
+    const internalRef = useRef<HTMLDivElement>(null);
+
+    // Sync state with props when closed (reset)
+    useLayoutEffect(() => {
+      if (!isOpen) {
+        setAdjustedVerticalPos(verticalPos);
+        setAdjustedAlignPos(alignPos);
+      }
+    }, [isOpen, verticalPos, alignPos]);
+
+    // Auto-positioning logic
+    useLayoutEffect(() => {
+      if (!isOpen || !internalRef.current) return;
+
+      const dropdown = internalRef.current;
+      const parent = dropdown.offsetParent as HTMLElement;
+      if (!parent) return;
+
+      const parentRect = parent.getBoundingClientRect();
+      const dropdownRect = dropdown.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
+
+      // 1. Vertical Auto-Positioning
+      // Check space below
+      const spaceBelow = viewportHeight - parentRect.bottom;
+      // Check space above
+      const spaceAbove = parentRect.top;
+
+      let newVert = verticalPos;
+
+      // If bottom is default but not enough space, and top HAS space -> Flip to top
+      if (verticalPos === 'bottom' && spaceBelow < dropdownRect.height && spaceAbove > dropdownRect.height) {
+        newVert = 'top';
+      }
+      // If top is default but not enough space, and bottom HAS space -> Flip to bottom
+      else if (verticalPos === 'top' && spaceAbove < dropdownRect.height && spaceBelow > dropdownRect.height) {
+        newVert = 'bottom';
+      }
+
+      // 2. Horizontal Auto-Positioning
+      let newAlign = alignPos;
+
+      // If aligning left (default)
+      if (alignPos === 'left') {
+        // Check if right side goes off-screen
+        const rightEdge = parentRect.left + dropdownRect.width;
+        if (rightEdge > viewportWidth) {
+          newAlign = 'right';
+        }
+      }
+      // If aligning right
+      else if (alignPos === 'right') {
+        // Check if left side goes off-screen (parentRect.right - dropdownWidth)
+        const leftEdge = parentRect.right - dropdownRect.width;
+        if (leftEdge < 0) {
+          newAlign = 'left';
+        }
+      }
+
+      // 3. Special Case: Force left if dropdown is wider than viewport
+      if (viewportWidth < dropdownRect.width) {
+        newAlign = 'left';
+      }
+
+      setAdjustedVerticalPos(newVert);
+      setAdjustedAlignPos(newAlign);
+
+    }, [isOpen, verticalPos, alignPos, maxHeight, width]); // Recalc if these change logic
+
     if (!isOpen || disabled) return null;
+
+    // Combine refs function
+    const setRefs = (element: HTMLDivElement | null) => {
+      internalRef.current = element;
+      if (typeof ref === 'function') {
+        ref(element);
+      } else if (ref) {
+        (ref as any).current = element;
+      }
+    };
 
     return (
       <MenuContainerRoot
-        ref={ref}
+        ref={setRefs}
         $width={width}
-        $verticalPos={verticalPos}
-        $alignPos={alignPos}
+        $verticalPos={adjustedVerticalPos}
+        $alignPos={adjustedAlignPos}
         $mode={mode}
         {...props}
         onWheel={(e) => {
@@ -179,7 +258,25 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
           autoHeightMax={maxHeight}
           renderThumbVertical={(thumbProps: any) => <ThumbRoot {...thumbProps} $mode={mode} />}
         >
-          <ListWrapper>{children}</ListWrapper>
+          <ListWrapper>
+            {options ? (
+              options.map((option) => (
+                <OptionItem
+                  key={option.value}
+                  isSelected={selectedValue === option.value}
+                  mode={mode}
+                  onClick={(e) => {
+                    option.onClick?.(option.value, e);
+                    onSelect?.(option.value);
+                  }}
+                >
+                  <Text variant="400-14">{option.label}</Text>
+                </OptionItem>
+              ))
+            ) : (
+              children
+            )}
+          </ListWrapper>
         </Scrollbars>
       </MenuContainerRoot>
     );

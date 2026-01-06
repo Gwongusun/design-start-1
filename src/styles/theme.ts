@@ -1,5 +1,5 @@
-import '@emotion/react'; 
-import { typo } from './typography'; 
+import '@emotion/react';
+import { typo } from './typography';
 
 // 1. Primitive Tokens
 export const colors = {
@@ -58,12 +58,60 @@ const components = {
       icon: { default: colors.coolgray[300], active: colors.coolgray[900], disabled: colors.coolgray[200] },
     },
   },
-  
+
+  select: {
+    light: {
+      bg: { default: colors.coolgray[50], hover: `${colors.black}0A`, active: colors.white, disabled: colors.coolgray[75] },
+      border: { default: 'transparent', hover: colors.coolgray[300], active: colors.coolgray[200], disabled: 'transparent' },
+      text: { default: colors.coolgray[900], placeholder: colors.coolgray[300], disabled: colors.coolgray[200] },
+      label: { default: colors.coolgray[800], disabled: colors.coolgray[250] },
+      icon: { default: colors.coolgray[300], active: colors.coolgray[900], disabled: colors.coolgray[200] },
+    },
+    dark: {
+      bg: { default: `${colors.white}14`, hover: `${colors.white}1f`, active: `${colors.white}00`, disabled: `${colors.white}14` },
+      border: { default: 'transparent', hover: colors.coolgray[600], active: colors.coolgray[700], disabled: 'transparent' },
+      text: { default: colors.white, placeholder: `${colors.white}80`, disabled: `${colors.white}40` },
+      label: { default: colors.coolgray[300], disabled: colors.coolgray[250] },
+      icon: { default: colors.coolgray[400], active: colors.white, disabled: colors.coolgray[400] },
+    },
+    transparent: {
+      bg: { default: 'transparent', hover: `${colors.black}0A`, active: `${colors.black}0A`, disabled: 'transparent' },
+      border: { default: 'transparent', hover: 'transparent', active: 'transparent', disabled: 'transparent' },
+      text: { default: colors.coolgray[900], placeholder: colors.coolgray[300], disabled: colors.coolgray[300] },
+      label: { default: colors.coolgray[800], disabled: colors.coolgray[250] },
+      icon: { default: colors.coolgray[300], active: colors.coolgray[900], disabled: colors.coolgray[200] },
+    },
+  },
+
+  dropdown: {
+    light: {
+      bg: colors.white,
+      border: colors.coolgray[150],
+      text: { default: colors.coolgray[800], selected: colors.indigo[600] },
+      item: { hover: colors.coolgray[50], selected: colors.indigo[50] },
+      scrollbar: { default: colors.coolgray[200], hover: colors.coolgray[300] },
+    },
+    dark: {
+      bg: colors.coolgray[800],
+      border: colors.coolgray[700],
+      text: { default: colors.coolgray[100], selected: colors.indigo[300] },
+      item: { hover: colors.coolgray[700], selected: colors.coolgray[700] },
+      scrollbar: { default: colors.coolgray[600], hover: colors.coolgray[500] },
+    },
+    transparent: {
+      bg: colors.white,
+      border: colors.coolgray[150],
+      text: { default: colors.coolgray[800], selected: colors.indigo[600] },
+      item: { hover: colors.coolgray[50], selected: colors.indigo[50] },
+      scrollbar: { default: colors.coolgray[200], hover: colors.coolgray[300] },
+    },
+  },
+
   button: {
     light: {
       // (1) Normal State
       filled: {
-        gray: { bg: colors.coolgray[700], text: colors.white, border: 'transparent', hover: { bg: colors.coolgray[900], text: colors.white, border: 'transparent' }, active: { bg:  colors.coolgray[700], text: colors.white, border: 'transparent' } },
+        gray: { bg: colors.coolgray[700], text: colors.white, border: 'transparent', hover: { bg: colors.coolgray[900], text: colors.white, border: 'transparent' }, active: { bg: colors.coolgray[700], text: colors.white, border: 'transparent' } },
         indigo: { bg: colors.indigo[400], text: colors.white, border: 'transparent', hover: { bg: colors.indigo[600], text: colors.white, border: 'transparent' }, active: { bg: colors.indigo[700], text: colors.white, border: 'transparent' } },
         green: { bg: colors.green[400], text: colors.white, border: 'transparent', hover: { bg: colors.green[600], text: colors.white, border: 'transparent' }, active: { bg: colors.green[700], text: colors.white, border: 'transparent' } },
         red: { bg: colors.red[400], text: colors.white, border: 'transparent', hover: { bg: colors.red[600], text: colors.white, border: 'transparent' }, active: { bg: colors.red[700], text: colors.white, border: 'transparent' } },
@@ -86,19 +134,19 @@ const components = {
       disabled: {
         filled: { // key: filled
           gray: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
-          indigo: { bg: colors.coolgray[50], text: colors.coolgray[150], border:'transparent' },
+          indigo: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
           green: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
           red: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
         },
         outlined: {
           gray: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
-          indigo: { bg: colors.coolgray[50], text: colors.coolgray[150], border:'transparent' },
+          indigo: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
           green: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
           red: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
         },
-        transparent: { 
+        transparent: {
           gray: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
-          indigo: { bg: colors.coolgray[50], text: colors.coolgray[150], border:'transparent' },
+          indigo: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
           green: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
           red: { bg: colors.coolgray[50], text: colors.coolgray[150], border: 'transparent' },
         },
@@ -127,7 +175,7 @@ const components = {
         },
 
       },
-      
+
       // Text fallback (Optional)
       text: {
         gray: { default: colors.coolgray[900] },
@@ -141,12 +189,12 @@ const components = {
 
 export const theme = {
   colors,
-  typo, 
+  typo,
   components,
 };
 
 export type ThemeType = typeof theme;
 
 declare module '@emotion/react' {
-  export interface Theme extends ThemeType {}
+  export interface Theme extends ThemeType { }
 }

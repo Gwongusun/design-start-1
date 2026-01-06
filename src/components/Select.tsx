@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTheme } from '@emotion/react';
 import type { Theme } from '@emotion/react';
 
+import { ChevronDown } from 'lucide-react';
 import Dropdown, { OptionItem } from './Dropdown';
 import Text from './Text';
 
@@ -41,84 +42,10 @@ interface TriggerColors {
 // ------------------------------------------------------------------
 // Helpers
 // ------------------------------------------------------------------
+// ------------------------------------------------------------------
+// Helpers
+// ------------------------------------------------------------------
 const PLACEHOLDER = '선택하세요';
-
-const computeTriggerColors = (args: {
-  theme: Theme;
-  mode: SelectMode;
-  disabled: boolean;
-  isOpen: boolean;
-  isPlaceholder: boolean;
-  isHovered: boolean;
-}): TriggerColors => {
-  const { theme, mode, disabled, isOpen, isPlaceholder, isHovered } = args;
-
-  // Disabled
-  if (disabled) {
-    if (mode === 'transparent') {
-      return {
-        label: theme.colors.coolgray[250],
-        background: 'transparent',
-        border: 'transparent',
-        text: theme.colors.coolgray[300],
-        icon: theme.colors.coolgray[200],
-        cursor: 'not-allowed',
-      };
-    }
-    if (mode === 'dark') {
-      return {
-        label: theme.colors.coolgray[250],
-        background: `${theme.colors.white}0F`,
-        border: 'transparent',
-        text: `${theme.colors.white}40`,
-        icon: theme.colors.coolgray[400],
-        cursor: 'not-allowed',
-      };
-    }
-    return {
-      label: theme.colors.coolgray[250],
-      background: theme.colors.coolgray[75],
-      border: 'transparent',
-      text: theme.colors.coolgray[200],
-      icon: theme.colors.coolgray[200],
-      cursor: 'not-allowed',
-    };
-  }
-
-  // Transparent
-  if (mode === 'transparent') {
-    return {
-      label: theme.colors.coolgray[800],
-      background: isHovered ? `${theme.colors.black}0A` : 'transparent',
-      border: 'transparent',
-      text: isPlaceholder ? theme.colors.coolgray[300] : theme.colors.coolgray[900],
-      icon: isHovered || isOpen ? theme.colors.coolgray[900] : theme.colors.coolgray[300],
-      cursor: 'pointer',
-    };
-  }
-
-  // Dark
-  if (mode === 'dark') {
-    return {
-      label: theme.colors.coolgray[300],
-      background: isOpen ? `${theme.colors.white}00` : `${theme.colors.white}14`,
-      border: isOpen ? theme.colors.coolgray[700] : isHovered ? theme.colors.coolgray[600] : 'transparent',
-      text: isPlaceholder ? `${theme.colors.white}80` : theme.colors.white,
-      icon: isHovered || isOpen ? theme.colors.white : theme.colors.coolgray[400],
-      cursor: 'pointer',
-    };
-  }
-
-  // Light (default)
-  return {
-    label: theme.colors.coolgray[800],
-    background: isOpen ? theme.colors.white : isHovered ? `${theme.colors.black}0A` : theme.colors.coolgray[50],
-    border: isOpen ? theme.colors.coolgray[200] : isHovered ? theme.colors.coolgray[300] : 'transparent',
-    text: isPlaceholder ? theme.colors.coolgray[300] : theme.colors.coolgray[900],
-    icon: isHovered || isOpen ? theme.colors.coolgray[900] : theme.colors.coolgray[300],
-    cursor: 'pointer',
-  };
-};
 
 // ------------------------------------------------------------------
 // Styled Components
@@ -175,7 +102,7 @@ const ValueText = styled(Text)`
   display: block;
 `;
 
-const ChevronIcon = styled.svg<{ $isOpen: boolean }>`
+const StyledChevronDown = styled(ChevronDown) <{ $isOpen: boolean }>`
   flex-shrink: 0;
   transition: transform 0.2s ease-in-out;
   transform: rotate(${({ $isOpen }) => ($isOpen ? '180deg' : '0deg')});
@@ -195,7 +122,7 @@ function Select({
   maxHeight = 200,
   mode = 'light',
 }: SelectProps) {
-  const theme = useTheme() as Theme;
+  const theme = useTheme();
 
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -211,18 +138,47 @@ function Select({
   const isPlaceholder = !selectedOption;
   const displayValue = selectedOption ? selectedOption.label : PLACEHOLDER;
 
-  const colors = useMemo(
-    () =>
-      computeTriggerColors({
-        theme,
-        mode,
-        disabled,
-        isOpen,
-        isPlaceholder,
-        isHovered,
-      }),
-    [theme, mode, disabled, isOpen, isPlaceholder, isHovered]
-  );
+  const colors = useMemo(() => {
+    // 1. Get token group based on mode (default: light)
+    const selectTheme = (theme.components as any).select?.[mode] || (theme.components as any).select?.light;
+
+    if (!selectTheme) {
+      // Fallback if theme is missing
+      return {
+        label: '#000',
+        background: '#fff',
+        border: '#ccc',
+        text: '#000',
+        icon: '#ccc',
+        cursor: 'pointer',
+      } as TriggerColors;
+    }
+
+    // 2. Determine state
+    let state = 'default';
+    if (disabled) state = 'disabled';
+    else if (isOpen) state = 'active'; // open state acts as active
+    else if (isHovered) state = 'hover';
+
+    // 3. Map tokens
+    // Note: Some tokens might not have specific state keys if not defined in theme, so fallbacks are managed by theme logical structure
+    // But our theme structure has flat keys for states inside each property (bg, border, etc.)
+
+    // Helper to get token value safely
+    const getToken = (prop: string, stateKey: string, fallbackState: string = 'default') => {
+      const propGroup = selectTheme[prop];
+      return propGroup[stateKey] || propGroup[fallbackState];
+    };
+
+    return {
+      label: getToken('label', disabled ? 'disabled' : 'default'), // Label uses disabled or default
+      background: getToken('bg', state),
+      border: getToken('border', state),
+      text: getToken('text', disabled ? 'disabled' : isPlaceholder ? 'placeholder' : 'default'),
+      icon: getToken('icon', disabled ? 'disabled' : isOpen || isHovered ? 'active' : 'default'),
+      cursor: disabled ? 'not-allowed' : 'pointer',
+    } as TriggerColors;
+  }, [theme, mode, disabled, isOpen, isPlaceholder, isHovered]);
 
   useLayoutEffect(() => {
     if (!isOpen || !containerRef.current) return;
@@ -285,20 +241,12 @@ function Select({
             </ValueText>
           </SelectedValueWrapper>
 
-          <ChevronIcon
+          <StyledChevronDown
             $isOpen={isOpen}
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke={colors.icon}
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="m6 9 6 6 6-6" />
-          </ChevronIcon>
+            size={16}
+            strokeWidth={2}
+            color={colors.icon}
+          />
         </TriggerButton>
 
         {!disabled && isOpen && (

@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
+import { forwardRef } from 'react';
 import type { ElementType, HTMLAttributes, ReactNode } from 'react';
 
 import type { TypographyVariant, FontWeight, FontSize } from '../styles/typography';
@@ -44,19 +45,19 @@ const StyledText = styled.p<{
   text-decoration: none;
 `;
 
-const Text = ({
+const Text = forwardRef<any, TextProps>(({
   as = 'p',
   variant = '400-16',
   color,
   align,
   children,
   ...props
-}: TextProps) => {
+}, ref) => {
   return (
-    <StyledText as={as} $variant={variant} $color={color} $align={align} {...props}>
+    <StyledText ref={ref} as={as} $variant={variant} $color={color} $align={align} {...props}>
       {children}
     </StyledText>
   );
-};
+});
 
 export default Text;

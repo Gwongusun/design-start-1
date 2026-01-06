@@ -4,14 +4,9 @@ import styled from '@emotion/styled';
 import { useTheme } from '@emotion/react';
 
 // Lucide Icons import
-import { CircleChevronLeft, CircleChevronRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { CircleChevronLeft, CircleChevronRight, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 
-import {
-  Button,
-  ButtonColor,
-  ButtonVariant,
-  ButtonMode
-} from './components/Button';
+import { Button, ButtonColor } from './components/Button';
 import Text from './components/Text';
 
 // -------------------------------------------------------------------------
@@ -79,8 +74,8 @@ const PropItem = styled.li`
   align-items: center;
   gap: 20px;
   padding: 20px 0;
-  border-bottom: 1px dotted ${({ theme }) => theme.colors.coolgray[200]};
-  &:first-of-type { border-top: 1px dotted ${({ theme }) => theme.colors.coolgray[200]}; }
+  border-bottom: 1px dashed ${({ theme }) => theme.colors.coolgray[200]};
+  &:first-of-type { border-top: 1px dashed ${({ theme }) => theme.colors.coolgray[200]}; }
   @media (max-width: 600px) { flex-direction: column; align-items: flex-start; gap: 8px; }
 `;
 
@@ -273,7 +268,7 @@ export default function ButtonTest() {
     <Container>
       <Header>
         <Text as="h1" variant="900-48" style={{ marginBottom: '10px', fontSize: 'clamp(32px, 5vw, 48px)' }}>
-          Button Components
+          Button Component
         </Text>
         <Text variant="400-18" color={theme.colors.coolgray[500]}>
           Light Mode Color, Variant, and Size Guide.
@@ -288,17 +283,28 @@ export default function ButtonTest() {
         </Text>
         <CodeBox>
           <Pre>
-            {`<Button
+            {`import Button from './components/Button';
+
+<Button
   color="indigo"
   variant="filled"
   mode="light"
   size="medium"
   width="100%"
+  fullWidth={true}
+  justifyContent="space-between"
   disabled={false}
   isLoading={false}
   leftIcon={<Icon />}
   rightIcon={<Icon />}
-  onClick={() => console.log('clicked')}
+  dropdownOptions={[
+    { label: 'Option 1', value: '1' },
+    { label: 'Option 2', value: '2' },
+  ]}
+  onDropdownSelect={(val) => console.log('Selected:', val)}
+  menuWidth="100%"
+  maxHeight={150}
+  menuMode="light"
 >
   버튼 텍스트
 </Button>`}
@@ -318,13 +324,20 @@ export default function ButtonTest() {
           <PropList>
             {[
               { name: 'color', desc: <span>버튼의 메인 색상: <b>gray, indigo, green, red</b></span> },
-              { name: 'variant', desc: <span>버튼 스타일: <b>filled, outlined, transparent, ghost</b></span> },
+              { name: 'variant', desc: <span>버튼 스타일: <b>filled, outlined, transparent</b></span> },
               { name: 'mode', desc: <span>테마 모드: <b>light</b></span> },
               { name: 'size', desc: <span>크기: <b>small, medium, large</b></span> },
               { name: 'width', desc: '버튼 너비 (CSS width)' },
+              { name: 'fullWidth', desc: '너비 100% 채움 (boolean)' },
+              { name: 'justifyContent', desc: <span>내부 콘텐츠 정렬 (<b>space-between</b>, center 등)</span> },
               { name: 'disabled', desc: '비활성화 여부' },
               { name: 'isLoading', desc: '로딩 상태 여부' },
               { name: 'leftIcon / rightIcon', desc: '아이콘 컴포넌트' },
+              { name: 'dropdownOptions', desc: '드롭다운 메뉴 옵션 배열 [{ label, value, onClick? }]' },
+              { name: 'onDropdownSelect', desc: '드롭다운 항목 선택 시 콜백' },
+              { name: 'menuWidth', desc: '드롭다운 메뉴 너비 (예: "200px")' },
+              { name: 'maxHeight', desc: '드롭다운 메뉴 최대 높이 (스크롤 생성)' },
+              { name: 'menuMode', desc: '드롭다운 메뉴 모드 (light | dark | transparent)' },
             ].map((prop) => (
               <PropItem key={prop.name}>
                 <PropBadge>{prop.name}</PropBadge>
@@ -398,18 +411,9 @@ export default function ButtonTest() {
             {colors.map((color) => (
               <React.Fragment key={color}>
                 <Text color={theme.colors.coolgray[900]}>{colorMap[color]}</Text>
-
-                <Button mode="light" color={color} variant="outlined" size="medium">
-                  확인
-                </Button>
-
-                <Button mode="light" color={color} variant="outlined" size="medium" isLoading={true}>
-                  확인
-                </Button>
-
-                <Button mode="light" color={color} variant="outlined-disabled" size="medium" disabled={true}>
-                  확인
-                </Button>
+                <Button mode="light" color={color} variant="outlined" size="medium">확인</Button>
+                <Button mode="light" color={color} variant="outlined" size="medium" isLoading={true}>확인</Button>
+                <Button mode="light" color={color} variant="outlined-disabled" size="medium" disabled={true}>확인</Button>
               </React.Fragment>
             ))}
           </MatrixGrid>
@@ -705,6 +709,87 @@ export default function ButtonTest() {
           </div>
         </TokenSectionBox>
       </Section>
+
+      {/* 6. Dropdown Button */}
+      <Section>
+        <SectionHeader title="6. Dropdown Button (Encapsulated)" />
+        <Text variant="400-14" color={theme.colors.coolgray[600]} >
+          Button 컴포넌트 자체에 <b>dropdownOptions</b>를 전달하여 드롭다운 메뉴를 쉽게 구현할 수 있습니다.
+        </Text>
+
+        <TokenSectionBox style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+          <Button
+            color="indigo"
+            variant="filled"
+            size="medium"
+            rightIcon={<ChevronDown />}
+            dropdownOptions={[
+              { label: 'Option 1', value: '1' },
+              { label: 'Option 2', value: '2' },
+              { label: 'Action', value: '3', onClick: () => alert('Action!') },
+            ]}
+            onDropdownSelect={(val) => console.log('Selected:', val)}
+          >
+            Actions
+          </Button>
+
+          <Button
+            color="gray"
+            variant="outlined"
+            size="medium"
+            rightIcon={<ChevronDown />}
+            dropdownOptions={[
+              { label: 'Top Left', value: 'tl' },
+              { label: 'Top Right', value: 'tr' },
+              { label: 'Bottom Left', value: 'bl' },
+              { label: 'Bottom Right', value: 'br' },
+              { label: 'Scrollable Item 1', value: 's1' },
+              { label: 'Scrollable Item 2', value: 's2' },
+              { label: 'Scrollable Item 3', value: 's3' },
+            ]}
+            onDropdownSelect={(val) => console.log('Selected:', val)}
+            menuWidth="240px"
+            maxHeight={150}
+            menuMode="light"
+          >
+            Full Props
+          </Button>
+
+          {/* New Example: Full Width Space Between */}
+          <div style={{ width: '500px' }}>
+            <Button
+              fullWidth
+              justifyContent="space-between"
+              color="indigo"
+              variant="outlined"
+              rightIcon={<ChevronDown />}
+              dropdownOptions={[
+                { label: 'Option A', value: 'a' },
+                { label: 'Option B', value: 'b' },
+              ]}
+              menuWidth="100%"
+            >
+              Space Between
+            </Button>
+          </div>
+          <div style={{ width: '500px' }}>
+            <Button
+              width="500px"
+              color="indigo"
+              variant="outlined"
+              rightIcon={<ChevronDown />}
+              dropdownOptions={[
+                { label: 'Option A', value: 'a' },
+                { label: 'Option B', value: 'b' },
+              ]}
+              menuWidth="100%"
+            >
+              Space Between
+            </Button>
+          </div>
+        </TokenSectionBox>
+      </Section>
+
     </Container>
   );
 }

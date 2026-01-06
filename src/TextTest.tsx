@@ -56,7 +56,7 @@ const StyledTable = styled.table`
 
 /* Tr 정의 */
 const Tr = styled.tr`
-  border-bottom: 1px dashed ${({ theme }) => theme.colors.coolgray[100]};
+  border-bottom: 1px dashed ${({ theme }) => theme.colors.coolgray[200]};
   /* 오류 원인 제거: Hover 배경색 전환 효과 잠시 제거하거나 단순화 */
   transition: background-color 0.2s;
 
@@ -131,7 +131,7 @@ const CodeBox = styled.div`
 `;
 const Pre = styled.pre` margin: 0; color: ${({ theme }) => theme.colors.white}; font-family: 'Menlo', 'Monaco', 'Courier New', monospace; font-size: 14px; line-height: 1.6; `;
 const PropList = styled.ul` display: flex; flex-direction: column; padding: 0; margin: 0; list-style: none; `;
-const PropItem = styled.li` display: flex; align-items: center; gap: 20px; padding: 20px 0; border-bottom: 1px dotted ${({ theme }) => theme.colors.coolgray[200]}; &:first-of-type { border-top: 1px dotted ${({ theme }) => theme.colors.coolgray[200]}; } @media (max-width: 600px) { flex-direction: column; align-items: flex-start; gap: 8px; } `;
+const PropItem = styled.li` display: flex; align-items: center; gap: 20px; padding: 20px 0; border-bottom: 1px dashed ${({ theme }) => theme.colors.coolgray[200]}; &:first-of-type { border-top: 1px dashed ${({ theme }) => theme.colors.coolgray[200]}; } @media (max-width: 600px) { flex-direction: column; align-items: flex-start; gap: 8px; } `;
 const PropBadge = styled.span` display: inline-flex; align-items: center; justify-content: center; background-color: ${({ theme }) => theme.colors.indigo[50]}; color: ${({ theme }) => theme.colors.indigo[600]}; padding: 6px 12px; border-radius: 4px; font-weight: 700; font-family: monospace; font-size: 14px; min-width: 80px; `;
 
 export default function TextTest() {
@@ -324,7 +324,7 @@ export default function TextTest() {
 
         <CodeBox>
           <Pre>
-{`<Text
+            {`<Text
   as="h1"
   variant="900-48"   // 900(Black) + 48px
   color={theme.colors.blue[500]}
@@ -447,7 +447,7 @@ export default function TextTest() {
               이것은 span 태그입니다 (줄바꿈 안 됨).
             </Text>
             <Text as="span" variant="700-18" color={theme.colors.blue[500]} style={{ marginLeft: '5px' }}>
-               옆에 붙은 Bold span입니다.
+              옆에 붙은 Bold span입니다.
             </Text>
           </li>
           <li>

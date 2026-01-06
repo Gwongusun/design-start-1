@@ -2,9 +2,10 @@
 import styled from '@emotion/styled';
 import { css, keyframes } from '@emotion/react';
 import type { ButtonHTMLAttributes, ReactNode, CSSProperties } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import Text from './Text';
+import Dropdown, { DropdownOption, DropdownProps } from './Dropdown';
 
 // -------------------------------------------------------------------------
 // Types
@@ -13,11 +14,9 @@ export type ButtonVariant =
   | 'filled'
   | 'outlined'
   | 'transparent'
-  | 'ghost'
   | 'filled-disabled'
   | 'outlined-disabled'
-  | 'transparent-disabled'
-  | 'ghost-disabled';
+  | 'transparent-disabled';
 
 export type ButtonSize = 'small' | 'medium' | 'large';
 export type ButtonColor = 'gray' | 'indigo' | 'green' | 'red';
@@ -34,6 +33,20 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
+
+  // Dropdown Integration
+  dropdownOptions?: DropdownOption[];
+  onDropdownSelect?: (value: string) => void;
+  dropdownProps?: Omit<DropdownProps, 'isOpen' | 'options' | 'onSelect'>;
+  menuWidth?: string;
+  maxHeight?: number;
+  menuMode?: ButtonMode;
+
+  /**
+   * Content alignment (useful with width="100%")
+   * @default 'center'
+   */
+  justifyContent?: CSSProperties['justifyContent'];
 }
 
 // -------------------------------------------------------------------------
@@ -136,10 +149,11 @@ const SpinnerContainer = styled.span`
   justify-content: center;
 `;
 
-const ContentWrapper = styled.span<{ $isLoading: boolean; $size: ButtonSize }>`
+const ContentWrapper = styled.span<{ $isLoading: boolean; $size: ButtonSize; $justifyContent?: CSSProperties['justifyContent'] }>`
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  justify-content: ${({ $justifyContent }) => $justifyContent || 'center'};
+  width: ${({ $justifyContent }) => ($justifyContent ? '100%' : 'auto')};
   transition: opacity 0.2s;
   opacity: ${({ $isLoading }) => ($isLoading ? 0 : 1)};
   height: 100%;
@@ -237,7 +251,10 @@ const ButtonBase = styled.button<ButtonBaseProps>`
 // -------------------------------------------------------------------------
 // Component
 // -------------------------------------------------------------------------
-export const Button = ({
+// -------------------------------------------------------------------------
+// Component
+// -------------------------------------------------------------------------
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
   children,
   variant = DEFAULTS.variant,
   color = DEFAULTS.color,
@@ -249,11 +266,49 @@ export const Button = ({
   disabled: propDisabled,
   leftIcon,
   rightIcon,
+  dropdownOptions,
+  onDropdownSelect,
+  dropdownProps,
+  menuWidth,
+  maxHeight,
+  menuMode,
+  justifyContent,
   style,
   ...props
-}: ButtonProps) => {
-  const buttonRef = useRef<HTMLButtonElement>(null);
+}, ref) => {
+  const innerRef = useRef<HTMLButtonElement>(null);
   const [measuredWidth, setMeasuredWidth] = useState<number | undefined>(undefined);
+
+  // Dropdown State
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+    const handleClickOutside = (event: MouseEvent) => {
+      // Button click is handled by onClick, so we only care about clicks outside both button and dropdown
+      if (
+        innerRef.current && !innerRef.current.contains(event.target as Node) &&
+        dropdownRef.current && !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isDropdownOpen]);
+
+
+  // Combine refs (simple version)
+  useEffect(() => {
+    if (!ref) return;
+    if (typeof ref === 'function') {
+      ref(innerRef.current);
+    } else {
+      (ref as any).current = innerRef.current;
+    }
+  }, [ref]);
 
   const hasIcon = Boolean(leftIcon) || Boolean(rightIcon);
   const hasText = hasMeaningfulText(children);
@@ -265,12 +320,12 @@ export const Button = ({
 
   useEffect(() => {
     // 로딩 전 "기본 너비"를 한 번만 측정 (width/fullWidth 미사용 시)
-    if (!buttonRef.current) return;
+    if (!innerRef.current) return;
     if (measuredWidth) return;
     if (isLoading) return;
     if (width || fullWidth) return;
 
-    setMeasuredWidth(buttonRef.current.getBoundingClientRect().width);
+    setMeasuredWidth(innerRef.current.getBoundingClientRect().width);
   }, [measuredWidth, isLoading, width, fullWidth]);
 
   const disabledByVariant = isDisabledVariant(variant);
@@ -292,9 +347,16 @@ export const Button = ({
 
   const textVariant = TEXT_VARIANT_BY_SIZE[size] || TEXT_VARIANT_BY_SIZE.medium;
 
-  return (
+  const handleButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (dropdownOptions) {
+      setIsDropdownOpen(!isDropdownOpen);
+    }
+    props.onClick?.(e);
+  };
+
+  const buttonContent = (
     <ButtonBase
-      ref={buttonRef}
+      ref={innerRef}
       $variant={variant}
       $color={color}
       $size={size}
@@ -310,6 +372,7 @@ export const Button = ({
       style={dynamicStyle}
       aria-busy={isLoading || undefined}
       {...props}
+      onClick={handleButtonClick}
     >
       {isLoading && (
         <SpinnerContainer>
@@ -317,7 +380,7 @@ export const Button = ({
         </SpinnerContainer>
       )}
 
-      <ContentWrapper $isLoading={isLoading} $size={size}>
+      <ContentWrapper $isLoading={isLoading} $size={size} $justifyContent={justifyContent}>
         {leftIcon}
 
         {hasText ? (
@@ -332,6 +395,29 @@ export const Button = ({
       </ContentWrapper>
     </ButtonBase>
   );
-};
+
+  if (dropdownOptions) {
+    return (
+      <div style={{ position: 'relative', display: fullWidth ? 'block' : 'inline-block', width: fullWidth ? '100%' : 'auto' }}>
+        {buttonContent}
+        <Dropdown
+          ref={dropdownRef}
+          isOpen={isDropdownOpen}
+          options={dropdownOptions}
+          onSelect={(value) => {
+            onDropdownSelect?.(value);
+            setIsDropdownOpen(false);
+          }}
+          width={menuWidth || dropdownProps?.width || (fullWidth ? '100%' : undefined)}
+          maxHeight={maxHeight || dropdownProps?.maxHeight}
+          mode={menuMode || dropdownProps?.mode || mode} // Default to button mode, but can be overridden by menuMode or dropdownProps
+          {...dropdownProps}
+        />
+      </div>
+    );
+  }
+
+  return buttonContent;
+});
 
 export default Button;

@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTheme } from '@emotion/react';
 import type { Theme } from '@emotion/react';
 import type { InputHTMLAttributes } from 'react';
@@ -124,8 +124,19 @@ const StyledInputRoot = styled.input<{ $colors: InputColors }>`
 // ------------------------------------------------------------------
 // Component
 // ------------------------------------------------------------------
-function InputTextField({ label, width, mode = 'light', disabled, onFocus, onBlur, ...props }: InputTextFieldProps) {
-  const theme = useTheme() as Theme;
+// ------------------------------------------------------------------
+// Component
+// ------------------------------------------------------------------
+const InputTextField = React.forwardRef<HTMLInputElement, InputTextFieldProps>(({
+  label,
+  width,
+  mode = 'light',
+  disabled,
+  onFocus,
+  onBlur,
+  ...props
+}, ref) => {
+  const theme = useTheme();
 
   const [isFocused, setIsFocused] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -144,6 +155,7 @@ function InputTextField({ label, width, mode = 'light', disabled, onFocus, onBlu
       )}
 
       <StyledInputRoot
+        ref={ref}
         disabled={disabled}
         $colors={colors}
         onFocus={(e) => {
@@ -160,6 +172,6 @@ function InputTextField({ label, width, mode = 'light', disabled, onFocus, onBlu
       />
     </WrapperRoot>
   );
-}
+});
 
 export default InputTextField;
