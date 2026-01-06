@@ -359,32 +359,9 @@ const [value, setValue] = useState('');
       <Section>
         <SectionHeader title="3. Light Mode Guide" />
 
-        {/* 3-1. Light Mode Tokens */}
-        <Text variant="700-16">Semantic Color Tokens (Light)</Text>
-        <div style={{ marginBottom: 10, padding: 30, background: '#fff', borderRadius: 12, border: `1px dashed ${theme.colors.coolgray[200]}` }}>
-          <ColorGrid>
-            <ColorCard><Swatch color={theme.components.input.light.bg.default} hasBorder /><div><Text variant="700-14">Bg (Def)</Text><Text variant="400-12" color="#666">coolgray[50]</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.light.bg.hover} hasBorder /><div><Text variant="700-14">Bg (Hov)</Text><Text variant="400-12" color="#666">coolgray[75]</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.light.bg.active} hasBorder /><div><Text variant="700-14">Bg (Act)</Text><Text variant="400-12" color="#666">white</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.light.bg.disabled} hasBorder /><div><Text variant="700-14">Bg (Dis)</Text><Text variant="400-12" color="#666">coolgray[75]</Text></div></ColorCard>
-
-            <ColorCard><Swatch color={theme.components.input.light.border.default} hasBorder /><div><Text variant="700-14">Border (Def)</Text><Text variant="400-12" color="#666">transparent</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.light.border.hover} /><div><Text variant="700-14">Border (Hov)</Text><Text variant="400-12" color="#666">coolgray[200]</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.light.border.active} /><div><Text variant="700-14">Border (Act)</Text><Text variant="400-12" color="#666">coolgray[200]</Text></div></ColorCard>
-
-            <ColorCard><Swatch color={theme.components.input.light.text.default} /><div><Text variant="700-14">Text (Def)</Text><Text variant="400-12" color="#666">coolgray[900]</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.light.text.placeholder} /><div><Text variant="700-14">Text (Place)</Text><Text variant="400-12" color="#666">coolgray[400]</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.light.text.disabled} /><div><Text variant="700-14">Text (Dis)</Text><Text variant="400-12" color="#666">coolgray[300]</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.light.label.default} /><div><Text variant="700-14">Label (Def)</Text><Text variant="400-12" color="#666">coolgray[800]</Text></div></ColorCard>
-
-            <ColorCard><Swatch color={theme.components.input.light.icon.default} /><div><Text variant="700-14">Icon (Def)</Text><Text variant="400-12" color="#666">coolgray[300]</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.light.icon.active} /><div><Text variant="700-14">Icon (Act)</Text><Text variant="400-12" color="#666">coolgray[900]</Text></div></ColorCard>
-          </ColorGrid>
-        </div>
-
         {/* 3-2. Light Mode States */}
         <Text variant="700-16">Component States</Text>
-        <div style={{ padding: '30px', backgroundColor: theme.colors.white, border: `1px dashed ${theme.colors.coolgray[200]}`, borderRadius: '12px' }}>
+        <div style={{ marginBottom: 10, padding: 30, backgroundColor: theme.colors.white, border: `1px dashed ${theme.colors.coolgray[200]}`, borderRadius: '12px' }}>
           <GridContainer>
             <div>
               <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Default</Text>
@@ -405,35 +382,39 @@ const [value, setValue] = useState('');
             </div>
           </GridContainer>
         </div>
+
+
+        {/* 3-1. Light Mode Tokens */}
+        <Text variant="700-16">Semantic Color Tokens </Text>
+        <div style={{ background: '#fff', borderRadius: 12, border: `1px dashed ${theme.colors.coolgray[200]}` }}>
+          <ColorGrid>
+            <ColorCard><Swatch color={theme.components.input.light.bg.default} hasBorder /><div><Text variant="700-14">Bg (Def)</Text><Text variant="400-12" color="#666">coolgray[50]</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.light.bg.hover} hasBorder /><div><Text variant="700-14">Bg (Hov)</Text><Text variant="400-12" color="#666">coolgray[75]</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.light.bg.active} hasBorder /><div><Text variant="700-14">Bg (Act)</Text><Text variant="400-12" color="#666">white</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.light.bg.disabled} hasBorder /><div><Text variant="700-14">Bg (Dis)</Text><Text variant="400-12" color="#666">coolgray[75]</Text></div></ColorCard>
+
+            <ColorCard><Swatch color={theme.components.input.light.border.default} hasBorder /><div><Text variant="700-14">Border (Def)</Text><Text variant="400-12" color="#666">transparent</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.light.border.hover} /><div><Text variant="700-14">Border (Hov)</Text><Text variant="400-12" color="#666">coolgray[200]</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.light.border.active} /><div><Text variant="700-14">Border (Act)</Text><Text variant="400-12" color="#666">coolgray[200]</Text></div></ColorCard>
+
+            <ColorCard><Swatch color={theme.components.input.light.text.default} /><div><Text variant="700-14">Text (Def)</Text><Text variant="400-12" color="#666">coolgray[900]</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.light.text.placeholder} /><div><Text variant="700-14">Text (Place)</Text><Text variant="400-12" color="#666">coolgray[400]</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.light.text.disabled} /><div><Text variant="700-14">Text (Dis)</Text><Text variant="400-12" color="#666">coolgray[300]</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.light.label.default} /><div><Text variant="700-14">Label (Def)</Text><Text variant="400-12" color="#666">coolgray[800]</Text></div></ColorCard>
+
+            <ColorCard><Swatch color={theme.components.input.light.icon.default} /><div><Text variant="700-14">Icon (Def)</Text><Text variant="400-12" color="#666">coolgray[300]</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.light.icon.active} /><div><Text variant="700-14">Icon (Act)</Text><Text variant="400-12" color="#666">coolgray[900]</Text></div></ColorCard>
+          </ColorGrid>
+        </div>
       </Section>
 
       {/* 4. Dark Mode Guide (Tokens & Usage) */}
       <Section>
         <SectionHeader title="4. Dark Mode Guide" />
 
-        {/* 4-1. Dark Mode Tokens */}
-        <Text variant="700-16">Semantic Color Tokens (Dark)</Text>
-        <div style={{ marginBottom: 10, padding: 30, background: '#111827', borderRadius: 12 }}>
-          <ColorGrid>
-            <ColorCard><Swatch color={theme.components.input.dark.bg.default} hasBorder /><div><Text variant="700-14">Bg (Def)</Text><Text variant="400-12" color="#666">white 8%</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.dark.bg.hover} hasBorder /><div><Text variant="700-14">Bg (Hov)</Text><Text variant="400-12" color="#666">white 12%</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.dark.bg.active} hasBorder /><div><Text variant="700-14">Bg (Act)</Text><Text variant="400-12" color="#666">white 0%</Text></div></ColorCard>
-
-            <ColorCard><Swatch color={theme.components.input.dark.border.default} hasBorder /><div><Text variant="700-14">Border (Def)</Text><Text variant="400-12" color="#666">transparent</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.dark.border.hover} /><div><Text variant="700-14">Border (Hov)</Text><Text variant="400-12" color="#666">coolgray[600]</Text></div></ColorCard>
-
-            <ColorCard><Swatch color={theme.components.input.dark.text.default} hasBorder /><div><Text variant="700-14">Text (Def)</Text><Text variant="400-12" color="#666">white</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.dark.text.placeholder} /><div><Text variant="700-14">Text (Place)</Text><Text variant="400-12" color="#666">coolgray[200]</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.dark.label.default} /><div><Text variant="700-14">Label (Def)</Text><Text variant="400-12" color="#666">coolgray[300]</Text></div></ColorCard>
-
-            <ColorCard><Swatch color={theme.components.input.dark.icon.default} /><div><Text variant="700-14">Icon (Def)</Text><Text variant="400-12" color="#666">coolgray[400]</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.dark.icon.active} hasBorder /><div><Text variant="700-14">Icon (Act)</Text><Text variant="400-12" color="#666">white</Text></div></ColorCard>
-          </ColorGrid>
-        </div>
-
         {/* 4-2. Dark Mode States */}
         <Text variant="700-16">Component States</Text>
-        <div style={{ padding: '30px', backgroundColor: theme.colors.coolgray[900], borderRadius: '12px' }}>
+        <div style={{ marginBottom: 10, padding: 30, backgroundColor: theme.colors.coolgray[900], borderRadius: '12px' }}>
           <GridContainer>
             <div>
               <Text as="h4" variant="700-14" color={theme.colors.white} style={{ marginBottom: '8px' }}>Default</Text>
@@ -454,33 +435,36 @@ const [value, setValue] = useState('');
             </div>
           </GridContainer>
         </div>
+
+        {/* 4-1. Dark Mode Tokens */}
+        <Text variant="700-16">Semantic Color Tokens </Text>
+        <div style={{ padding: 30, background: '#111827', borderRadius: 12 }}>
+          <ColorGrid>
+            <ColorCard><Swatch color={theme.components.input.dark.bg.default} hasBorder /><div><Text variant="700-14">Bg (Def)</Text><Text variant="400-12" color="#666">white 8%</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.dark.bg.hover} hasBorder /><div><Text variant="700-14">Bg (Hov)</Text><Text variant="400-12" color="#666">white 12%</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.dark.bg.active} hasBorder /><div><Text variant="700-14">Bg (Act)</Text><Text variant="400-12" color="#666">white 0%</Text></div></ColorCard>
+
+            <ColorCard><Swatch color={theme.components.input.dark.border.default} hasBorder /><div><Text variant="700-14">Border (Def)</Text><Text variant="400-12" color="#666">transparent</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.dark.border.hover} /><div><Text variant="700-14">Border (Hov)</Text><Text variant="400-12" color="#666">coolgray[600]</Text></div></ColorCard>
+
+            <ColorCard><Swatch color={theme.components.input.dark.text.default} hasBorder /><div><Text variant="700-14">Text (Def)</Text><Text variant="400-12" color="#666">white</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.dark.text.placeholder} /><div><Text variant="700-14">Text (Place)</Text><Text variant="400-12" color="#666">coolgray[200]</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.dark.label.default} /><div><Text variant="700-14">Label (Def)</Text><Text variant="400-12" color="#666">coolgray[300]</Text></div></ColorCard>
+
+            <ColorCard><Swatch color={theme.components.input.dark.icon.default} /><div><Text variant="700-14">Icon (Def)</Text><Text variant="400-12" color="#666">coolgray[400]</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.dark.icon.active} hasBorder /><div><Text variant="700-14">Icon (Act)</Text><Text variant="400-12" color="#666">white</Text></div></ColorCard>
+          </ColorGrid>
+        </div>
+
       </Section>
 
       {/* 5. Transparent Mode Guide (Tokens & Usage) */}
       <Section>
         <SectionHeader title="5. Transparent Mode Guide" />
 
-        {/* 5-1. Transparent Mode Tokens */}
-        <Text variant="700-16">Semantic Color Tokens (Transparent)</Text>
-        <div style={{ marginBottom: 10, padding: 30, background: '#F3F4F6', borderRadius: 12, border: `1px dashed ${theme.colors.coolgray[200]}` }}>
-          <ColorGrid>
-            <ColorCard><Swatch color={theme.components.input.transparent.bg.default} hasBorder /><div><Text variant="700-14">Bg (Def)</Text><Text variant="400-12" color="#666">Transparent</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.transparent.bg.hover} hasBorder /><div><Text variant="700-14">Bg (Hov)</Text><Text variant="400-12" color="#666">Black 4%</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.transparent.bg.active} hasBorder /><div><Text variant="700-14">Bg (Act)</Text><Text variant="400-12" color="#666">Black 4%</Text></div></ColorCard>
-
-            <ColorCard><Swatch color={theme.components.input.transparent.border.default} hasBorder /><div><Text variant="700-14">Border (All)</Text><Text variant="400-12" color="#666">Transparent</Text></div></ColorCard>
-
-            <ColorCard><Swatch color={theme.components.input.transparent.text.default} /><div><Text variant="700-14">Text (Def)</Text><Text variant="400-12" color="#666">coolgray[900]</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.transparent.text.placeholder} /><div><Text variant="700-14">Text (Place)</Text><Text variant="400-12" color="#666">coolgray[400]</Text></div></ColorCard>
-
-            <ColorCard><Swatch color={theme.components.input.transparent.icon.default} /><div><Text variant="700-14">Icon (Def)</Text><Text variant="400-12" color="#666">coolgray[300]</Text></div></ColorCard>
-            <ColorCard><Swatch color={theme.components.input.transparent.icon.active} /><div><Text variant="700-14">Icon (Act)</Text><Text variant="400-12" color="#666">coolgray[900]</Text></div></ColorCard>
-          </ColorGrid>
-        </div>
-
         {/* 5-2. Transparent Mode States */}
         <Text variant="700-16">Component States</Text>
-        <div style={{ padding: '30px', backgroundColor: theme.colors.coolgray[50], border: `1px dashed ${theme.colors.coolgray[200]}`, borderRadius: '12px' }}>
+        <div style={{ marginBottom: 10, padding: 30, backgroundColor: theme.colors.coolgray[50], border: `1px dashed ${theme.colors.coolgray[200]}`, borderRadius: '12px' }}>
           <GridContainer>
             <div>
               <Text as="h4" variant="700-14" style={{ marginBottom: '8px' }}>Default</Text>
@@ -502,6 +486,26 @@ const [value, setValue] = useState('');
             </div>
           </GridContainer>
         </div>
+
+        {/* 5-1. Transparent Mode Tokens */}
+        <Text variant="700-16">Semantic Color Tokens </Text>
+        <div style={{ padding: 30, background: '#F3F4F6', borderRadius: 12, border: `1px dashed ${theme.colors.coolgray[200]}` }}>
+          <ColorGrid>
+            <ColorCard><Swatch color={theme.components.input.transparent.bg.default} hasBorder /><div><Text variant="700-14">Bg (Def)</Text><Text variant="400-12" color="#666">Transparent</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.transparent.bg.hover} hasBorder /><div><Text variant="700-14">Bg (Hov)</Text><Text variant="400-12" color="#666">Black 4%</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.transparent.bg.active} hasBorder /><div><Text variant="700-14">Bg (Act)</Text><Text variant="400-12" color="#666">Black 4%</Text></div></ColorCard>
+
+            <ColorCard><Swatch color={theme.components.input.transparent.border.default} hasBorder /><div><Text variant="700-14">Border (All)</Text><Text variant="400-12" color="#666">Transparent</Text></div></ColorCard>
+
+            <ColorCard><Swatch color={theme.components.input.transparent.text.default} /><div><Text variant="700-14">Text (Def)</Text><Text variant="400-12" color="#666">coolgray[900]</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.transparent.text.placeholder} /><div><Text variant="700-14">Text (Place)</Text><Text variant="400-12" color="#666">coolgray[400]</Text></div></ColorCard>
+
+            <ColorCard><Swatch color={theme.components.input.transparent.icon.default} /><div><Text variant="700-14">Icon (Def)</Text><Text variant="400-12" color="#666">coolgray[300]</Text></div></ColorCard>
+            <ColorCard><Swatch color={theme.components.input.transparent.icon.active} /><div><Text variant="700-14">Icon (Act)</Text><Text variant="400-12" color="#666">coolgray[900]</Text></div></ColorCard>
+          </ColorGrid>
+        </div>
+
+
       </Section>
 
       {/* 6. Auto Positioning */}
@@ -511,19 +515,19 @@ const [value, setValue] = useState('');
           <CaseWrapper>
             <div><Text variant="700-16">CASE A. Right Edge</Text></div>
             <PositionBox align="right">
-              <Select label="오른쪽 끝" options={options} value={testRight} onChange={setTestRight} width="240px" menuWidth="300px" mode="light" />
+              <Select label="Right Edge" options={options} value={testRight} onChange={setTestRight} width="240px" menuWidth="300px" mode="light" />
             </PositionBox>
           </CaseWrapper>
           <CaseWrapper>
             <div><Text variant="700-16">CASE B. Bottom Edge</Text></div>
             <PositionBox align="bottom">
-              <Select label="바닥" options={options} value={testBottom} onChange={setTestBottom} width="100%" mode="light" />
+              <Select label="Bottom Edge" options={options} value={testBottom} onChange={setTestBottom} width="100%" mode="light" />
             </PositionBox>
           </CaseWrapper>
           <CaseWrapper>
             <div><Text variant="700-16">CASE C. Corner</Text></div>
             <PositionBox align="right" style={{ justifyContent: 'flex-end' }}>
-              <Select label="구석탱이" options={options} value={testCorner} onChange={setTestCorner} width="250px" menuWidth="1000px" mode="light" />
+              <Select label="Corner" options={options} value={testCorner} onChange={setTestCorner} width="250px" menuWidth="1000px" mode="light" />
             </PositionBox>
           </CaseWrapper>
         </PositionGrid>
